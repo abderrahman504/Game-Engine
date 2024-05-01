@@ -24,6 +24,7 @@ The gun itself can be a tree:
 classDiagram
     class Gun
     Gun <|-- Mesh
+    Gun <|-- SoundPlayer
 ```
 
 Now we look at the types of nodes:
@@ -39,7 +40,7 @@ The most basic class that can be involved in ```PhysicsServer``` calculations. N
 ### KenimaticBody3D : PhysicsBody3D
 Stores a velocity variable to be used by the ```PhysicsServer``` to move it. Can collide with other ```PhyiscsBody3D``` objects and reacts appropriately.
 
-### CollisionBox3D
+### CollisionBox3D : Node3D
 A simple collider in the shape of a box. Can specify width, length, and height. Cannot rotate for now to make collision detection simple. 
 
 ### Camera3D : Node3D
