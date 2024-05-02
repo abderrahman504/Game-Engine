@@ -16,8 +16,10 @@ namespace Engine{
         Node* scene_root;
 
         public:
-        //Pass important engine objects to the scene head
+        //Pass important engine objects to the scene head and constructs the scene tree.
         void Init(InputServer *inputServer, PhysicsServer *physicsServer);
+        //Starts the scene
+        void Start();
         InputServer& getInputServer();
         PhysicsServer& getPhysicsServer();
         

@@ -37,6 +37,10 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     this->onTreeReady();
 }
 
+void SceneHead::Start(){
+    glutMainLoop();
+}
+
 void SceneHead::onTreeReady(){
     this->scene_root->propegateReady(this);
 }
