@@ -5,23 +5,30 @@
 #include "PhysicsServer.h"
 
 using namespace Engine::Nodes;
+void glutIdle();
+void glutDraw();
 namespace Engine{
     class SceneHead
     {
+        friend void ::glutIdle();
+        friend void ::glutDraw();
         protected:
         Node* scene_root;
 
         public:
         //Pass important engine objects to the scene head
-        void Init(InputServer &inputServer, PhysicsServer &physicsServer);
-        virtual void Idle();
-        virtual void Draw();
-        virtual void Resize(int width, int height);
+        void Init(InputServer *inputServer, PhysicsServer *physicsServer);
+        InputServer& getInputServer();
+        PhysicsServer& getPhysicsServer();
         
-        void KeyboardInput(unsigned char key, int x, int y);
+        protected:
+        virtual Node* constructTree() = 0;//Adding = 0 forces subclasses to override this function or an error is thrown.
+        
+        private:
+        void onTreeReady();
+        void idle();
+        void draw();
 
-
-        void MouseInput(int button, int state, int x, int y);
 
     };
 }
