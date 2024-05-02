@@ -5,7 +5,13 @@
 
 namespace Engine{
 namespace DataTypes{
-    
+
+    const Quaternion Quaternion::FORWARD = Quaternion(0, Vector3(0,0,0));
+    const Quaternion Quaternion::LEFT = Quaternion(90, Vector3(0,1,0));
+    const Quaternion Quaternion::RIGHT = Quaternion(90, Vector3(0,-1,0));
+    const Quaternion Quaternion::UP = Quaternion(90, Vector3(1,0,0));
+    const Quaternion Quaternion::DOWN = Quaternion(90, Vector3(-1,0,0));
+
     Quaternion::Quaternion(float w, float i, float j, float k): w(w), i(i), j(j), k(k){}
     
     Quaternion::Quaternion(float angle, Vector3 axis)
