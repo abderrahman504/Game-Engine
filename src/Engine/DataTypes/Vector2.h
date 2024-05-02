@@ -7,6 +7,7 @@ namespace DataTypes{
     {
         static const Vector2 ZERO, ONE, LEFT, RIGHT, UP, DOWN; 
         float x,y;
+        Vector2();
         Vector2(float x, float y);
         Vector2 operator+(Vector2 other);
         Vector2 operator-(Vector2 other);

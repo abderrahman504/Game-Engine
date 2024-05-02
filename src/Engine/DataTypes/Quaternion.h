@@ -9,6 +9,7 @@ namespace DataTypes{
     {
         static const Quaternion FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN; 
         float w,i,j,k;
+        Quaternion();
         Quaternion(float w, float i, float j, float k);
         Quaternion(float angle, Vector3 axis);
         Quaternion operator*(Quaternion q);

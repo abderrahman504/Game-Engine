@@ -12,6 +12,7 @@ namespace DataTypes{
     const Vector2 Vector2::LEFT(-1,0);
     const Vector2 Vector2::RIGHT(1,0);
 
+    Vector2::Vector2(): x(0), y(0){}
     Vector2::Vector2(float x, float y): x(x), y(y){}
     Vector2 Vector2::operator+(Vector2 other)
     {

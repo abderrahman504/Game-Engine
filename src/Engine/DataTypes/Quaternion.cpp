@@ -12,6 +12,7 @@ namespace DataTypes{
     const Quaternion Quaternion::UP = Quaternion(90, Vector3(1,0,0));
     const Quaternion Quaternion::DOWN = Quaternion(90, Vector3(-1,0,0));
 
+    Quaternion::Quaternion(): w(1), i(0), j(0), k(0){}
     Quaternion::Quaternion(float w, float i, float j, float k): w(w), i(i), j(j), k(k){}
     
     Quaternion::Quaternion(float angle, Vector3 axis)
