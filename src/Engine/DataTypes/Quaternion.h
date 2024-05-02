@@ -11,10 +11,10 @@ namespace DataTypes{
         float w,i,j,k;
         Quaternion();
         Quaternion(float w, float i, float j, float k);
-        Quaternion(float angle, Vector3 axis);
+        Quaternion(float angleRad, Vector3 axis);
         Quaternion operator*(Quaternion q);
         //Returns the axis and angle a point would rotate around if this quaternion is applied to it.
-        void angle_and_axis(float* angle, Vector3* axis);
+        void angle_and_axis(float* angleRad, Vector3* axis);
     };
     
 }}

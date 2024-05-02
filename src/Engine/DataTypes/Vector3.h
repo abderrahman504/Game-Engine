@@ -15,7 +15,7 @@ namespace DataTypes{
         Vector3 operator/(float scalar);
         float dot(Vector3 other);
         Vector3 cross(Vector3 other);
-        //Returns the angle between this and other
+        //Returns the angle between vectors this and other in radians.
         float angle_to(Vector3 other);
         float length();
         Vector3 normalize();
