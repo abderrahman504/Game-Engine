@@ -36,13 +36,12 @@ namespace Nodes{
         void propegateReady(SceneHead* sceneHead);
         //Calls children's propegateIdle() then this->idle()
         void propegateIdle(double deltaTime); 
-        //Calls children's propegateDraw() then this->draw()
-        void propegateDraw(); 
         
         protected:
+        //Calls children's propegateDraw() then this->draw()
+        virtual void propegateDraw();  //Unlike other propegate functions, this function will have to be overriden in derived node classes that need to draw themselves.
         virtual void ready();
         virtual void idle(double deltaTime);
-        virtual void draw();
 
     };
 

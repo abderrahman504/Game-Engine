@@ -66,10 +66,8 @@ void Node::propegateDraw(){
     for(int i = 0; i < children.size(); i++){
         children[i]->propegateDraw();
     }
-    draw();
 }
 
 
 void Node::ready(){}
 void Node::idle(double deltaTime){}
-void Node::draw(){}
