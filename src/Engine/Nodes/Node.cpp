@@ -3,16 +3,19 @@
 using namespace Engine::Nodes;
 using namespace Engine;
 
-
-Node& Node::getParent(){
-    return *parent;
+Node::Node(){
+    parent = nullptr;
+    sceneHead = nullptr;
+    children = std::vector<Node*>();
+    name = "Node";
 }
-void Node::setParent(Node* parent){
-    //implement later
+Node::~Node(){
+    for(int i = 0; i < children.size(); i++){
+        delete children[i];
+    }
 }
-Node& Node::getChildAt(int index){
-    return *children[index];
-}
+Node& Node::Parent(){return *parent;}
+Node& Node::getChildAt(int index){return *children[index];}
 std::vector<Node*> Node::getChildren(){
     std::vector<Node*> childrenCopy;
     for(int i = 0; i < children.size(); i++){
@@ -21,6 +24,7 @@ std::vector<Node*> Node::getChildren(){
     return childrenCopy;
 }
 void Node::addChild(Node* child){
+    for(int i = 0; i < children.size(); i++) if(children[i] == child) return;
     children.push_back(child);
 }
 void Node::removeChild(Node* child){
@@ -31,9 +35,7 @@ void Node::removeChild(Node* child){
         }
     }
 }
-void Node::removeChildAt(int index){
-    children.erase(children.begin() + index);
-}
+void Node::removeChildAt(int index){children.erase(children.begin() + index);}
 std::string Node::getName(){
     std::string nameCopy = name;
     return nameCopy;

@@ -16,8 +16,9 @@ namespace Nodes{
         SceneHead* sceneHead;
 
         public:
-        Node& getParent();
-        void setParent(Node* parent);
+        Node();
+        ~Node();
+        Node& Parent();
         Node& getChildAt(int index);
         std::vector<Node*> getChildren();
         void addChild(Node* child);
