@@ -5,7 +5,7 @@ namespace Engine{
 namespace DataTypes{
     struct Vector2
     {
-        static const Vector2 ONE, LEFT, RIGHT, UP, DOWN; 
+        static const Vector2 ZERO, ONE, LEFT, RIGHT, UP, DOWN; 
         float x,y;
         Vector2(float x, float y);
         Vector2 operator+(Vector2 other);

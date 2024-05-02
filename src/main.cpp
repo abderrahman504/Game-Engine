@@ -6,10 +6,9 @@ using namespace Engine::DataTypes;
 
 int main(int argc, char** argv)
 {
-    Vector2 vec = Vector2(0,0);
+    Vector2 vec = Vector2::ZERO;
+    printf("vec = (%f, %f)", vec.x, vec.y);
 
-    printf("main started\n");
     initEngine(argc, argv);
-    printf("main finished\n");
     return 0;
 }
