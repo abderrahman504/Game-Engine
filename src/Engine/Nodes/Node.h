@@ -11,9 +11,10 @@ namespace Nodes{
         friend class Engine::SceneHead;
 
         std::string name;
-        Node* parent;
-        std::vector<Node*> children;
+        Node* parent = nullptr;
+        std::vector<Node*> children = std::vector<Node*>();
         SceneHead* sceneHead;
+        bool queuedForDeletion = false;
 
         public:
         Node();
@@ -27,7 +28,7 @@ namespace Nodes{
         std::string getName();
         std::string setName(std::string name);
         SceneHead& getSceneHead();
-        //Remove this node and all children from the scene tree
+        //Queues this node and its children for deletion at the end of the current frame
         void queueFree();
 
         private:

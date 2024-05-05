@@ -4,9 +4,6 @@ using namespace Engine::Nodes;
 using namespace Engine;
 
 Node::Node(){
-    parent = nullptr;
-    sceneHead = nullptr;
-    children = std::vector<Node*>();
     name = "Node";
 }
 Node::~Node(){
@@ -48,9 +45,8 @@ SceneHead& Node::getSceneHead(){
     return *sceneHead;
 }
 void Node::queueFree(){
-    //implement later
+    queuedForDeletion = true;
 }
-
 
 void Node::propegateReady(SceneHead* sceneHead){
     for(int i = 0; i < children.size(); i++){
