@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <chrono>
+#include <stack>
 
 #define FRAMERATE_CAP 140.0
 
@@ -12,6 +13,7 @@ using namespace Engine;
 static InputServer *inputServer;
 static PhysicsServer *physicsServer;
 static SceneHead *sceneHead;
+static std::vector<Node*> node_freeing_queue;
 
 void glutIdle();
 void glutDraw();
@@ -57,6 +59,8 @@ void SceneHead::idle()
     last_idle = now;
     if (delta < (1.0 / FRAMERATE_CAP)) return;
     this->scene_root->propegateIdle(delta);
+    this->findNodesForFreeing();
+    free_nodes();
     glutPostRedisplay();
 }
 
@@ -93,4 +97,34 @@ void mouse_motion(int x, int y)
     //implement later
 }
 
+
+void SceneHead::findNodesForFreeing()
+{
+    std::stack<Node*> node_stack = std::stack<Node*>();
+    node_stack.push(sceneHead->scene_root);
+    while(!node_stack.empty())
+    {
+        Node* current_node = node_stack.top();
+        node_stack.pop();
+        if(current_node->queuedForDeletion)
+        {
+            node_freeing_queue.push_back(current_node);
+        }
+        else{
+            for(int i = 0; i < current_node->children.size(); i++)
+            {
+                node_stack.push(current_node->children[i]);
+            }
+        }
+    }
+}
+
+void free_nodes()
+{
+    for(int i = 0; i < node_freeing_queue.size(); i++)
+    {
+        delete node_freeing_queue[i];
+    }
+    node_freeing_queue.clear();
+}
 

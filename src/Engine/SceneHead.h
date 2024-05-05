@@ -30,6 +30,7 @@ namespace Engine{
         void onTreeReady();
         void idle();
         void draw();
+        void findNodesForFreeing();
 
 
     };
