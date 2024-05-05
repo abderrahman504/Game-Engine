@@ -4,7 +4,8 @@
 
 namespace Engine{
     static bool engine_started = false;
-
+    PhysicsServer* physicsServer;
+    InputServer* inputServer;
 
 
     void initEngine(int argc, char** argv)
@@ -23,12 +24,13 @@ namespace Engine{
         glewExperimental = GL_TRUE;
         glewInit();
 
-
-        // glutMainLoop();
+        physicsServer = new PhysicsServer();
+        inputServer = new InputServer();
     }
 
     void setMainScene(SceneHead &sceneHead)
     {
-        //implement later
+        sceneHead.Init(inputServer, physicsServer);
+        sceneHead.Start();
     }
 }
