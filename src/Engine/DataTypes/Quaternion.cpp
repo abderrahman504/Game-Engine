@@ -30,6 +30,22 @@ namespace DataTypes{
         float k = this->w*q.k + this->i*q.j - this->j*q.i + this->k*q.w;
         return Quaternion(w, i, j, k);
     }
+    Quaternion Quaternion::operator*(float f){
+        return Quaternion(w*f, i*f, j*f, k*f);
+    }
+    Quaternion Quaternion::operator/(float f){
+        return Quaternion(w/f, i/f, j/f, k/f);
+    }
+    Quaternion Quaternion::operator*(Vector3 v){
+        Quaternion res = Quaternion(0, v.x, v.y, v.z);
+        return *this * res;
+    }
+    Quaternion Quaternion::operator+(Quaternion q){
+        return Quaternion(w + q.w, i + q.i, j + q.j, k + q.k);
+    }
+    Quaternion Quaternion::operator-(Quaternion q){
+        return Quaternion(w - q.w, i - q.i, j - q.j, k - q.k);
+    }
     void Quaternion::angle_and_axis(float* angle, Vector3* axis)
     {
         *angle = acos(w) * 2;
@@ -43,6 +59,19 @@ namespace DataTypes{
             axis->z = k / sine;
         *angle = *angle * 180 / M_PI;
         }
+    }
+    Quaternion Quaternion::conjugate(){
+        return Quaternion(w, -i, -j, -k);
+    }
+    float Quaternion::magnitude(){
+        return sqrt(w*w + i*i + j*j + k*k);
+    }
+    Quaternion Quaternion::normalize(){
+        float mag = magnitude();
+        return Quaternion(w/mag, i/mag, j/mag, k/mag);
+    }
+    Quaternion Quaternion::inverse(){
+        return conjugate() / magnitude();
     }
 
 }}

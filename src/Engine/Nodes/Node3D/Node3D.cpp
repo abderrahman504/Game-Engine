@@ -20,11 +20,19 @@ void Node3D::Orientation(Quaternion quaterion){this->orientation = quaterion;}
 Vector3 Node3D::Scale(){return scale;}
 void Node3D::Scale(Vector3 scale){this->scale = scale;}
 
-
+Vector3 Node3D::getUp(){
+    Quaternion result = Quaternion(0, Vector3::UP.x, Vector3::UP.y, Vector3::UP.z);
+    result = orientation * result * orientation.inverse();
+    return Vector3(result.i, result.j, result.k).normalize();
+}
+Vector3 Node3D::getForward(){
+    Quaternion result = Quaternion(0, Vector3::FORWARD.x, Vector3::FORWARD.y, Vector3::FORWARD.z);
+    result = orientation * result * orientation.inverse();
+    return Vector3(result.i, result.j, result.k).normalize();
+}
 void Node3D::lookAt(Vector3 point, Vector3 up){
     lookTowards(point - position, up);
 }
-
 void Node3D::lookTowards(Vector3 direction, Vector3 up){
     Vector3 vec = Vector3::FORWARD;
     //Rotate so your face points towards direction
