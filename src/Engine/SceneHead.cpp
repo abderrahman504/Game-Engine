@@ -21,6 +21,7 @@ void resize(int width, int height);
 void keyboard_input(unsigned char key, int x, int y);
 void mouse_input(int button, int state, int x, int y);
 void mouse_motion(int x, int y);
+void free_nodes();
 
 void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServerParam){
     sceneHead = this;
