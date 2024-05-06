@@ -33,8 +33,6 @@ class Node3D : public Node
     void lookTowards(Vector3 direction, Vector3 up);
     //Rotates the node3d around ```axis``` by ```angle``` radians.
     void rotateAround(Vector3 axis, float angleRad);
-    //Applies transformations to the modelview matrix before drawing itself and children
-    void propegateDraw();
 };
 
 }}

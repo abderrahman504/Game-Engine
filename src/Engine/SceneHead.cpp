@@ -1,4 +1,5 @@
 #include "SceneHead.h"
+#include "SceneHeadHelpers/TreeDrawer.h"
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <chrono>
@@ -13,6 +14,7 @@ using namespace Engine;
 static InputServer *inputServer;
 static PhysicsServer *physicsServer;
 static SceneHead *sceneHead;
+static TreeDrawer *treeDrawer;
 static std::vector<Node*> node_freeing_queue;
 
 void glutIdle();
@@ -27,6 +29,7 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     sceneHead = this;
     inputServer = inputServerParam;
     physicsServer = physicsServerParam;
+    treeDrawer = new TreeDrawer();
 
     glutIdleFunc(glutIdle);
     glutDisplayFunc(glutDraw);
@@ -66,19 +69,14 @@ void SceneHead::idle()
 }
 
 void glutDraw() {sceneHead->draw();}
-void SceneHead::draw()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
-    this->scene_root->propegateDraw();
-    glutSwapBuffers();
+void SceneHead::draw(){
+    treeDrawer->drawScene(scene_root);
 }
 
 void resize(int width, int height)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    // gluPerspective(45.0, (double)width / (double)height, 0.1, 100.0);
     glFrustum(-8, 8,  -4.5, 4.5, 5, 500.0);
     glMatrixMode(GL_MODELVIEW);
 }

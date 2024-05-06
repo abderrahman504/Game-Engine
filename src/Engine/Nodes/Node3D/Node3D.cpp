@@ -47,15 +47,3 @@ void Node3D::rotateAround(Vector3 axis, float angleRad){
     Quaternion newRotation = Quaternion(angleRad, axis);
     orientation = orientation * newRotation;
 }
-
-void Node3D::propegateDraw(){
-    glPushMatrix();
-    glTranslatef(position.x, position.y, position.z);
-    float angle;
-    Vector3 axis;
-    orientation.angle_and_axis(&angle, &axis);
-    glRotatef(angle, axis.x, axis.y, axis.z);
-    glScalef(scale.x, scale.y, scale.z);
-    Node::propegateDraw();
-    glPopMatrix();
-}

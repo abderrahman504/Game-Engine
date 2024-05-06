@@ -60,11 +60,6 @@ void Node::propegateIdle(double deltaTime){
     }
     idle(deltaTime);
 }
-void Node::propegateDraw(){
-    for(int i = 0; i < children.size(); i++){
-        children[i]->propegateDraw();
-    }
-}
 
 
 void Node::ready(){}
