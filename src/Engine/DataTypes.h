@@ -4,5 +4,6 @@
 #include "DataTypes/Vector3.h"
 #include "DataTypes/Quaternion.h"
 
+#define PI 3.14159265358979323846
 
 #endif
