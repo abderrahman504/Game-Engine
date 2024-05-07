@@ -13,17 +13,17 @@ namespace Nodes{
         bool meshChanged = false;
         protected:
         //The vertices of the mesh
-        float** vertices = nullptr;
+        float* vertices = nullptr;
         //The indeces of the mesh
-        int** indeces = nullptr;
+        unsigned int** indeces = nullptr;
         int* countIndeces = nullptr;
         int countPrimatives = 0;
         
         public:
         Mesh3D();
         ~Mesh3D();
-        float** Vertices();
-        int** Indeces();
+        float* Vertices();
+        unsigned int** Indeces();
         int* CountIndeces();
         int CountPrimatives();
     };
