@@ -46,7 +46,7 @@ namespace DataTypes{
     Quaternion Quaternion::operator-(Quaternion q){
         return Quaternion(w - q.w, i - q.i, j - q.j, k - q.k);
     }
-    void Quaternion::angle_and_axis(float* angle, Vector3* axis)
+    void Quaternion::angleAndAxis(float* angle, Vector3* axis)
     {
         *angle = acos(w) * 2;
         double sine = (sin(*angle / 2));

@@ -24,6 +24,7 @@ namespace Engine{
         PhysicsServer& getPhysicsServer();
         
         protected:
+        //Builds the scene tree and returns the root node
         virtual Node* constructTree() = 0;//Adding = 0 forces subclasses to override this function or an error is thrown.
         
         private:

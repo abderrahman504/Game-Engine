@@ -30,7 +30,7 @@ void TreeDrawer::drawNode(Nodes::Node* node)
         Vector3 position = ((Node3D*)node)->Position();
         Vector3 axis = Vector3::ZERO;
         float angle = 0;
-        ((Node3D*)node)->Orientation().angle_and_axis(&angle, &axis);
+        ((Node3D*)node)->Orientation().angleAndAxis(&angle, &axis);
         Vector3 scale = ((Node3D*)node)->Scale();
         glTranslatef(position.x, position.y, position.z);
         glRotatef(angle * PI / 180.0, axis.x, axis.y, axis.z);
