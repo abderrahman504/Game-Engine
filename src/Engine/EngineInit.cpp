@@ -28,9 +28,9 @@ namespace Engine{
         inputServer = new InputServer();
     }
 
-    void setMainScene(SceneHead &sceneHead)
+    void setMainScene(SceneHead *sceneHead)
     {
-        sceneHead.Init(inputServer, physicsServer);
-        sceneHead.Start();
+        sceneHead->Init(inputServer, physicsServer);
+        sceneHead->Start();
     }
 }
