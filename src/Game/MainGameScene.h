@@ -6,8 +6,7 @@ namespace Game{
     class MainGameScene: public Engine::SceneHead
     {
         public:
-        MainGameScene();
-        
+        Engine::Nodes::Node* constructTree();
     };
 }
 
