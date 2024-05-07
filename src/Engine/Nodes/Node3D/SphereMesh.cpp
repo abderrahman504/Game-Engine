@@ -1,6 +1,9 @@
 #include "SphereMesh.h"
+#include <math.h>
 
 using namespace Engine::Nodes;
+
+void buildSphereVertices(float, int, float**, unsigned int***, int**, int*);
 
 SphereMesh::SphereMesh(float radius, int resolution)
 {
