@@ -16,6 +16,7 @@ static PhysicsServer *physicsServer;
 static SceneHead *sceneHead;
 static TreeDrawer *treeDrawer;
 static std::vector<Node*> node_freeing_queue;
+static unsigned long long last_idle;
 
 void glutIdle();
 void glutDraw();
@@ -39,11 +40,12 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     glutPassiveMotionFunc(mouse_motion);
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    scene_root = this->constructTree();
-    this->onTreeReady();
 }
 
 void SceneHead::Start(){
+    scene_root = this->constructTree();
+    this->onTreeReady();
+    last_idle = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     glutMainLoop();
 }
 
@@ -55,7 +57,6 @@ InputServer& SceneHead::getInputServer() {return *inputServer;}
 PhysicsServer& SceneHead::getPhysicsServer(){return *physicsServer;}
 
 void glutIdle() {sceneHead->idle();}
-unsigned long long last_idle;
 void SceneHead::idle()
 {
     unsigned long long now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
