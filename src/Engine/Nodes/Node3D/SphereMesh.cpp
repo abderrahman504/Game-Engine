@@ -8,7 +8,7 @@ void buildSphereVertices(float, int, float**, unsigned int***, int**, int*);
 SphereMesh::SphereMesh(float radius, int resolution)
 {
     this->radius = radius;
-    buildSphereVertices(radius, resolution, &vertices, &indeces, &countIndeces, &countPrimatives);
+    buildSphereVertices(radius, resolution, &vertices, &indeces, &countIndeces, &countPrimitives);
     setName("SphereMesh");
 }
 

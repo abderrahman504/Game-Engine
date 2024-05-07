@@ -17,7 +17,7 @@ namespace Nodes{
         //The indeces of the mesh
         unsigned int** indeces = nullptr;
         int* countIndeces = nullptr;
-        int countPrimatives = 0;
+        int countPrimitives = 0;
         
         public:
         Mesh3D();
@@ -25,7 +25,7 @@ namespace Nodes{
         float* Vertices();
         unsigned int** Indeces();
         int* CountIndeces();
-        int CountPrimatives();
+        int CountPrimitives();
     };
 }}
 

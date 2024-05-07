@@ -6,7 +6,7 @@ Mesh3D::Mesh3D(){
 }
 Mesh3D::~Mesh3D(){
     if(vertices != nullptr){
-        for(int i = 0; i < countPrimatives; i++){
+        for(int i = 0; i < countPrimitives; i++){
             delete[] vertices;
             delete[] indeces[i];
         }
@@ -18,4 +18,4 @@ Mesh3D::~Mesh3D(){
 float* Mesh3D::Vertices(){return vertices;}
 unsigned int** Mesh3D::Indeces(){return indeces;}
 int* Mesh3D::CountIndeces(){return countIndeces;}
-int Mesh3D::CountPrimatives(){return countPrimatives;}
+int Mesh3D::CountPrimitives(){return countPrimitives;}

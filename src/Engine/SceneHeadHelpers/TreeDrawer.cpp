@@ -39,7 +39,11 @@ void TreeDrawer::drawNode(Nodes::Node* node)
     //If Mesh3D then draw its vertices
     if(isMesh3D)
     {
-        //implement later
+        Mesh3D* mesh = (Mesh3D*)node;
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
+        glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
+        glDisableClientState(GL_VERTEX_ARRAY);
     }
     std::vector<Nodes::Node*> children = node->getChildren();
     for (int i=0; i<children.size(); i++)
