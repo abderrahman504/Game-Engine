@@ -78,7 +78,7 @@ void resize(int width, int height)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-8, 8,  -4.5, 4.5, 5, 500.0);
+    glFrustum(-8, 8,  -4.5, 4.5, 1, 1000.0);
     glMatrixMode(GL_MODELVIEW);
 }
 

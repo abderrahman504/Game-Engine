@@ -1,0 +1,20 @@
+#ifndef PLANET_GUARD
+#define PLANET_GUARD
+#include "../Engine/Nodes.h"
+#include "../Engine/DataTypes.h"
+
+using namespace Engine::Nodes;
+
+namespace Game{
+    class Planet : public SphereMesh
+    {
+        public:
+        float orbitRadius = 1;
+        float orbitSpeed = PI * 0.5;
+        float orbitAngle = 0;
+
+        void idle(double deltaTime);
+    };
+}
+
+#endif
