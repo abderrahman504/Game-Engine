@@ -41,6 +41,7 @@ void TreeDrawer::drawNode(Nodes::Node* node)
     {
         Mesh3D* mesh = (Mesh3D*)node;
         glEnableClientState(GL_VERTEX_ARRAY);
+        glColor3f(0,0,0);
         glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
         glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
         glDisableClientState(GL_VERTEX_ARRAY);

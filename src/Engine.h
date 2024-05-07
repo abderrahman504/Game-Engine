@@ -11,7 +11,7 @@
 namespace Engine{
 
     void initEngine(int argc, char** argv);
-    void setMainScene(Engine::SceneHead* scene);
+    void setMainScene(SceneHead* scene);
 
 }
 
