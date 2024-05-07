@@ -6,9 +6,6 @@ using namespace Engine::Nodes;
 using namespace Engine::DataTypes;
 
 Node3D::Node3D() : Node(){
-    position = Vector3::ZERO;
-    orientation = Quaternion::FORWARD;
-    scale = Vector3::ONE;
     setName("Node3D");
 }
 

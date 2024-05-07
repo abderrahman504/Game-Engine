@@ -10,9 +10,9 @@ namespace Nodes{
 class Node3D : public Node
 {
     protected:
-    Vector3 position;
-    Quaternion orientation;
-    Vector3 scale;
+    Vector3 position = Vector3::ZERO;
+    Quaternion orientation = Quaternion::FORWARD;
+    Vector3 scale = Vector3::ONE;
     
     public:
     Node3D();
