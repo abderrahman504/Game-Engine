@@ -43,4 +43,6 @@ This file will help you prep your IDE to run this project.
     "version": "2.0.0"
 }
 ```
-- **Remember** to replace the compiler path in ```"command"``` with the path to your c++ compiler.
+- **Remember** to replace the compiler path in ```"command"``` with the path to your c++ compiler.  
+
+If you run into trouble building the project with an error about missing definitions then double check that all the source files are in the list of files to compile.

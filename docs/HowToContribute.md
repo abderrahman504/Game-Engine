@@ -23,3 +23,4 @@ It is **very important** that you don't have any definitions/implementation in y
 ### Writing a source file
 Your source file need to ```#include``` the header that contains its forward declarations. Then you can define whatever functions or class/struct members you want to implement.
 
+The header file effectively provides an interface, while the source file hides all the implementation details and private functions that aren't needed by outside code.
