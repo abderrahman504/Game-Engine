@@ -10,7 +10,7 @@ The base node class for making a 3D object. All 3D classes inherit this class. S
 ### Mesh3D : Node3D
 Stores vertex and material information about the mesh to be drawn which is used by the SceneHead to draw the mesh. 
 
-## Light3D : Node3D
+### Light3D : Node3D
 Stores lighting information to be used the SceneHead to light the scene.
 
 ### PhysicsBody3D : Node3D

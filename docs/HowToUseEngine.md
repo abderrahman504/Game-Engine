@@ -2,10 +2,10 @@
 
 ## ```initEngine()``` and ```setMainScene()```
 In ```main()``` call initEngine() to initiate the engine for use. This functions starts up openGL and creates singletons that are needed for any game.
-Call setMainScene() with a pointer to a ```SceneHead``` instance that represent the entry scene of your game.
+Call `setMainScene()` with a pointer to a ```SceneHead``` instance that represent the entry scene of your game.
 
 ## What is ```SceneHead```?
-SceneHead is a base class that is responsible for managing your scene tree. It calls the ```ready()```, ```idle()``` functions of every node in the tree and communicates with InputServer and PhysicsServer for running input and physics calculations every frame.
+SceneHead is a base class that is responsible for managing your scene tree. It calls the ```ready()```, ```idle()``` functions of every node in the tree and communicates with `InputServer` and `PhysicsServer` for running input and physics calculations every frame.
 When you want to create a scene for your game, write a new class that extends SceneHead and overrides ```costructTree()``` to create all the nodes in the game scene and return the root node.
 
 ## Scene Tree and Nodes
@@ -27,5 +27,5 @@ classDiagram
     Gun <|-- SoundPlayer
 ```
 
-Go to Nodes.md to see a description of all node types.
+Go to **Nodes.md** to see a description of all node types.
 
