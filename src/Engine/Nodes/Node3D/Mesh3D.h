@@ -1,6 +1,7 @@
 #ifndef MESH3D_GUARD
 #define MESH3D_GUARD
 #include "Node3D.h"
+#include "../../DataTypes.h"
 
 namespace Engine{
 namespace Nodes{
@@ -8,9 +9,7 @@ namespace Nodes{
     class Mesh3D : public Node3D
     {
         public:
-        //True if the mesh was changed since the last time it was drawn.
-        //Used to update any VAOs, VBOs, or display lists that are used to draw this mesh. 
-        bool meshChanged = false;
+        DataTypes::Material *material = new DataTypes::Material();
         protected:
         //The vertices of the mesh
         float* vertices = nullptr;

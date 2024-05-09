@@ -11,6 +11,8 @@
 using namespace Engine;
 using namespace Engine::Nodes;
 
+void applyMaterial(Material material);
+
 void TreeDrawer::drawScene(Nodes::Node* root){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -40,8 +42,9 @@ void TreeDrawer::drawNode(Nodes::Node* node)
     if(isMesh3D)
     {
         Mesh3D* mesh = (Mesh3D*)node;
+        Material* material = mesh->material;
+        applyMaterial(*material);
         glEnableClientState(GL_VERTEX_ARRAY);
-        glColor3f(0,0,0);
         glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
         glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
         glDisableClientState(GL_VERTEX_ARRAY);
@@ -53,4 +56,14 @@ void TreeDrawer::drawNode(Nodes::Node* node)
     }
     //Undo node3d transformation
     if(isNode3D) glPopMatrix();
+}
+
+
+void applyMaterial(Material material)
+{
+    float amb[4] = {material.color[0]*material.ambient_diffuse, material.color[1]*material.ambient_diffuse, material.color[2]*material.ambient_diffuse, material.color[3]};
+    float spec[4] = {1*material.specular, 1*material.specular, 1*material.specular, 1};
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, amb);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material.shininess);
 }

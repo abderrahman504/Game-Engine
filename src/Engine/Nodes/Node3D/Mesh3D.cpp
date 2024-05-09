@@ -13,6 +13,7 @@ Mesh3D::~Mesh3D(){
         delete[] vertices;
         delete[] indeces;
         delete[] countIndeces;
+        delete material;
     }
 }
 float* Mesh3D::Vertices(){return vertices;}

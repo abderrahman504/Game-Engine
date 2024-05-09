@@ -39,7 +39,11 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     glutReshapeFunc(resize);
     glutPassiveMotionFunc(mouse_motion);
     glEnable(GL_DEPTH_TEST);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glEnable(GL_LIGHTING);
+    // float global_ambience[4] = {0.2, 0.2, 0.2, 1.0};
+    // glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambience);
+    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+    glClearColor(0,0,0, 1.0);
 }
 
 void SceneHead::Start(){
