@@ -31,4 +31,15 @@ Here is where most of the complex work happens so strap in.
 First we calculate the time since the last idle was called (how much time has passed since the last frame) then call `idle()` recursively on all nodes in the tree.  
 Next we search the tree for any nodes that requested to be freed and we delete them and their children from the scene.  
 Next we call `glutPostRedisplay()` which invokes `SceneHead.draw()`. Drawing the tree is delegated to `TreeDrawer.drawScene()`
- 
+
+## `TreeDrawer.drawScene()`
+Scene drawing is still a work in progress. Right now it iterates through all the nodes in the tree and draws them, ignoring mesh material, lights, and cameras.  
+Here is how it **Should** work:
+First thing that must be done is determine where the camera(s) and viewports should be placed, so the drawer searches the tree for all active camera objects.  
+For each active camera it determines its global position, orientation, and scale in the world by applying The 3D transformations of its parent nodes on 3 vectors: 
+- cameraPos: Stores the global position of the camera. Starts at Vector3.ZERO.
+- cameraForward: Stores the forward direction of the camera. Starts at Vector3.FORWARD.
+- cameraUp: Stores the up direction of the camera. Starts at Vector3.UP.
+
+After these 3 vectors are calculated for a specific camera, `gluLookAt()` is called to position the camera in the world then `drawNode()` is called on the root of the tree which recursively draws all nodes in the tree, then `glLoadIdentity()` is called to reset the modelview matrix.    
+This process is repeated for all active cameras, drawing to different viewports each time.
