@@ -7,11 +7,20 @@
 using namespace Engine::Nodes;
 void glutIdle();
 void glutDraw();
+void ::keyboard_key(unsigned char key, int x, int y);
+void ::special_keyboard(int key, int x, int y);
+void ::mouse_motion(int x, int y);
+void ::mouse_key(int button, int state, int x, int y);
 namespace Engine{
     class SceneHead
     {
         friend void ::glutIdle();
         friend void ::glutDraw();
+        friend void ::keyboard_key(unsigned char key, int x, int y);
+        friend void ::special_keyboard(int key, int x, int y);
+        friend void ::mouse_motion(int x, int y);
+        friend void ::mouse_key(int button, int state, int x, int y);
+
         protected:
         Node* scene_root;
 
@@ -31,6 +40,10 @@ namespace Engine{
         void onTreeReady();
         void idle();
         void draw();
+        void keyboard(unsigned char key, int x, int y);
+        void specialKeyboard(int key, int x, int y);
+        void mouseMotion(int x, int y);
+        void mouseKey(int button, int state, int x, int y);
         void findNodesForFreeing();
 
 

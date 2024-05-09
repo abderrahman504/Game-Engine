@@ -21,8 +21,9 @@ static unsigned long long last_idle;
 void glutIdle();
 void glutDraw();
 void resize(int width, int height);
-void keyboard_input(unsigned char key, int x, int y);
-void mouse_input(int button, int state, int x, int y);
+void keyboard_key(unsigned char key, int x, int y);
+void special_keyboard(int key, int x, int y);
+void mouse_key(int button, int state, int x, int y);
 void mouse_motion(int x, int y);
 void free_nodes();
 
@@ -32,10 +33,14 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     physicsServer = physicsServerParam;
     treeDrawer = new TreeDrawer();
 
+    //Input callbacks
+    glutKeyboardFunc(keyboard_key);
+    glutSpecialFunc(special_keyboard);
+    glutPassiveMotionFunc(mouse_motion);
+    glutMouseFunc(mouse_key);
+    //Other callbacks
     glutIdleFunc(glutIdle);
     glutDisplayFunc(glutDraw);
-    glutKeyboardFunc(keyboard_input);
-    glutMouseFunc(mouse_input);
     glutReshapeFunc(resize);
     glutPassiveMotionFunc(mouse_motion);
     glEnable(GL_DEPTH_TEST);
@@ -49,6 +54,7 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
 void SceneHead::Start(){
     scene_root = this->constructTree();
     this->onTreeReady();
+    inputServer->init();
     last_idle = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     glutMainLoop();
 }
@@ -67,6 +73,7 @@ void SceneHead::idle()
     double delta = (now - last_idle) * 1e-9;
     last_idle = now;
     if (delta < (1.0 / FRAMERATE_CAP)) return;
+    inputServer->onIdle();
     this->scene_root->propegateIdle(delta);
     this->findNodesForFreeing();
     free_nodes();
@@ -86,20 +93,17 @@ void resize(int width, int height)
     glMatrixMode(GL_MODELVIEW);
 }
 
-void keyboard_input(unsigned char key, int x, int y)
-{
-    //implement later
-}
+void keyboard_key(unsigned char key, int x, int y){sceneHead->keyboard(key, x, y);}
+void SceneHead::keyboard(unsigned char key, int x, int y){inputServer->keyboardInput(key, x, y);}
 
-void mouse_input(int button, int state, int x, int y)
-{
-    //implement later
-}
+void special_keyboard(int key, int x, int y){sceneHead->specialKeyboard(key, x, y);}
+void SceneHead::specialKeyboard(int key, int x, int y){inputServer->specialInput(key, x, y);}
 
-void mouse_motion(int x, int y)
-{
-    //implement later
-}
+void mouse_motion(int x, int y){sceneHead->mouseMotion(x, y);}
+void SceneHead::mouseMotion(int x, int y){inputServer->mouseMotion(x, y);}
+
+void mouse_key(int button, int state, int x, int y){sceneHead->mouseKey(button, state, x, y);}
+void SceneHead::mouseKey(int button, int state, int x, int y){inputServer->mouseKey(button, state, x, y);}
 
 
 void SceneHead::findNodesForFreeing()
@@ -111,14 +115,10 @@ void SceneHead::findNodesForFreeing()
         Node* current_node = node_stack.top();
         node_stack.pop();
         if(current_node->queuedForDeletion)
-        {
             node_freeing_queue.push_back(current_node);
-        }
         else{
             for(int i = 0; i < current_node->children.size(); i++)
-            {
                 node_stack.push(current_node->children[i]);
-            }
         }
     }
 }
