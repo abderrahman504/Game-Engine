@@ -7,19 +7,26 @@
 using namespace Engine::Nodes;
 void glutIdle();
 void glutDraw();
-void ::keyboard_key(unsigned char key, int x, int y);
-void ::special_keyboard(int key, int x, int y);
-void ::mouse_motion(int x, int y);
-void ::mouse_key(int button, int state, int x, int y);
+void keyboard_key(unsigned char key, int x, int y);
+void keyboard_key_up(unsigned char key, int x, int y);
+void special_key(int key, int x, int y);
+void special_key_up(int key, int x, int y);
+void mouse_motion(int x, int y);
+void mouse_key(int button, int state, int x, int y);
+void mouse_key_up(int button, int state, int x, int y);
+void mouse_wheel(int wheel, int direction, int x, int y);
 namespace Engine{
     class SceneHead
     {
         friend void ::glutIdle();
         friend void ::glutDraw();
         friend void ::keyboard_key(unsigned char key, int x, int y);
-        friend void ::special_keyboard(int key, int x, int y);
+        friend void ::keyboard_key_up(unsigned char key, int x, int y);
+        friend void ::special_key(int key, int x, int y);
+        friend void ::special_key_up(int key, int x, int y);
         friend void ::mouse_motion(int x, int y);
         friend void ::mouse_key(int button, int state, int x, int y);
+        friend void ::mouse_wheel(int wheel, int direction, int x, int y);
 
         protected:
         Node* scene_root;
@@ -41,9 +48,12 @@ namespace Engine{
         void idle();
         void draw();
         void keyboard(unsigned char key, int x, int y);
+        void keyboardUp(unsigned char key, int x, int y);
         void specialKeyboard(int key, int x, int y);
+        void specialKeyboardUp(int key, int x, int y);
         void mouseMotion(int x, int y);
         void mouseKey(int button, int state, int x, int y);
+        void mouseWheel(int wheel, int direction, int x, int y);
         void findNodesForFreeing();
 
 

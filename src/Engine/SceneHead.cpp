@@ -4,6 +4,7 @@
 #include <GL/freeglut.h>
 #include <chrono>
 #include <stack>
+#include <stdio.h>
 
 #define FRAMERATE_CAP 140.0
 
@@ -22,9 +23,12 @@ void glutIdle();
 void glutDraw();
 void resize(int width, int height);
 void keyboard_key(unsigned char key, int x, int y);
-void special_keyboard(int key, int x, int y);
+void keyboard_key_up(unsigned char key, int x, int y);
+void special_key(int key, int x, int y);
+void special_key_up(int key, int x, int y);
 void mouse_key(int button, int state, int x, int y);
 void mouse_motion(int x, int y);
+void mouse_wheel(int wheel, int direction, int x, int y);
 void free_nodes();
 
 void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServerParam){
@@ -35,8 +39,10 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
 
     //Input callbacks
     glutKeyboardFunc(keyboard_key);
-    glutSpecialFunc(special_keyboard);
+    glutKeyboardUpFunc(keyboard_key_up);
+    glutSpecialUpFunc(special_key_up);
     glutPassiveMotionFunc(mouse_motion);
+    glutMouseWheelFunc(mouse_wheel);
     glutMouseFunc(mouse_key);
     //Other callbacks
     glutIdleFunc(glutIdle);
@@ -71,13 +77,13 @@ void SceneHead::idle()
 {
     unsigned long long now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     double delta = (now - last_idle) * 1e-9;
-    last_idle = now;
     if (delta < (1.0 / FRAMERATE_CAP)) return;
-    inputServer->onIdle();
+    last_idle = now;
     this->scene_root->propegateIdle(delta);
     this->findNodesForFreeing();
     free_nodes();
     glutPostRedisplay();
+    inputServer->onIdle();
 }
 
 void glutDraw() {sceneHead->draw();}
@@ -94,16 +100,25 @@ void resize(int width, int height)
 }
 
 void keyboard_key(unsigned char key, int x, int y){sceneHead->keyboard(key, x, y);}
-void SceneHead::keyboard(unsigned char key, int x, int y){inputServer->keyboardInput(key, x, y);}
+void SceneHead::keyboard(unsigned char key, int x, int y){inputServer->keyboardInput(key, true, x, y);}
 
-void special_keyboard(int key, int x, int y){sceneHead->specialKeyboard(key, x, y);}
-void SceneHead::specialKeyboard(int key, int x, int y){inputServer->specialInput(key, x, y);}
+void keyboard_key_up(unsigned char key, int x, int y){sceneHead->keyboardUp(key, x, y);}
+void SceneHead::keyboardUp(unsigned char key, int x, int y){inputServer->keyboardInput(key, false, x, y);}
+
+void special_key(int key, int x, int y){sceneHead->specialKeyboard(key, x, y);}
+void SceneHead::specialKeyboard(int key, int x, int y){inputServer->specialInput(key, true, x, y);}
+
+void special_key_up(int key, int x, int y){sceneHead->specialKeyboardUp(key, x, y);}
+void SceneHead::specialKeyboardUp(int key, int x, int y){inputServer->specialInput(key, false, x, y);}
 
 void mouse_motion(int x, int y){sceneHead->mouseMotion(x, y);}
 void SceneHead::mouseMotion(int x, int y){inputServer->mouseMotion(x, y);}
 
 void mouse_key(int button, int state, int x, int y){sceneHead->mouseKey(button, state, x, y);}
 void SceneHead::mouseKey(int button, int state, int x, int y){inputServer->mouseKey(button, state, x, y);}
+
+void mouse_wheel(int wheel, int direction, int x, int y){sceneHead->mouseWheel(wheel, direction, x, y);}
+void SceneHead::mouseWheel(int wheel, int direction, int x, int y){inputServer->mouseWheel(wheel, direction, x, y);}
 
 
 void SceneHead::findNodesForFreeing()
