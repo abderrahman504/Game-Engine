@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Quaternion.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
 
@@ -43,6 +44,11 @@ namespace DataTypes{
     }
     Vector3 Vector3::normalize(){
         return (*this)/length();
+    }
+    Vector3 Vector3::rotateBy(Quaternion quaternion){
+        quaternion = quaternion.normalize();
+        Quaternion q = quaternion * *this * quaternion.inverse();
+        return Vector3(q.i, q.j, q.k);
     }
 
 }}

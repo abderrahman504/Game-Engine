@@ -1,10 +1,10 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
-#include "Vector3.h"
 
 namespace Engine{
 namespace DataTypes{
-    
+    struct Vector3;
+
     struct Quaternion
     {
         static const Quaternion FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN; 

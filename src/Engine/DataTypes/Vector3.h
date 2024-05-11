@@ -3,6 +3,7 @@
 
 namespace Engine{
 namespace DataTypes{
+    struct Quaternion;
     struct Vector3
     {
         static const Vector3 ZERO,ONE, LEFT, RIGHT, UP, DOWN, FORWARD, BACK; 
@@ -19,6 +20,7 @@ namespace DataTypes{
         float angle_to(Vector3 other);
         float length();
         Vector3 normalize();
+        Vector3 rotateBy(Quaternion quaternion);
     };
 }}
 

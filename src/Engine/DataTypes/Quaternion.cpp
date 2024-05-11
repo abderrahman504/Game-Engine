@@ -1,4 +1,5 @@
 #include "Quaternion.h"
+#include "Vector3.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
 
@@ -46,10 +47,10 @@ namespace DataTypes{
     Quaternion Quaternion::operator-(Quaternion q){
         return Quaternion(w - q.w, i - q.i, j - q.j, k - q.k);
     }
-    void Quaternion::angleAndAxis(float* angle, Vector3* axis)
+    void Quaternion::angleAndAxis(float* angleRad, Vector3* axis)
     {
-        *angle = acos(w) * 2;
-        double sine = (sin(*angle / 2));
+        *angleRad = acos(w) * 2;
+        double sine = (sin(*angleRad / 2));
         if (sine == 0.0){
             axis->x = axis->y = axis->z = 0;
         }
@@ -57,7 +58,6 @@ namespace DataTypes{
             axis->x = i / sine;
             axis->y = j / sine;
             axis->z = k / sine;
-        *angle = *angle * 180 / M_PI;
         }
     }
     Quaternion Quaternion::conjugate(){
