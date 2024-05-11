@@ -49,15 +49,16 @@ namespace DataTypes{
     }
     void Quaternion::angleAndAxis(float* angleRad, Vector3* axis)
     {
-        *angleRad = acos(w) * 2;
+        Quaternion unit = this->normalize();
+        *angleRad = acos(unit.w) * 2;
         double sine = (sin(*angleRad / 2));
         if (sine == 0.0){
             axis->x = axis->y = axis->z = 0;
         }
         else{
-            axis->x = i / sine;
-            axis->y = j / sine;
-            axis->z = k / sine;
+            axis->x = unit.i / sine;
+            axis->y = unit.j / sine;
+            axis->z = unit.k / sine;
         }
     }
     Quaternion Quaternion::conjugate(){
