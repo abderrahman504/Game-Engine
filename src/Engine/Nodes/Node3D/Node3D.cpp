@@ -18,11 +18,11 @@ Vector3 Node3D::Scale(){return scale;}
 void Node3D::Scale(Vector3 scale){this->scale = scale;}
 
 Vector3 Node3D::getUp(){
-    Quaternion result = orientation * Vector3::UP * orientation.inverse();
+    Quaternion result = orientation * Vector3::UP * orientation.conjugate();
     return Vector3(result.i, result.j, result.k).normalize();
 }
 Vector3 Node3D::getForward(){
-    Quaternion result = orientation * Vector3::FORWARD * orientation.inverse();
+    Quaternion result = orientation * Vector3::FORWARD * orientation.conjugate();
     return Vector3(result.i, result.j, result.k).normalize();
 }
 void Node3D::lookAt(Vector3 point, Vector3 up){

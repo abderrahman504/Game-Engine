@@ -47,7 +47,7 @@ namespace DataTypes{
     }
     Vector3 Vector3::rotateBy(Quaternion quaternion){
         quaternion = quaternion.normalize();
-        Quaternion q = quaternion * *this * quaternion.inverse();
+        Quaternion q = quaternion * *this * quaternion.conjugate();
         return Vector3(q.i, q.j, q.k);
     }
 
