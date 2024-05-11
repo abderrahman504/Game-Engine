@@ -13,18 +13,16 @@ Node3D::Node3D() : Node(){
 Vector3 Node3D::Position(){return position;}
 void Node3D::Position(Vector3 position){this->position = position;}
 Quaternion Node3D::Orientation(){return orientation;}
-void Node3D::Orientation(Quaternion quaterion){this->orientation = quaterion;}
+void Node3D::Orientation(Quaternion quaterion){this->orientation = quaterion.normalize();}
 Vector3 Node3D::Scale(){return scale;}
 void Node3D::Scale(Vector3 scale){this->scale = scale;}
 
 Vector3 Node3D::getUp(){
-    Quaternion result = Quaternion(0, Vector3::UP.x, Vector3::UP.y, Vector3::UP.z);
-    result = orientation * result * orientation.inverse();
+    Quaternion result = orientation * Vector3::UP * orientation.inverse();
     return Vector3(result.i, result.j, result.k).normalize();
 }
 Vector3 Node3D::getForward(){
-    Quaternion result = Quaternion(0, Vector3::FORWARD.x, Vector3::FORWARD.y, Vector3::FORWARD.z);
-    result = orientation * result * orientation.inverse();
+    Quaternion result = orientation * Vector3::FORWARD * orientation.inverse();
     return Vector3(result.i, result.j, result.k).normalize();
 }
 void Node3D::lookAt(Vector3 point, Vector3 up){
@@ -39,8 +37,7 @@ void Node3D::lookTowards(Vector3 direction, Vector3 up){
     vec = Vector3::UP;
     rotateAround(vec.cross(properUp), vec.angle_to(properUp));
 }
-
 void Node3D::rotateAround(Vector3 axis, float angleRad){
     Quaternion newRotation = Quaternion(angleRad, axis);
-    orientation = orientation * newRotation;
+    orientation = (orientation * newRotation).normalize();
 }
