@@ -3,6 +3,8 @@
 
 using namespace Game;
 
+Planet::Planet(float planetRadius, int resolution) : SphereMesh(planetRadius, resolution){}
+
 void Planet::idle(double deltaTime)
 {
     //Update planet angle every frame
