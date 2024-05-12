@@ -17,17 +17,29 @@ namespace DataTypes{
     Vector3::Vector3(): x(0), y(0), z(0){}
     Vector3::Vector3(float x, float y, float z): x(x), y(y), z(z){}
 
-    Vector3 Vector3::operator+(Vector3 other){
-        return Vector3(x+other.x, y+other.y, z+other.z);
+    Vector3 Vector3::operator+(float scalar){
+        return Vector3(x+scalar, y+scalar, z+scalar);
     }
-    Vector3 Vector3::operator-(Vector3 other){
-        return Vector3(x-other.x, y-other.y, z-other.z);
+    Vector3 Vector3::operator-(float scalar){
+        return Vector3(x-scalar, y-scalar, z-scalar);
     }
     Vector3 Vector3::operator*(float scalar){
         return Vector3(x*scalar, y*scalar, z*scalar);
     }
     Vector3 Vector3::operator/(float scalar){
         return Vector3(x/scalar, y/scalar, z/scalar);
+    }
+    Vector3 Vector3::operator+(Vector3 other){
+        return Vector3(x+other.x, y+other.y, z+other.z);
+    }
+    Vector3 Vector3::operator-(Vector3 other){
+        return Vector3(x-other.x, y-other.y, z-other.z);
+    }
+    Vector3 Vector3::operator*(Vector3 other){
+        return Vector3(x*other.x, y*other.y, z*other.z);
+    }
+    Vector3 Vector3::operator/(Vector3 other){
+        return Vector3(x/other.x, y/other.y, z/other.z);
     }
     float Vector3::dot(Vector3 other){
         return x*other.x + y*other.y + z*other.z;

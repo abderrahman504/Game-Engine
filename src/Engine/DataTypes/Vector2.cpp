@@ -14,13 +14,13 @@ namespace DataTypes{
 
     Vector2::Vector2(): x(0), y(0){}
     Vector2::Vector2(float x, float y): x(x), y(y){}
-    Vector2 Vector2::operator+(Vector2 other)
+    Vector2 Vector2::operator+(float scalar)
     {
-        return Vector2(x + other.x, y + other.y);
+        return Vector2(x + scalar, y + scalar);
     }
-    Vector2 Vector2::operator-(Vector2 other)
+    Vector2 Vector2::operator-(float scalar)
     {
-        return Vector2(x - other.x, y - other.y);
+        return Vector2(x - scalar, y - scalar);
     }
     Vector2 Vector2::operator*(float scalar)
     {
@@ -29,6 +29,22 @@ namespace DataTypes{
     Vector2 Vector2::operator/(float scalar)
     {
         return Vector2(x / scalar, y / scalar);
+    }
+    Vector2 Vector2::operator+(Vector2 other)
+    {
+        return Vector2(x + other.x, y + other.y);
+    }
+    Vector2 Vector2::operator-(Vector2 other)
+    {
+        return Vector2(x - other.x, y - other.y);
+    }
+    Vector2 Vector2::operator*(Vector2 other)
+    {
+        return Vector2(x * other.x, y * other.y);
+    }
+    Vector2 Vector2::operator/(Vector2 other)
+    {
+        return Vector2(x / other.x, y / other.y);
     }
     float Vector2::dot(Vector2 other)
     {
