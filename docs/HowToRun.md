@@ -25,7 +25,8 @@ This file will help you prep your IDE to run this project.
                 "${fileDirname}/${fileBasenameNoExtension}.exe",
                 "-lopengl32",
                 "-lfreeglut",
-                "-lglew32"
+                "-lglew32",
+                "-lglu32"
             ],
             "options": {
                 "cwd": "${fileDirname}"
