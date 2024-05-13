@@ -19,8 +19,8 @@ namespace Nodes{
         public:
         Node();
         ~Node();
-        Node& Parent();
-        Node& getChildAt(int index);
+        Node* Parent();
+        Node* getChildAt(int index);
         std::vector<Node*> getChildren();
         void addChild(Node* child);
         void removeChild(Node* child);

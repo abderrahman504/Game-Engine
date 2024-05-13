@@ -11,8 +11,8 @@ Node::~Node(){
         delete children[i];
     }
 }
-Node& Node::Parent(){return *parent;}
-Node& Node::getChildAt(int index){return *children[index];}
+Node* Node::Parent(){return parent;}
+Node* Node::getChildAt(int index){return children[index];}
 std::vector<Node*> Node::getChildren(){
     std::vector<Node*> childrenCopy;
     for(int i = 0; i < children.size(); i++){
@@ -23,16 +23,20 @@ std::vector<Node*> Node::getChildren(){
 void Node::addChild(Node* child){
     for(int i = 0; i < children.size(); i++) if(children[i] == child) return;
     children.push_back(child);
+    child->parent = this;
 }
 void Node::removeChild(Node* child){
     for(int i = 0; i < children.size(); i++){
         if(children[i] == child){
-            children.erase(children.begin() + i);
+            removeChildAt(i);
             return;
         }
     }
 }
-void Node::removeChildAt(int index){children.erase(children.begin() + index);}
+void Node::removeChildAt(int index){
+    children[index]->parent = NULL;
+    children.erase(children.begin() + index);
+}
 std::string Node::getName(){
     std::string nameCopy = name;
     return nameCopy;
