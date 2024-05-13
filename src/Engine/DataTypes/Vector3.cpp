@@ -11,8 +11,8 @@ namespace DataTypes{
     const Vector3 Vector3::RIGHT(1, 0, 0);
     const Vector3 Vector3::UP(0, 1, 0);
     const Vector3 Vector3::DOWN(0, -1, 0);
-    const Vector3 Vector3::FORWARD(0, 0, 1);
-    const Vector3 Vector3::BACK(0, 0, -1);
+    const Vector3 Vector3::FORWARD(0, 0, -1);
+    const Vector3 Vector3::BACK(0, 0, 1);
     
     Vector3::Vector3(): x(0), y(0), z(0){}
     Vector3::Vector3(float x, float y, float z): x(x), y(y), z(z){}
