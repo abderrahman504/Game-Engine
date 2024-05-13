@@ -18,6 +18,7 @@ static SceneHead *sceneHead;
 static TreeDrawer *treeDrawer;
 static std::vector<Node*> node_freeing_queue;
 static unsigned long long last_idle;
+static Vector2 windowSize;
 
 void glutIdle();
 void glutDraw();
@@ -88,14 +89,16 @@ void SceneHead::idle()
 
 void glutDraw() {sceneHead->draw();}
 void SceneHead::draw(){
-    treeDrawer->drawScene(scene_root);
+    treeDrawer->drawScene(scene_root, windowSize);
 }
 
 void resize(int width, int height)
 {
+    windowSize = Vector2(width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-8, 8,  -4.5, 4.5, 1, 1000.0);
+    gluPerspective(33.6, 16.0 / 9.0, 1, 1000);
+    // glFrustum(-4, 4,  -4.5, 4.5, 1, 1000.0);
     glMatrixMode(GL_MODELVIEW);
 }
 

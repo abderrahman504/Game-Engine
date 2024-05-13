@@ -8,7 +8,7 @@ namespace Engine{
     {
 
         public:
-        void drawScene(Nodes::Node* root);
+        void drawScene(Nodes::Node* root, DataTypes::Vector2 windowSize);
         
         private:
         void drawNode(Nodes::Node* node);

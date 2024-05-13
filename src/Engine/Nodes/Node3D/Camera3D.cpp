@@ -5,6 +5,10 @@ using namespace Engine::Nodes;
 using namespace Engine::DataTypes;
 
 
+Camera3D::Camera3D() : Node3D(){
+    setName("Camera3D");
+    updateDims();
+}
 
 void Camera3D::setAspect(Vector2 aspect){
     this->aspect = aspect;
@@ -28,27 +32,20 @@ void Camera3D::setNear(float near){
     updateDims();
 }
 
-
-float Camera3D::getLeft(){return left;}
-float Camera3D::getRight(){return right;}
-float Camera3D::getUp(){return up;}
-float Camera3D::getDown(){return down;}
+float Camera3D::getFOV(){return fov_or_width;}
+Vector2 Camera3D::getAspect(){return aspect;}
+float Camera3D::getWidth(){return width;}
+float Camera3D::getHeight(){return height;}
 float Camera3D::getNear(){return near;}
 float Camera3D::getFar(){return far;}
 
 
 void Camera3D::updateDims(){
     //Applying fov or width
-    float width;
     if(projection = PERSPECTIVE)
         width = 2 * near * tan(0.5 * fov_or_width);
     else
         width = fov_or_width;
     //Applying aspect ratio
-    float height = width / (aspect.x / aspect.y);
-    //Setting the dimensions
-    left = -0.5 * width;
-    right = 0.5 * width;
-    up = 0.5 * height;
-    down = -0.5 * height;
+    height = width / (aspect.x / aspect.y);
 }
