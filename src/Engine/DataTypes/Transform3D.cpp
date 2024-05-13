@@ -5,8 +5,8 @@ using namespace Engine::DataTypes;
 
 Transform3D identity();
 
-const Transform3D IDENTITY = identity();
-const Transform3D ZERO();
+const Transform3D Transform3D::IDENTITY = identity();
+const Transform3D Transform3D::ZERO = Transform3D();
 
 Transform3D::Transform3D(){
     for(int i=0; i<4; i++)
@@ -25,7 +25,7 @@ Transform3D Transform3D::translation(Vector3 position){
     return trans;
 }
 Transform3D Transform3D::rotation(Vector3 axis, float angle){
-    rotation(Quaternion(angle, axis));
+    return rotation(Quaternion(angle, axis));
 }
 Transform3D Transform3D::rotation(Quaternion quaternion){
     float i2 = quaternion.i * quaternion.i;
