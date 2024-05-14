@@ -42,8 +42,8 @@ float Camera3D::getFar(){return far;}
 
 void Camera3D::updateDims(){
     //Applying fov or width
-    if(projection = PERSPECTIVE)
-        width = 2 * near * tan(0.5 * fov_or_width);
+    if(projection == PERSPECTIVE)
+        width = 2 * near * tan(0.5 * fov_or_width * PI/180.0);
     else
         width = fov_or_width;
     //Applying aspect ratio

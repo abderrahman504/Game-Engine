@@ -69,8 +69,8 @@ void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root)
     glViewport(camera->viewportPosition.x * windowSize.x, camera->viewportPosition.y * windowSize.y, camera->viewportSize.x * windowSize.x, camera->viewportSize.y * windowSize.y);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(33, camera->getAspect().x / camera->getAspect().y, camera->getNear(), camera->getFar());
-    // glFrustum(-0.5*camera->getWidth(), 0.5*camera->getWidth(), -0.5*camera->getHeight(), 0.5*camera->getHeight(), camera->getNear(), camera->getFar());
+    // gluPerspective(33, camera->getAspect().x / camera->getAspect().y, camera->getNear(), camera->getFar());
+    glFrustum(-0.5*camera->getWidth(), 0.5*camera->getWidth(), -0.5*camera->getHeight(), 0.5*camera->getHeight(), camera->getNear(), camera->getFar());
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.x + cameraForward.x, cameraPos.y + cameraForward.y, cameraPos.z + cameraForward.z, cameraUp.x, cameraUp.y, cameraUp.z);
