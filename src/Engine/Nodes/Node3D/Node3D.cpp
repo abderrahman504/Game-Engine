@@ -34,7 +34,7 @@ void Node3D::lookTowards(Vector3 direction, Vector3 up){
     rotateAround(vec.cross(direction), vec.angle_to(direction));
     //Rotate so your top points towards up
     Vector3 properUp = up - direction * up.dot(direction); 
-    vec = Vector3::UP;
+    vec = getUp();
     rotateAround(vec.cross(properUp), vec.angle_to(properUp));
 }
 void Node3D::rotateAround(Vector3 axis, float angleRad){
