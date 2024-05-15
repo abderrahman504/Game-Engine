@@ -6,12 +6,12 @@
 #include <GL/freeglut.h>
 #include <vector>
 #include <stack>
-#include <unordered_map>
+#include <map>
 #include <math.h>
 
 using namespace Engine;
 using namespace Engine::Nodes;
-std::unordered_map<int, Camera3D*> activeCameras = std::unordered_map<int, Camera3D*>();
+std::map<int, Camera3D*> activeCameras = std::map<int, Camera3D*>();
 
 
 void applyMaterial(Material material);
@@ -62,14 +62,24 @@ void getCameraOrientationAndPosition(Camera3D* camera, Vector3* pos, Vector3* fo
     *up = cameraUp;
 }
 
-void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root)
+void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root, bool multipleCameras)
 {
     Vector3 cameraPos, cameraForward, cameraUp;
     getCameraOrientationAndPosition(camera, &cameraPos, &cameraForward, &cameraUp);
-    glViewport(camera->viewportPosition.x * windowSize.x, camera->viewportPosition.y * windowSize.y, camera->viewportSize.x * windowSize.x, camera->viewportSize.y * windowSize.y);
+    Vector2 viewportPosition = camera->viewportPosition * windowSize;
+    Vector2 viewportSize = camera->viewportSize * windowSize;
+    glViewport(viewportPosition.x, viewportPosition.y, viewportSize.x, viewportSize.y);
+    if(multipleCameras)
+    {
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(viewportPosition.x, viewportPosition.y, viewportSize.x, viewportSize.y);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDisable(GL_SCISSOR_TEST);
+    }
+    else 
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    // gluPerspective(33, camera->getAspect().x / camera->getAspect().y, camera->getNear(), camera->getFar());
     glFrustum(-0.5*camera->getWidth(), 0.5*camera->getWidth(), -0.5*camera->getHeight(), 0.5*camera->getHeight(), camera->getNear(), camera->getFar());
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -77,7 +87,6 @@ void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root)
 }
 
 void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     findCameras(root);
     Camera3D defaultCam = defaultCamera();
@@ -85,7 +94,7 @@ void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
     for(auto it = activeCameras.begin(); it != activeCameras.end(); it++)
     {
         Camera3D* camera = it->second;
-        drawCameraViewport(camera, windowSize, root);
+        drawCameraViewport(camera, windowSize, root, activeCameras.size() > 1);
         drawNode(root);
     }
     glutSwapBuffers();
@@ -141,7 +150,5 @@ void applyMaterial(Material material)
 
 Camera3D defaultCamera()
 {
-    //implement later
-    //Create a default camera object to be used in drawing the scene if no camera is present.
     return Camera3D();
 }
