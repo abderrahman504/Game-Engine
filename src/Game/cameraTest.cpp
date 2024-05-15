@@ -24,15 +24,20 @@ namespace Game{
                 printf("Position = (%f, %f, %f)\n", Position().x, Position().y, Position().z);
             }
             Vector3 rotateDir = Vector3::ZERO;
-            if(sceneHead.getInputServer().isKeyPressed('i')) rotateDir = rotateDir + Vector3::UP;
-            if(sceneHead.getInputServer().isKeyPressed('k')) rotateDir = rotateDir + Vector3::DOWN;
-            if(sceneHead.getInputServer().isKeyPressed('j')) rotateDir = rotateDir + Vector3::LEFT;
-            if(sceneHead.getInputServer().isKeyPressed('l')) rotateDir = rotateDir + Vector3::RIGHT;
+            Vector2 mouseDir=sceneHead.getInputServer().getMouseMotion();
+            rotateDir.x=mouseDir.x;
+            rotateDir.y=mouseDir.y;
+
+//            if(mouseDir) rotateDir = rotateDir + Vector3::UP;
+//            if(sceneHead.getInputServer().isKeyPressed('k')) rotateDir = rotateDir + Vector3::DOWN;
+//            if(sceneHead.getInputServer().isKeyPressed('j')) rotateDir = rotateDir + Vector3::LEFT;
+//            if(sceneHead.getInputServer().isKeyPressed('l')) rotateDir = rotateDir + Vector3::RIGHT;
             if(rotateDir.length() != 0)
             {
-                float speed = 70 * PI / 180.0;
+                float speed = 10 * PI / 180.0;
                 rotateAround(Vector3::DOWN, speed * deltaTime * rotateDir.x);
                 rotateAround(Vector3::LEFT, speed * deltaTime * rotateDir.y);
+
             }
 
         }

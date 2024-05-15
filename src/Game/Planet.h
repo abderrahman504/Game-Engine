@@ -8,8 +8,6 @@ using namespace Engine::Nodes;
 namespace Game{
     class Planet : public SphereMesh
     {
-
-
         public:
         float orbitRadius = 1;
         float orbitSpeed = PI * 0.5;
