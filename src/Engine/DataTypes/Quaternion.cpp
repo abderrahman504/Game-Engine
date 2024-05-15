@@ -18,6 +18,11 @@ namespace DataTypes{
     
     Quaternion::Quaternion(float angle, Vector3 axis)
     {
+        if(axis.length() == 0 || angle == 0){
+            this->w = 1;
+            this->i = this->j = this->k = 0;
+            return;
+        }
         this->w = cos(angle / 2);
         this->i = axis.x * sin(angle / 2);
         this->j = axis.y * sin(angle / 2);
