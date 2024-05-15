@@ -10,6 +10,7 @@ enum {PRESSED, RELEASED, HELD, NONE};
 
 typedef int KeyState;
 Vector2 mouse_pos, prev_mouse_pos;
+bool mouse_just_entered;
 std::unordered_map<int, KeyState> key_map = std::unordered_map<int, KeyState>();
 
 
@@ -32,20 +33,41 @@ void InputServer::init()
     key_map[ARROW_DOWN] = NONE;
     mouse_pos = Vector2::ZERO;
     prev_mouse_pos = Vector2::ZERO;
+    mouse_just_entered = false;
 }
 
 void InputServer::keyboardInput(unsigned char key, bool down, int x, int y){
+    if(mouse_just_entered)
+    {
+        mouse_just_entered = false;
+        prev_mouse_pos = Vector2(x, y);
+    }
     mouse_pos = Vector2(x,y);
     key_map[key] = down ? PRESSED : RELEASED;
 }
 void InputServer::specialInput(int key, bool down, int x, int y){
+    if(mouse_just_entered)
+    {
+        mouse_just_entered = false;
+        prev_mouse_pos = Vector2(x, y);
+    }
     mouse_pos = Vector2(x,y);
     //implement later
 }
 void InputServer::mouseMotion(int x, int y){
+    if(mouse_just_entered)
+    {
+        mouse_just_entered = false;
+        prev_mouse_pos = Vector2(x, y);
+    }
     mouse_pos = Vector2(x, y);
 }
 void InputServer::mouseKey(int button, int state, int x, int y){
+    if(mouse_just_entered)
+    {
+        mouse_just_entered = false;
+        prev_mouse_pos = Vector2(x, y);
+    }
     mouse_pos = Vector2(x,y);
     switch(button)
     {
@@ -61,11 +83,19 @@ void InputServer::mouseKey(int button, int state, int x, int y){
     }
 }
 void InputServer::mouseWheel(int wheel, int direction, int x, int y){
+    if(mouse_just_entered)
+    {
+        mouse_just_entered = false;
+        prev_mouse_pos = Vector2(x, y);
+    }
     mouse_pos = Vector2(x,y);
     if (direction > 0)
         key_map[MOUSE_SCROLL_UP] = RELEASED;
     else
         key_map[MOUSE_SCROLL_DOWN] = RELEASED;
+}
+void InputServer::mouseEntry(int state){
+    mouse_just_entered = state == GLUT_ENTERED;
 }
 
 void InputServer::onIdle()

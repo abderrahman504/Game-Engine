@@ -45,17 +45,22 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     glutPassiveMotionFunc(mouse_motion);
     glutMouseWheelFunc(mouse_wheel);
     glutMouseFunc(mouse_key);
+    glutPassiveMotionFunc(mouse_motion);
+    glutEntryFunc(mouse_entry);
     //Other callbacks
     glutIdleFunc(glutIdle);
     glutDisplayFunc(glutDraw);
     glutReshapeFunc(resize);
-    glutPassiveMotionFunc(mouse_motion);
+    // glutSetCursor(GLUT_CURSOR_NONE);
+    
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
+    glClearColor(0,0,0, 1.0);
+
+    //Setting global lighting
     float global_ambience[4] = {0.8, 0.8, 0.8, 1.0};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambience);
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-    glClearColor(0,0,0, 1.0);
 }
 
 void SceneHead::Start(){
@@ -98,7 +103,6 @@ void resize(int width, int height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(33.6, 16.0 / 9.0, 1, 1000);
-    // glFrustum(-4, 4,  -4.5, 4.5, 1, 1000.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -122,6 +126,8 @@ void SceneHead::mouseKey(int button, int state, int x, int y){inputServer->mouse
 
 void mouse_wheel(int wheel, int direction, int x, int y){sceneHead->mouseWheel(wheel, direction, x, y);}
 void SceneHead::mouseWheel(int wheel, int direction, int x, int y){inputServer->mouseWheel(wheel, direction, x, y);}
+void mouse_entry(int state){sceneHead->mouseEntry(state);}
+void SceneHead::mouseEntry(int state){inputServer->mouseEntry(state);}
 
 
 void SceneHead::findNodesForFreeing()

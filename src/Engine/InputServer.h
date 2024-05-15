@@ -16,6 +16,7 @@ namespace Engine{
         void mouseMotion(int x, int y);
         void mouseKey(int button, int state, int x, int y);
         void mouseWheel(int wheel, int direction, int x, int y);
+        void mouseEntry(int state);
         void onIdle();
         void init();
 

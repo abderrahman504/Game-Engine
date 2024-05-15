@@ -15,6 +15,7 @@ void mouse_motion(int x, int y);
 void mouse_key(int button, int state, int x, int y);
 void mouse_key_up(int button, int state, int x, int y);
 void mouse_wheel(int wheel, int direction, int x, int y);
+void mouse_entry(int state);
 namespace Engine{
     class SceneHead
     {
@@ -27,6 +28,7 @@ namespace Engine{
         friend void ::mouse_motion(int x, int y);
         friend void ::mouse_key(int button, int state, int x, int y);
         friend void ::mouse_wheel(int wheel, int direction, int x, int y);
+        friend void ::mouse_entry(int state);
 
         protected:
         Node* scene_root;
@@ -54,6 +56,7 @@ namespace Engine{
         void mouseMotion(int x, int y);
         void mouseKey(int button, int state, int x, int y);
         void mouseWheel(int wheel, int direction, int x, int y);
+        void mouseEntry(int state);
         void findNodesForFreeing();
 
 

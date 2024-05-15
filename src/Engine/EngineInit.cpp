@@ -17,7 +17,7 @@ namespace Engine{
         glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-        glutInitWindowSize(1280, 720);
+        glutInitWindowSize(1120, 630);
         glutInitWindowPosition(100, 50);
         glutCreateWindow("Game Engine");
 
