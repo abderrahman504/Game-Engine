@@ -7,9 +7,9 @@
 namespace Engine{
 namespace DataTypes{
 
-    const Quaternion Quaternion::FORWARD = Quaternion(0, Vector3(0,0,0));
-    const Quaternion Quaternion::LEFT = Quaternion(90, Vector3(0,1,0));
-    const Quaternion Quaternion::RIGHT = Quaternion(90, Vector3(0,-1,0));
+    const Quaternion Quaternion::IDENTITY = Quaternion(1,0,0,0);
+    const Quaternion Quaternion::LEFT = Quaternion(-90, Vector3(0,1,0));
+    const Quaternion Quaternion::RIGHT = Quaternion(90, Vector3(0,1,0));
     const Quaternion Quaternion::UP = Quaternion(90, Vector3(1,0,0));
     const Quaternion Quaternion::DOWN = Quaternion(90, Vector3(-1,0,0));
 
@@ -18,6 +18,12 @@ namespace DataTypes{
     
     Quaternion::Quaternion(float angle, Vector3 axis)
     {
+        if (axis.length() == 0){
+            this->w = 1;
+            this->i = this->j = this->k = 0;
+            return;
+        }
+        axis = axis.normalize();
         this->w = cos(angle / 2);
         this->i = axis.x * sin(angle / 2);
         this->j = axis.y * sin(angle / 2);
