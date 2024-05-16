@@ -3,7 +3,7 @@
 #include "cameraTest.cpp"
 
 using namespace Game;
-SphereMesh* createPlanet(SphereMesh* sun,std::string planetName,
+Planet* createPlanet(Planet* parent,std::string planetName,
                   float radius,float red,float green,
                   float blue,float xPos
         ,float yPos,float zPos);
@@ -12,7 +12,7 @@ Engine::Nodes::Node* MainGameScene::constructTree()
 {
     Node* root = new Node();
     root->setName("Solar System");
-    SphereMesh* sun = new SphereMesh(30, 100);
+    Planet* sun = new Planet(30, 100);
     Material* sunMaterial = sun->material;
     sunMaterial->color[0] = 255/256.0;
     sunMaterial->color[1] = 255/256.0;
@@ -24,28 +24,37 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     sun->setName("Sun");
     root->addChild(sun);
     // Earth
-   SphereMesh* earth= createPlanet(sun,"Earth",15,65/256.0,175/256.0,239/256.0,100.0,0.0,0.0);
-
+   Planet* earth= createPlanet(sun,"Earth",15,65/256.0,175/256.0,239/256.0,100.0,0.0,0.0);
+  earth->orbitRadius=100;
+  earth->orbitSpeed=PI * 0.298;
     //Moon
-    createPlanet(earth,"Moon",10,0.2,0.2,0.2,0.0,50.0,0.0);
-
+  Planet* moon=  createPlanet(earth,"Moon",10,0.2,0.2,0.2,0.0,0.0,0.0);
+  moon->orbitRadius=50;
+  moon->orbitSpeed=PI * 0.4;
     // venus
-    createPlanet(sun,"Venus",15,195/256.0,141/256.0,14/256.0,200.0,0.0,0.0);
-
+   Planet* venus= createPlanet(sun,"Venus",15,195/256.0,141/256.0,14/256.0,130.0,0.0,0.0);
+ venus->orbitRadius=130;
+ venus->orbitSpeed=PI * 0.35;
   // mercury
-    createPlanet(sun,"Mercury",5,0.941,0.906,0.902,50.0,0.0,0.0);
-
+ Planet* mercury=   createPlanet(sun,"Mercury",5,0.941,0.906,0.902,50.0,0.0,0.0);
+mercury->orbitRadius=50;
+mercury->orbitSpeed=PI * 0.479;
   // jupiter
-    createPlanet(sun,"Jupiter",20,0.902,0.486,0.431,-80.0,0.0,0.0);
-
+   Planet* jupiter= createPlanet(sun,"Jupiter",20,0.902,0.486,0.431,160.0,0.0,0.0);
+jupiter->orbitRadius=160;
+jupiter->orbitSpeed=PI * 0.131;
     //neptune
-    createPlanet(sun,"Neptune",20,0.902,0.486,0.431,-150.0,0.0,0.0);
+   Planet* neptune= createPlanet(sun,"Neptune",20,0.902,0.486,0.431,200.0,0.0,0.0);
+   neptune->orbitRadius=200;
+   neptune->orbitSpeed=PI*0.054;
     //Mars
-    createPlanet(sun,"Mars",20,1,0,0,-250.0,0.0,0.0);
-
+   Planet* mars= createPlanet(sun,"Mars",20,1,0,0,250.0,0.0,0.0);
+mars->orbitRadius=250;
+mars->orbitSpeed=PI * 0.24;
     //Saturn
-    createPlanet(sun,"Saturn",20,1,0.655,0.655,-350.0,0.0,0.0);
-
+  Planet* saturn=  createPlanet(sun,"Saturn",20,1,0.655,0.655,300.0,0.0,0.0);
+saturn->orbitRadius=300;
+saturn->orbitSpeed=PI * 0.096;
 
     CameraTest* cameraParent = new CameraTest();
     Camera3D* camera = new Camera3D();
@@ -65,12 +74,12 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     return root;
 }
 
-SphereMesh* createPlanet(SphereMesh* parent,std::string planetName,
+Planet* createPlanet(Planet* parent,std::string planetName,
                   float radius,float red,float green,
                   float blue,float xPos
                   ,float yPos,float zPos)
 {
-    SphereMesh* planet = new SphereMesh(radius, 100);
+    Planet* planet = new Planet(radius, 100);
     Material* planetMaterial = planet->material;
     // Earth
     planetMaterial = planet->material;

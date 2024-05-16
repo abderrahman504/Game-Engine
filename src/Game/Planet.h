@@ -10,7 +10,7 @@ namespace Game{
     {
         public:
         float orbitRadius = 1;
-        float orbitSpeed = PI * 0.5;
+        float orbitSpeed = PI * 0.05;
         float orbitAngle = 0;
 
         Planet(float radius, int resolution);
