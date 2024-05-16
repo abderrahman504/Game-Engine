@@ -1,0 +1,168 @@
+Index: src/Engine/Nodes/Node3D/SpaceShipMesh.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>//\r\n// Created by AhmedSamir on 15/05/2024.\r\n//\r\n\r\n#include \"SpaceShipMesh.h\"\r\n\r\nusing namespace Engine::Nodes;\r\n\r\n\r\nSpaceShipMesh::SpaceShipMesh(float baseWidth, float baseHeight, float height, int resolution) {\r\n    this->baseWidth = baseWidth;\r\n    this->baseHeight = baseHeight;\r\n    this->height = height;\r\n    buildMesh(baseWidth, baseHeight, height, resolution, &vertices, &indeces, &countIndeces, &countPrimitives);\r\n    setName(\"SpaceShipMesh\");\r\n}\r\n\r\n\r\n\r\nfloat SpaceShipMesh::BaseWidth() { return baseWidth; }\r\n\r\nfloat SpaceShipMesh::BaseHeight() { return baseHeight; }\r\n\r\nfloat SpaceShipMesh::Height() { return height; }\r\n\r\nvoid SpaceShipMesh::buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices, unsigned int ***indeces, int **countIndeces, int *countPrimitives) {\r\n    *countPrimitives = resolution;\r\n    *countIndeces = new int[resolution];\r\n    *indeces = new unsigned int*[resolution];\r\n    for (int i =  0; i < resolution; i++){\r\n        (*indeces)[i] = new unsigned int[2*(resolution+1)];\r\n        (*countIndeces)[i] = 2*(resolution+1);\r\n    }\r\n    *vertices = new float[((resolution+1) * (resolution)) * 3];\r\n\r\n    float stepSize = height / resolution;\r\n    float angleIncrement = 2.0f * PI / resolution;\r\n\r\n    // Generate vertices for the spaceship\r\n    int vertexIndex = 0;\r\n    for (int i = 0; i <= resolution; i++) {\r\n        float currentHeight = i * stepSize;\r\n        float currentRadius = (baseWidth / 2) * (1.0f - currentHeight / height);\r\n        float yCoord = -baseHeight / 2.0f + currentHeight;\r\n\r\n        for (int j = 0; j < resolution; j++) {\r\n            float angle = j * angleIncrement;\r\n            float xCoord = currentRadius * cos(angle);\r\n            float zCoord = currentRadius * sin(angle);\r\n            (*vertices)[vertexIndex++] = xCoord;\r\n            (*vertices)[vertexIndex++] = zCoord;\r\n            (*vertices)[vertexIndex++] = yCoord;\r\n        }\r\n    }\r\n\r\n    // Generate indices for the spaceship\r\n    for (int i = 0; i < resolution; i++) {\r\n        for (int j = 0; j <= resolution; j++) {\r\n            (*indeces)[i][2 * j] = i * resolution + j % resolution;\r\n            (*indeces)[i][2 * j + 1] = (i + 1) * resolution + j % resolution;\r\n        }\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Engine/Nodes/Node3D/SpaceShipMesh.cpp b/src/Engine/Nodes/Node3D/SpaceShipMesh.cpp
+--- a/src/Engine/Nodes/Node3D/SpaceShipMesh.cpp	(revision cd2192c480d392e4518305cb5b4459984b6572ed)
++++ b/src/Engine/Nodes/Node3D/SpaceShipMesh.cpp	(date 1715864053368)
+@@ -24,14 +24,23 @@
+ float SpaceShipMesh::Height() { return height; }
+ 
+ void SpaceShipMesh::buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices, unsigned int ***indeces, int **countIndeces, int *countPrimitives) {
+-    *countPrimitives = resolution;
+-    *countIndeces = new int[resolution];
+-    *indeces = new unsigned int*[resolution];
+-    for (int i =  0; i < resolution; i++){
++//    *countPrimitives = resolution;
++//    *countIndeces = new int[resolution];
++//    *indeces = new unsigned int*[resolution];
++//    for (int i =  0; i < resolution; i++){
++//        (*indeces)[i] = new unsigned int[2*(resolution+1)];
++//        (*countIndeces)[i] = 2*(resolution+1);
++//    }
++//    *vertices = new float[((resolution+1) * (resolution)) * 3];
++
++    *countPrimitives = resolution + 1; // Add 1 for the base of the spaceship
++    *countIndeces = new int[resolution + 1]; // Add 1 for the base of the spaceship
++    *indeces = new unsigned int*[resolution + 1]; // Add 1 for the base of the spaceship
++    for (int i =  0; i <= resolution; i++){ // Add 1 for the base of the spaceship
+         (*indeces)[i] = new unsigned int[2*(resolution+1)];
+         (*countIndeces)[i] = 2*(resolution+1);
+     }
+-    *vertices = new float[((resolution+1) * (resolution)) * 3];
++    *vertices = new float[((resolution+1) * (resolution + 1)) * 3];
+ 
+     float stepSize = height / resolution;
+     float angleIncrement = 2.0f * PI / resolution;
+@@ -49,8 +58,19 @@
+             float zCoord = currentRadius * sin(angle);
+             (*vertices)[vertexIndex++] = xCoord;
+             (*vertices)[vertexIndex++] = zCoord;
+-            (*vertices)[vertexIndex++] = yCoord;
+-        }
++            (*vertices)[vertexIndex++] = -yCoord;
++        }
++    }
++
++    float baseRadius = baseWidth / 2;
++    for (int j = 0; j < resolution; j++) {
++        float angle = j * angleIncrement;
++        float xCoord = baseRadius * cos(angle);
++        float zCoord = baseRadius * sin(angle);
++        float yCoord = -baseHeight / 2.0f; // Base is at the bottom of the cone
++        (*vertices)[vertexIndex++] = xCoord;
++        (*vertices)[vertexIndex++] = zCoord;
++        (*vertices)[vertexIndex++] = yCoord;
+     }
+ 
+     // Generate indices for the spaceship
+@@ -60,5 +80,9 @@
+             (*indeces)[i][2 * j + 1] = (i + 1) * resolution + j % resolution;
+         }
+     }
++    for (int j = 0; j < resolution; j++) {
++        (*indeces)[resolution][2 * j] = resolution * resolution + j;
++        (*indeces)[resolution][2 * j + 1] = resolution * resolution + (j + 1) % resolution;
++    }
+ 
+ }
+Index: src/Game/MainGameScene.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include \"MainGameScene.h\"\r\n#include \"Planet.h\"\r\n#include \"cameraTest.cpp\"\r\n\r\nusing namespace Game;\r\nSpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, int resolution,Vector3 *vector3);\r\n\r\nEngine::Nodes::Node* MainGameScene::constructTree()\r\n{\r\n    Node* root = new Node();\r\n    root->setName(\"Solar System\");\r\n    SphereMesh* sun = new SphereMesh(50, 100);\r\n    Material* sunMaterial = sun->material;\r\n    sunMaterial->color[0] = 1;\r\n    sunMaterial->color[1] = 0.8;\r\n    sunMaterial->color[2] = 0.2;\r\n    sunMaterial->ambient_diffuse = 1;\r\n    sunMaterial->shininess = 0;\r\n    sunMaterial->specular = 0;\r\n    sun->Position(Vector3(0, 0, -300));\r\n    sun->setName(\"Sun\");\r\n    root->addChild(sun);\r\n    SphereMesh* sun2 = new SphereMesh(50, 100);\r\n    sunMaterial = sun2->material;\r\n    sunMaterial->color[0] = 0.2;\r\n    sunMaterial->color[1] = 0.5;\r\n    sunMaterial->color[2] = 0.8;\r\n    sunMaterial->ambient_diffuse = 1;\r\n    sunMaterial->shininess = 0;\r\n    sunMaterial->specular = 0;\r\n    sun2->Position(Vector3(50, 0, 0));\r\n    sun2->setName(\"Sun\");\r\n//    root->addChild(sun2);\r\n\r\n\r\n    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, new Vector3(0, 0, 0));\r\n    root->addChild(spaceship);\r\n\r\n\r\n\r\n\r\n    //Create 8 planet objects and make them children of the sun\r\n    //For each planet you need to set its material, orbit radius and orbit speed. Don't worry about setting position.\r\n    //You can create another planet object for the moon and make it a child of earth.\r\n    CameraTest* cameraParent = new CameraTest();\r\n    Camera3D* camera = new Camera3D();\r\n    camera->active = true;\r\n    cameraParent->addChild(camera);\r\n//    cameraParent->addChild(spaceship);\r\n    root->addChild(cameraParent);\r\n    Camera3D* camera2 = new Camera3D();\r\n    camera2->active = true;\r\n    camera2->viewport = Engine::VIEWPORT_2;\r\n    camera2->viewportPosition = Vector2(0.7,0.1);\r\n    camera2->viewportSize = Vector2(0.2,0.2);\r\n    camera2->setFOV(90);\r\n    camera2->Position(Vector3(50, 500, 0));\r\n    camera2->lookTowards(Vector3::DOWN, Vector3::FORWARD);\r\n    root->addChild(camera2);\r\n\r\n    return root;\r\n}\r\n\r\n\r\nSpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, int resolution,Vector3 *vector3)\r\n{\r\n    SpaceShipMesh* spaceship =new SpaceShipMesh(baseWidth, baseHeight, height, resolution);\r\n\r\n    Material* spaceshipMaterial = spaceship->material;\r\n    // set color of spaceship to be red\r\n    spaceshipMaterial->color[0] = 1;\r\n    spaceshipMaterial->color[1] = 0;\r\n    spaceshipMaterial->color[2] = 0;\r\n    spaceshipMaterial->ambient_diffuse = 1;\r\n    spaceshipMaterial->shininess = 0;\r\n    spaceshipMaterial->specular = 0;\r\n    spaceship->Position(*vector3);\r\n    spaceship->setName(\"Spaceship\");\r\n\r\n    SpaceShipMesh* spaceship1= new SpaceShipMesh(baseWidth/1.5, baseHeight/3,height/2, resolution);\r\n    spaceshipMaterial = spaceship1->material;\r\n    // set color of spaceship to be red\r\n    spaceshipMaterial->color[0] = 1;\r\n    spaceshipMaterial->color[1] = 1;\r\n    spaceshipMaterial->color[2] = 0;\r\n    spaceshipMaterial->ambient_diffuse = 1;\r\n    spaceshipMaterial->shininess = 0;\r\n    spaceshipMaterial->specular = 0;\r\n    spaceship1->Position(Vector3(5, 0,-height/5.5));\r\n\r\n    spaceship1->setName(\"right wing\");\r\n    SpaceShipMesh* spaceship2 = new SpaceShipMesh(baseWidth/1.5, baseHeight/3,height/2, resolution);\r\n    spaceshipMaterial = spaceship2->material;\r\n    // set color of spaceship to be red\r\n    spaceshipMaterial->color[0] = 1;\r\n    spaceshipMaterial->color[1] = 1;\r\n    spaceshipMaterial->color[2] = 0;\r\n    spaceshipMaterial->ambient_diffuse = 1;\r\n    spaceshipMaterial->shininess = 0;\r\n    spaceshipMaterial->specular = 0;\r\n    spaceship2->Position(Vector3(-5, 0, -height/5.5));\r\n    spaceship2->setName(\"left wing\");\r\n\r\n    SphereMesh* spaceshiphead = new SphereMesh(height/10, resolution);\r\n    spaceshipMaterial = spaceshiphead->material;\r\n    // set color of spaceship to be red\r\n    spaceshipMaterial->color[0] = 1;\r\n    spaceshipMaterial->color[1] = 1;\r\n    spaceshipMaterial->color[2] = 0;\r\n    spaceshipMaterial->ambient_diffuse = 1;\r\n    spaceshipMaterial->shininess = 0;\r\n    spaceshipMaterial->specular = 0;\r\n    spaceshiphead->Position(Vector3(0, 1.2, 7.5));\r\n    spaceshiphead->setName(\"head\");\r\n\r\n\r\n\r\n    spaceship->addChild(spaceship1);\r\n    spaceship->addChild(spaceship2);\r\n    spaceship->addChild(spaceshiphead);\r\n\r\n    return spaceship;\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Game/MainGameScene.cpp b/src/Game/MainGameScene.cpp
+--- a/src/Game/MainGameScene.cpp	(revision cd2192c480d392e4518305cb5b4459984b6572ed)
++++ b/src/Game/MainGameScene.cpp	(date 1715864267310)
+@@ -33,8 +33,8 @@
+ //    root->addChild(sun2);
+ 
+ 
+-    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, new Vector3(0, 0, 0));
+-    root->addChild(spaceship);
++    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, new Vector3(0, -5, -10));
++//    root->addChild(spaceship);
+ 
+ 
+ 
+@@ -46,7 +46,7 @@
+     Camera3D* camera = new Camera3D();
+     camera->active = true;
+     cameraParent->addChild(camera);
+-//    cameraParent->addChild(spaceship);
++    cameraParent->addChild(spaceship);
+     root->addChild(cameraParent);
+     Camera3D* camera2 = new Camera3D();
+     camera2->active = true;
+@@ -86,7 +86,7 @@
+     spaceshipMaterial->ambient_diffuse = 1;
+     spaceshipMaterial->shininess = 0;
+     spaceshipMaterial->specular = 0;
+-    spaceship1->Position(Vector3(5, 0,-height/5.5));
++    spaceship1->Position(Vector3(5, 0,height/5.5));
+ 
+     spaceship1->setName("right wing");
+     SpaceShipMesh* spaceship2 = new SpaceShipMesh(baseWidth/1.5, baseHeight/3,height/2, resolution);
+@@ -98,7 +98,7 @@
+     spaceshipMaterial->ambient_diffuse = 1;
+     spaceshipMaterial->shininess = 0;
+     spaceshipMaterial->specular = 0;
+-    spaceship2->Position(Vector3(-5, 0, -height/5.5));
++    spaceship2->Position(Vector3(-5, 0, height/5.5));
+     spaceship2->setName("left wing");
+ 
+     SphereMesh* spaceshiphead = new SphereMesh(height/10, resolution);
+@@ -110,7 +110,7 @@
+     spaceshipMaterial->ambient_diffuse = 1;
+     spaceshipMaterial->shininess = 0;
+     spaceshipMaterial->specular = 0;
+-    spaceshiphead->Position(Vector3(0, 1.2, 7.5));
++    spaceshiphead->Position(Vector3(0, 1.2, -7.5));
+     spaceshiphead->setName("head");
+ 
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"CMakeSettings\">\r\n    <configurations>\r\n      <configuration PROFILE_NAME=\"Debug\" ENABLED=\"true\" CONFIG_NAME=\"Debug\" />\r\n    </configurations>\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"263dd75d-9e3f-46a9-af20-abac33490670\" name=\"Changes\" comment=\"\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ClangdSettings\">\r\n    <option name=\"formatViaClangd\" value=\"false\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"CMakeLists.txt\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2gVmKlRahJIrlSS0VkqSjsQc7WY\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.cidr.known.project.marker\": \"true\",\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"cf.first.check.clang-format\": \"false\",\r\n    \"cidr.known.project.marker\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"ignore.virus.scanning.warn.message\": \"true\",\r\n    \"last_opened_file_path\": \"C:/Users/ahmed/Desktop/Game-Engine\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"settings.editor.selected.configurable\": \"CPPToolchains\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\">\r\n    <configuration name=\"Game-engine\" type=\"CppFileRunConfiguration\" factoryName=\"CppFileRunConfiguration\" singleton=\"false\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" WORKING_DIR=\"file://$PROJECT_DIR$/src\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"Game-Engine\" TARGET_NAME=\"main.cpp - MinGW (1)\" CONFIG_NAME=\"Game-engine\">\r\n      <option name=\"compilerFile\" value=\"C:\\msys64\\ucrt64\\bin\\gcc.exe\" />\r\n      <option name=\"compilerOptions\" value=\"-g C:\\Users\\ahmed\\Desktop\\Game-Engine/src/Engine/*.cpp C:\\Users\\ahmed\\Desktop\\Game-Engine/src/Engine/SceneHeadHelpers/*.cpp C:\\Users\\ahmed\\Desktop\\Game-Engine/src/Engine/DataTypes/*.cpp C:\\Users\\ahmed\\Desktop\\Game-Engine/src/Engine/Nodes/*.cpp C:\\Users\\ahmed\\Desktop\\Game-Engine/src/Engine/Nodes/Node3D/*.cpp C:\\Users\\ahmed\\Desktop\\Game-Engine/src/Game/*.cpp -lopengl32 -lfreeglut -lglew32 -lstdc++ -lopengl32 -lfreeglut -lglew32 -lglu32\" />\r\n      <option name=\"sourceFile\" value=\"src\\main.cpp\" />\r\n      <option name=\"toolchainName\" value=\"MinGW (1)\" />\r\n      <method v=\"2\">\r\n        <option name=\"com.jetbrains.cidr.cpp.runfile.CppFileBuildBeforeRunTaskProvider$BasicBuildBeforeRunTask\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"263dd75d-9e3f-46a9-af20-abac33490670\" name=\"Changes\" comment=\"\" />\r\n      <created>1715791057692</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1715791057692</updated>\r\n      <workItem from=\"1715791060178\" duration=\"1528000\" />\r\n      <workItem from=\"1715792680950\" duration=\"4382000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision cd2192c480d392e4518305cb5b4459984b6572ed)
++++ b/.idea/workspace.xml	(date 1715864283088)
+@@ -9,7 +9,11 @@
+     </configurations>
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="263dd75d-9e3f-46a9-af20-abac33490670" name="Changes" comment="" />
++    <list default="true" id="263dd75d-9e3f-46a9-af20-abac33490670" name="Changes" comment="">
++      <change beforePath="$PROJECT_DIR$/src/Engine/Nodes/Node3D/SpaceShipMesh.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Nodes/Node3D/SpaceShipMesh.cpp" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Game/MainGameScene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/MainGameScene.cpp" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main.exe" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.exe" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -35,6 +39,7 @@
+   &quot;associatedIndex&quot;: 2
+ }</component>
+   <component name="ProjectId" id="2gVmKlRahJIrlSS0VkqSjsQc7WY" />
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+@@ -79,7 +84,7 @@
+       <option name="presentableId" value="Default" />
+       <updated>1715791057692</updated>
+       <workItem from="1715791060178" duration="1528000" />
+-      <workItem from="1715792680950" duration="4382000" />
++      <workItem from="1715792680950" duration="17923000" />
+     </task>
+     <servers />
+   </component>

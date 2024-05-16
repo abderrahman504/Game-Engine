@@ -9,7 +9,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="263dd75d-9e3f-46a9-af20-abac33490670" name="Changes" comment="" />
+    <list default="true" id="263dd75d-9e3f-46a9-af20-abac33490670" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/Engine/Nodes/Node3D/SpaceShipMesh.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Nodes/Node3D/SpaceShipMesh.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/MainGameScene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/MainGameScene.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.exe" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.exe" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,6 +39,7 @@
   &quot;associatedIndex&quot;: 2
 }</component>
   <component name="ProjectId" id="2gVmKlRahJIrlSS0VkqSjsQc7WY" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -79,7 +84,7 @@
       <option name="presentableId" value="Default" />
       <updated>1715791057692</updated>
       <workItem from="1715791060178" duration="1528000" />
-      <workItem from="1715792680950" duration="4382000" />
+      <workItem from="1715792680950" duration="17923000" />
     </task>
     <servers />
   </component>

@@ -56,13 +56,20 @@ mars->orbitSpeed=PI * 0.24;
   Planet* saturn=  createPlanet(sun,"Saturn",20,1,0.655,0.655,300.0,0.0,0.0);
 saturn->orbitRadius=300;
 saturn->orbitSpeed=PI * 0.096;
-    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, new Vector3(0, 0, 0));
-    root->addChild(spaceship);
+    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, new Vector3(-12, -8, -12));
+//    root->addChild(spaceship);
 
+
+
+
+    //Create 8 planet objects and make them children of the sun
+    //For each planet you need to set its material, orbit radius and orbit speed. Don't worry about setting position.
+    //You can create another planet object for the moon and make it a child of earth.
     CameraTest* cameraParent = new CameraTest();
     Camera3D* camera = new Camera3D();
     camera->active = true;
     cameraParent->addChild(camera);
+    cameraParent->addChild(spaceship);
     root->addChild(cameraParent);
     Camera3D* camera2 = new Camera3D();
     camera2->active = true;
@@ -123,7 +130,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
-    spaceship1->Position(Vector3(5, 0,-height/5.5));
+    spaceship1->Position(Vector3(5, 0,height/5.5));
 
     spaceship1->setName("right wing");
     SpaceShipMesh* spaceship2 = new SpaceShipMesh(baseWidth/1.5, baseHeight/3,height/2, resolution);
@@ -135,7 +142,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
-    spaceship2->Position(Vector3(-5, 0, -height/5.5));
+    spaceship2->Position(Vector3(-5, 0, height/5.5));
     spaceship2->setName("left wing");
 
     SphereMesh* spaceshiphead = new SphereMesh(height/10, resolution);
@@ -147,7 +154,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
-    spaceshiphead->Position(Vector3(0, 1.2, 7.5));
+    spaceshiphead->Position(Vector3(0, 1.2, -7.5));
     spaceshiphead->setName("head");
 
 
