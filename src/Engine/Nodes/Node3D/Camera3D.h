@@ -34,6 +34,8 @@ namespace Nodes{
         void setWidth(float w);
         //Sets the near value of the camera. Will maintain aspect and fov.
         void setNear(float near);
+        //Sets the far value of the camera
+        void setFar(float far);
 
         float getFOV();
         Vector2 getAspect();

@@ -31,6 +31,7 @@ void Camera3D::setNear(float near){
     this->near = near;
     updateDims();
 }
+void Camera3D::setFar(float far){this->far = far;}
 
 float Camera3D::getFOV(){return fov_or_width;}
 Vector2 Camera3D::getAspect(){return aspect;}
