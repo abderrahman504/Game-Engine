@@ -2,6 +2,7 @@
 #define NODE_GUARD
 #include <vector>
 #include <string>
+#include "cmath"
 
 namespace Engine{
     class SceneHead;
