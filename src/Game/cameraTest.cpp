@@ -21,7 +21,6 @@ namespace Game{
                 moveDir = moveDir.normalize().rotateBy(Orientation());
                 float speed = 100;
                 Position(Position() + moveDir * speed * deltaTime);
-                printf("Position = (%f, %f, %f)\n", Position().x, Position().y, Position().z);
             }
             Vector3 rotateDir = Vector3::ZERO;
             Vector2 mouseDir=sceneHead.getInputServer().getMouseMotion();
