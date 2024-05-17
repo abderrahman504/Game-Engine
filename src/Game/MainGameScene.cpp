@@ -55,10 +55,8 @@ Engine::Nodes::Node* MainGameScene::constructTree()
 	neptune->orbitRadius = 2400;
 	neptune->orbitSpeed = 0.5 *  PI / 180;
 
-
-
-    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, 0, 200));
-   	root->addChild(spaceship);
+    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, -20, -100));
+   	// root->addChild(spaceship);
 
 	//Controllable Camera
     CameraTest* cameraParent = new CameraTest();
@@ -66,8 +64,8 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     camera->active = true;
     camera->setFar(8000);
     cameraParent->addChild(camera);
-	cameraParent->Position(Vector3(0, 100, 200));
-    // cameraParent->addChild(spaceship);
+	cameraParent->Position(Vector3(0, 0, 200));
+    cameraParent->addChild(spaceship);
     root->addChild(cameraParent);
 
 	//Minimap Camera
@@ -78,7 +76,7 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     camera2->viewportSize = Vector2(0.2,0.2);
     camera2->setFOV(90);
     camera2->setFar(5000);
-    camera2->Position(Vector3(0, 2000, 0));
+    camera2->Position(Vector3(0, 3000, 0));
     camera2->rotateAround(Vector3::LEFT, PI / 2);
     root->addChild(camera2);
 
