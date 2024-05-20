@@ -21,7 +21,7 @@ namespace DataTypes{
         float dot(Vector3 other);
         Vector3 cross(Vector3 other);
         //Returns the angle between vectors this and other in radians.
-        float angle_to(Vector3 other);
+        float angleTo(Vector3 other);
         float length();
         Vector3 normalize();
         Vector3 rotateBy(Quaternion quaternion);
