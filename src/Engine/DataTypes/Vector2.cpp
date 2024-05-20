@@ -50,6 +50,16 @@ namespace DataTypes{
     {
         return x * other.x + y * other.y;
     }
+    float Vector2::cross(Vector2 other)
+    {
+        return x * other.y - y * other.x;
+    }
+    float Vector2::angleTo(Vector2 other)
+    {
+        float cosine = this->normalize().dot(other.normalize());
+        float sine = this->normalize().cross(other.normalize());
+        return sine < 0 ? -1*acos(cosine) : acos(cosine);
+    }
     float Vector2::length()
     {
         return sqrt(x*x + y*y);

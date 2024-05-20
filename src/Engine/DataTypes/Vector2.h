@@ -19,8 +19,8 @@ namespace DataTypes{
         Vector2 operator/(Vector2 other);
         float dot(Vector2 other);
         float cross(Vector2 other);
-        //Returns the angle between this and other in radians
-        float angle_to(Vector2 other);
+        //Returns the angle between this and `other` in radians
+        float angleTo(Vector2 other);
         float length();
         Vector2 normalize();
     };
