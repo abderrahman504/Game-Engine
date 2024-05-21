@@ -58,6 +58,7 @@ namespace DataTypes{
     {
         float cosine = this->normalize().dot(other.normalize());
         float sine = this->normalize().cross(other.normalize());
+        cosine = cosine > 1.0 ? 1.0 : cosine;
         return sine < 0 ? -1*acos(cosine) : acos(cosine);
     }
     float Vector2::length()

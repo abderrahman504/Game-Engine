@@ -51,7 +51,9 @@ namespace DataTypes{
     float Vector3::angleTo(Vector3 other){
         float cosine = this->normalize().dot(other.normalize());
         float sine = this->normalize().cross(other.normalize()).length();
-        return sine < 0 ? -1*acos(cosine) : acos(cosine);
+        cosine = cosine > 1.0 ? 1.0 : cosine;
+        float result = sine < 0 ? -1*acos(cosine) : acos(cosine);
+        return result;
     }
     float Vector3::length(){
         return sqrt(x*x + y*y + z*z);
