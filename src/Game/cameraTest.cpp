@@ -19,20 +19,22 @@ namespace Game{
             if(moveDir.length() != 0)
             {
                 moveDir = moveDir.normalize().rotateBy(Orientation());
-                float speed = 100;
+                float speed = 300;
                 Position(Position() + moveDir * speed * deltaTime);
             }
             Vector2 mouseDir = inputServer.getMouseMotion();
 
-//            if(mouseDir) rotateDir = rotateDir + Vector3::UP;
-//            if(sceneHead.getInputServer().isKeyPressed('k')) rotateDir = rotateDir + Vector3::DOWN;
-//            if(sceneHead.getInputServer().isKeyPressed('j')) rotateDir = rotateDir + Vector3::LEFT;
-//            if(sceneHead.getInputServer().isKeyPressed('l')) rotateDir = rotateDir + Vector3::RIGHT;
             if(mouseDir.length() != 0)
             {
                 float speed = 10 * PI / 180.0;
-                rotateAround(Vector3::DOWN, speed * deltaTime * mouseDir.x);
-                rotateAround(Vector3::LEFT, speed * deltaTime * mouseDir.y);
+                float xAngle =  speed * deltaTime * -1*mouseDir.x;
+                float yAngle = speed * deltaTime * mouseDir.y;
+
+                // Vector3 pitchVec = getForward();
+                // Vector3 zeroPitchVec = Vector3(pitchVec.x,0,pitchVec.z);
+                rotateAround(Vector3::UP, xAngle);
+                rotateAround(Vector3::LEFT, yAngle);
+                // lookTowards(getForward(), Vector3::UP);
 
             }
 
