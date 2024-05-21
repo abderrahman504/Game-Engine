@@ -11,7 +11,7 @@ class Node3D : public Node
 {
     protected:
     Vector3 position = Vector3::ZERO;
-    Quaternion orientation = Quaternion::FORWARD;
+    Quaternion orientation = Quaternion::IDENTITY;
     Vector3 scale = Vector3::ONE;
     
     public:

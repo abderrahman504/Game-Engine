@@ -33,8 +33,9 @@ namespace Game{
                 // Vector3 pitchVec = getForward();
                 // Vector3 zeroPitchVec = Vector3(pitchVec.x,0,pitchVec.z);
                 rotateAround(Vector3::UP, xAngle);
-                rotateAround(Vector3::LEFT, yAngle);
-                // lookTowards(getForward(), Vector3::UP);
+                rotateAround(getUp().cross(getForward()), yAngle);
+                Vector3 direction = getForward();
+                lookTowards(getForward(), Vector3::UP);
 
             }
 
