@@ -139,10 +139,12 @@ void TreeDrawer::drawNode(Node* node)
     //If Light3D then place it in scene
     if(isLight3D)
     {
+        // glPushMatrix();
+        // glLoadIdentity();
         int lightID = getLightID(++lightCount);
         Light3D* light = (Light3D*)node;
-        float pos[3] = {light->Position().x, light->Position().y, light->Position().z};
-        //implement later
+        // float pos[4] = {light->Position().x, light->Position().y, light->Position().z, 1};
+        float pos[4] = {1, 1, 1, 1};
         float amb[4] = {light->color.r*light->ambient, light->color.g*light->ambient, light->color.b*light->ambient, 1};
         float diff[4] = {light->color.r*light->diffuse, light->color.g*light->diffuse, light->color.b*light->diffuse, 1};
         float spec[4] = {light->color.r*light->specular, light->color.g*light->specular, light->color.b*light->specular, 1};
@@ -151,6 +153,7 @@ void TreeDrawer::drawNode(Node* node)
         glLightfv(lightID, GL_DIFFUSE, diff);
         glLightfv(lightID, GL_SPECULAR, spec);
         glEnable(GL_LIGHT0);
+        // glPopMatrix();
     }
 
     std::vector<Nodes::Node*> children = node->getChildren();
@@ -168,10 +171,10 @@ void applyMaterial(Material material)
     float amb[4] = {material.color.r*material.ambient_diffuse, material.color.g*material.ambient_diffuse, material.color.b*material.ambient_diffuse, material.color.a};
     float spec[4] = {1*material.specular, 1*material.specular, 1*material.specular, 1};
     float emi[4] = {material.color.r*material.emission, material.color.g*material.emission, material.color.b*material.emission, material.color.a};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, amb);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material.shininess);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emi);
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amb);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
+    glMaterialf(GL_FRONT, GL_SHININESS, material.shininess);
+    glMaterialfv(GL_FRONT, GL_EMISSION, emi);
 }
 
 Camera3D defaultCamera()
