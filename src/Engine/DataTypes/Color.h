@@ -10,9 +10,13 @@ namespace DataTypes{
         float r,g,b,a;
 
         Color();
-        Color(float r, float g, float b, float a);
+        // Color(float r, float g, float b, float a);
         Color(int r, int g, int b, int a);
         Color(int rgb_hexa);
+
+        static Color fromRGBFloat(float r, float g, float b, float a);
+        static Color fromRGBInt(int r, int g, int b, int a);
+        static Color fromRGBHexa(int hexa);
 
         void setRGB(float r, float g, float b, float a);
         void setRGB(int r, int g, int b, int a);

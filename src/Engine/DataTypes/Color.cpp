@@ -11,7 +11,6 @@ const Color Color::BLUE(0,0,255,255);
 
 
 Color::Color(): r(0), g(0), b(0), a(1){}
-Color::Color(float r, float g, float b, float a): r(r), g(g), b(b), a(a){}
 Color::Color(int r, int g, int b, int a): r(r/255.0), g(g/255.0), b(b/255.0), a(a/255.0){}
 Color::Color(int rgb_hexa){
     a = (rgb_hexa & 0x000000ff) / 255.0;
@@ -19,6 +18,10 @@ Color::Color(int rgb_hexa){
     g = ((rgb_hexa & 0x00ff0000) >> 16) / 255.0;
     r = ((rgb_hexa & 0xff000000) >> 24) / 255.0;
 }
+
+Color Color::fromRGBFloat(float r, float g, float b, float a){return Color(255*r, 255*g, 255*b, 255*a);}
+Color Color::fromRGBInt(int r, int g, int b, int a){return Color(r, g, b, a);}
+Color Color::fromRGBHexa(int hexa){return Color(hexa);}
 
 void Color::setRGB(float r, float g, float b, float a){
     this->r = r;
