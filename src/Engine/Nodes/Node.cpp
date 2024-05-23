@@ -21,9 +21,10 @@ std::vector<Node*> Node::getChildren(){
     return childrenCopy;
 }
 void Node::addChild(Node* child){
-    for(int i = 0; i < children.size(); i++) if(children[i] == child) return;
+    if(child->parent != nullptr) child->parent->removeChild(child);
     children.push_back(child);
     child->parent = this;
+    if(is_ready) child->propegateReady(sceneHead);
 }
 void Node::removeChild(Node* child){
     for(int i = 0; i < children.size(); i++){
@@ -35,6 +36,7 @@ void Node::removeChild(Node* child){
 }
 void Node::removeChildAt(int index){
     children[index]->parent = NULL;
+    children[index]->is_ready = false;
     children.erase(children.begin() + index);
 }
 std::string Node::getName(){
@@ -57,6 +59,7 @@ void Node::propegateReady(SceneHead* sceneHead){
         children[i]->propegateReady(sceneHead);
     }
     ready();
+    is_ready = true;
 }
 void Node::propegateIdle(double deltaTime){
     for(int i = 0; i < children.size(); i++){
