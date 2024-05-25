@@ -46,14 +46,14 @@ void getCameraOrientationAndPosition(Camera3D* camera, Vector3* pos, Vector3* fo
         Node3D* node = dynamic_cast<Node3D*>(current);
         if(node != NULL){
             //Apply scaling and rotation to all
-            cameraPos = cameraPos * node->Scale();
-            cameraForward = cameraForward * node->Scale();
-            cameraUp = cameraUp * node->Scale();
-            cameraPos = cameraPos.rotateBy(node->Orientation());
-            cameraForward = cameraForward.rotateBy(node->Orientation());
-            cameraUp = cameraUp.rotateBy(node->Orientation());
+            cameraPos = cameraPos * node->scale;
+            cameraForward = cameraForward * node->scale;
+            cameraUp = cameraUp * node->scale;
+            cameraPos = cameraPos.rotateBy(node->orientation);
+            cameraForward = cameraForward.rotateBy(node->orientation);
+            cameraUp = cameraUp.rotateBy(node->orientation);
             //Apply translation to cameraPos only
-            cameraPos = cameraPos + node->Position();
+            cameraPos = cameraPos + node->position;
         }
         current = current->Parent();
     }
@@ -109,11 +109,11 @@ void TreeDrawer::drawNode(Node* node)
     if(isNode3D)
     {
         glPushMatrix();
-        Vector3 position = ((Node3D*)node)->Position();
+        Vector3 position = ((Node3D*)node)->position;
         Vector3 axis = Vector3::ZERO;
         float angle = 0;
-        ((Node3D*)node)->Orientation().angleAndAxis(&angle, &axis);
-        Vector3 scale = ((Node3D*)node)->Scale();
+        ((Node3D*)node)->orientation.angleAndAxis(&angle, &axis);
+        Vector3 scale = ((Node3D*)node)->scale;
         glTranslatef(position.x, position.y, position.z);
         glRotatef(angle * PI / 180.0, axis.x, axis.y, axis.z);
         glScalef(scale.x, scale.y, scale.z);

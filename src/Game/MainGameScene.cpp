@@ -19,7 +19,7 @@ Engine::Nodes::Node* MainGameScene::constructTree()
 	sunMaterial->ambient_diffuse = 1;
 	sunMaterial->shininess = 0;
 	sunMaterial->specular = 0;
-	sun->Position(Vector3(0, 0, 0));
+	sun->position = Vector3(0, 0, 0);
 	sun->setName("Sun");
 	root->addChild(sun);
 	// mercury
@@ -64,7 +64,7 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     camera->active = true;
     camera->setFar(8000);
     cameraParent->addChild(camera);
-	cameraParent->Position(Vector3(0, 0, 200));
+	cameraParent->position = Vector3(0, 0, 200);
     cameraParent->addChild(spaceship);
     root->addChild(cameraParent);
 
@@ -76,7 +76,7 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     camera2->viewportSize = Vector2(0.2,0.2);
     camera2->setFOV(90);
     camera2->setFar(5000);
-    camera2->Position(Vector3(0, 3000, 0));
+    camera2->position = Vector3(0, 3000, 0);
     camera2->rotateAround(Vector3::LEFT, PI / 2);
     root->addChild(camera2);
 
@@ -114,7 +114,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
-    spaceship->Position(vector3);
+    spaceship->position = vector3;
     spaceship->setName("Spaceship");
 
     SpaceShipMesh* spaceship1= new SpaceShipMesh(baseWidth/1.5, baseHeight/3,height/2, resolution);
@@ -126,7 +126,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
-    spaceship1->Position(Vector3(5, 0,height/5.5));
+    spaceship1->position = Vector3(5, 0,height/5.5);
 
     spaceship1->setName("right wing");
     SpaceShipMesh* spaceship2 = new SpaceShipMesh(baseWidth/1.5, baseHeight/3,height/2, resolution);
@@ -138,7 +138,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
-    spaceship2->Position(Vector3(-5, 0, height/5.5));
+    spaceship2->position = Vector3(-5, 0, height/5.5);
     spaceship2->setName("left wing");
 
     SphereMesh* spaceshiphead = new SphereMesh(height/10, resolution);
@@ -150,7 +150,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
-    spaceshiphead->Position(Vector3(0, 1.2, -7.5));
+    spaceshiphead->position = Vector3(0, 1.2, -7.5);
     spaceshiphead->setName("head");
 
     spaceship->addChild(spaceship1);

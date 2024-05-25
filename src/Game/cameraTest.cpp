@@ -18,9 +18,9 @@ namespace Game{
             if(inputServer.isKeyPressed('c')) moveDir = moveDir + Vector3::DOWN;
             if(moveDir.length() != 0)
             {
-                moveDir = moveDir.normalize().rotateBy(Orientation());
+                moveDir = moveDir.normalize().rotateBy(orientation);
                 float speed = 300;
-                Position(Position() + moveDir * speed * deltaTime);
+                position = position + moveDir * speed * deltaTime;
             }
             Vector2 mouseDir = inputServer.getMouseMotion();
 

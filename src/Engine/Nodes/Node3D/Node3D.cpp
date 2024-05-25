@@ -10,12 +10,6 @@ Node3D::Node3D() : Node(){
 }
 
 
-Vector3 Node3D::Position(){return position;}
-void Node3D::Position(Vector3 position){this->position = position;}
-Quaternion Node3D::Orientation(){return orientation;}
-void Node3D::Orientation(Quaternion quaterion){this->orientation = quaterion.normalize();}
-Vector3 Node3D::Scale(){return scale;}
-void Node3D::Scale(Vector3 scale){this->scale = scale;}
 
 Vector3 Node3D::getUp(){
     Quaternion result = orientation * Vector3::UP * orientation.conjugate();
