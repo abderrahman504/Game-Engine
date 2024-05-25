@@ -7,5 +7,6 @@
 #include "Node3D/SpaceShipMesh.h"
 #include "Node3D/CollisionBody3D.h"
 #include "Node3D/Collider3D.h"
+#include "Node3D/SphereCollider.h"
 
 #endif
