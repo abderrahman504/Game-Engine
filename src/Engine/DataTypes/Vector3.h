@@ -20,7 +20,7 @@ namespace DataTypes{
         Vector3 operator/(Vector3 other);
         float dot(Vector3 other);
         Vector3 cross(Vector3 other);
-        //Returns the angle between vectors this and other in radians.
+        //Returns the shorter angle between this vector and `other` in radians. Always in range [0,180].
         float angleTo(Vector3 other);
         float length();
         Vector3 normalize();

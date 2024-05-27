@@ -47,13 +47,11 @@ namespace DataTypes{
     Vector3 Vector3::cross(Vector3 other){
         return Vector3(y*other.z - z*other.y, z*other.x - x*other.z, x*other.y - y*other.x);
     }
-    //Returns the angle between this and other
     float Vector3::angleTo(Vector3 other){
         float cosine = this->normalize().dot(other.normalize());
-        float sine = this->normalize().cross(other.normalize()).length();
         cosine = cosine > 1.0 ? 1.0 : cosine;
-        float result = sine < 0 ? -1*acos(cosine) : acos(cosine);
-        return result;
+        float result = acos(cosine);
+        return cosine;
     }
     float Vector3::length(){
         return sqrt(x*x + y*y + z*z);

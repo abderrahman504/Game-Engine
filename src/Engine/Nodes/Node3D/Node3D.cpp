@@ -34,7 +34,7 @@ void Node3D::lookTowards(Vector3 direction, Vector3 up){
     //Rotate so your face points towards direction
     float angle = currentForward.angleTo(direction);
     Vector3 normal = currentForward.cross(direction).normalize();
-    rotateAround(normal, abs(angle));
+    rotateAround(normal, angle);
     
     //Rotate so your top points towards up
     Vector3 currentUp = getUp();
@@ -44,7 +44,7 @@ void Node3D::lookTowards(Vector3 direction, Vector3 up){
     // Vector3 actualUp = up - direction * up.dot(direction);
     angle = currentUp.angleTo(actualUp);
     normal = currentUp.cross(actualUp).normalize();
-    rotateAround(normal, abs(angle));
+    rotateAround(normal, angle);
 }
 void Node3D::rotateAround(Vector3 axis, float angleRad){
     Quaternion newRotation = Quaternion(angleRad, axis);
