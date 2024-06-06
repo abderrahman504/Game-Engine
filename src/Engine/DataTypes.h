@@ -5,7 +5,6 @@
 #include "DataTypes/Quaternion.h"
 #include "DataTypes/Transform3D.h"
 #include "DataTypes/Material.h"
-#include "DataTypes/CollisionInfo.h"
 
 #define PI 3.14159265358979323846
 
