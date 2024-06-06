@@ -51,7 +51,7 @@ namespace DataTypes{
         float cosine = this->normalize().dot(other.normalize());
         cosine = cosine > 1.0 ? 1.0 : cosine;
         float result = acos(cosine);
-        return cosine;
+        return result;
     }
     float Vector3::length(){
         return sqrt(x*x + y*y + z*z);
