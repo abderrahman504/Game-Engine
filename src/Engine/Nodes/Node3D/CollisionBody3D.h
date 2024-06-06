@@ -1,6 +1,7 @@
 #ifndef COLLISION_BODY_3D_GUARD
 #define COLLISION_BODY_3D_GUARD
 #include "Node3D.h"
+#include "../../Physics/CollisionInfo.h"
 
 namespace Engine
 {
