@@ -9,5 +9,5 @@ namespace Nodes
         setName("CollisionBody3D");
     }
 
-    void CollisionBody3D::onCollision(CollisionBody3D* other){}
+    void CollisionBody3D::onCollision(CollisionBody3D* other, CollisionInfo info){}
 }}

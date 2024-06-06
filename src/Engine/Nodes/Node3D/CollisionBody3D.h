@@ -14,7 +14,7 @@ namespace Nodes
         bool disabled = false;
 
         CollisionBody3D();
-        virtual void onCollision(CollisionBody3D* other);
+        virtual void onCollision(CollisionBody3D* other, CollisionInfo info);
     };
 }}
 
