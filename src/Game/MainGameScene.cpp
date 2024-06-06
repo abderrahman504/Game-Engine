@@ -65,7 +65,7 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     camera->setFar(8000);
     cameraParent->addChild(camera);
 	cameraParent->position = Vector3(0, 0, 200);
-    cameraParent->addChild(spaceship);
+    // cameraParent->addChild(spaceship);
     root->addChild(cameraParent);
 
 	//Minimap Camera
