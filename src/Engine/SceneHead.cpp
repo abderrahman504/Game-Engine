@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #define FRAMERATE_CAP 140.0
+#define PHYSICS_FRAME_CAP 60.0
 
 using namespace Engine::Nodes;
 using namespace Engine;
@@ -18,6 +19,7 @@ static SceneHead *sceneHead;
 static TreeDrawer *treeDrawer;
 static std::vector<Node*> node_freeing_queue;
 static unsigned long long last_idle;
+static unsigned long long last_physics;
 static Vector2 windowSize;
 
 void glutIdle();
@@ -83,13 +85,26 @@ void SceneHead::idle()
 {
     unsigned long long now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     double delta = (now - last_idle) * 1e-9;
-    if (delta < (1.0 / FRAMERATE_CAP)) return;
-    last_idle = now;
-    this->scene_root->propegateIdle(delta);
-    this->findNodesForFreeing();
-    free_nodes();
-    glutPostRedisplay();
-    inputServer->onIdle();
+    double physics_delta = (now - last_physics) * 1e-9;
+    
+    if (delta >= (1.0 / FRAMERATE_CAP)){
+        //Run idle frame
+        last_idle = now;
+        this->scene_root->propegateIdle(delta);
+        //Run physics frame
+        if(physics_delta >= (1.0 / PHYSICS_FRAME_CAP)){
+            last_physics = now;
+            physicsServer->update(physics_delta, scene_root);
+            scene_root->propegatePhysics(physics_delta);
+        }
+        //Check for nodes that need freeing and free them
+        this->findNodesForFreeing();
+        free_nodes();
+        //Draw scene
+        glutPostRedisplay();
+        //Reset input for next frame
+        inputServer->onIdle();
+    }
 }
 
 void glutDraw() {sceneHead->draw();}
