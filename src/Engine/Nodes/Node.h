@@ -39,11 +39,13 @@ namespace Nodes{
         void propegateReady(SceneHead* sceneHead);
         //Calls children's propegateIdle() then this->idle()
         void propegateIdle(double deltaTime); 
+        //Calls children's propegatePhysics() then this->physics()
+        void propegatePhysics(double deltaTime);
         
         protected:
-        //Calls children's propegateDraw() then this->draw()
         virtual void ready();
         virtual void idle(double deltaTime);
+        virtual void physics(double deltaTime);
 
     };
 

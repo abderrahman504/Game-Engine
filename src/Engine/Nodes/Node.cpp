@@ -64,7 +64,14 @@ void Node::propegateIdle(double deltaTime){
     }
     idle(deltaTime);
 }
+void Node::propegatePhysics(double deltaTime){
+    for(int i = 0; i < children.size(); i++){
+        children[i]->propegatePhysics(deltaTime);
+    }
+    physics(deltaTime);
+}
 
 
 void Node::ready(){}
 void Node::idle(double deltaTime){}
+void Node::physics(double deltaTime){}
