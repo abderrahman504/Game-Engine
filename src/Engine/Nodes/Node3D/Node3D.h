@@ -15,6 +15,13 @@ class Node3D : public Node
     Quaternion orientation = Quaternion::IDENTITY;
     Vector3 scale = Vector3::ONE;
     Node3D();
+    Vector3 GlobalPosition();
+    // void GlobalPosition(Vector3 position);
+    Quaternion GlobalOrientation();
+    // void GlobalOrientation(Quaternion quaterion);
+    Vector3 GlobalScale();
+    // void GlobalScale(Vector3 scale);
+
     
     //Gets the up direction of this node3d relative to its parent.
     Vector3 getUp();

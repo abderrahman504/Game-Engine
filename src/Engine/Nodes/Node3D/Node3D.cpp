@@ -9,7 +9,38 @@ Node3D::Node3D() : Node(){
     setName("Node3D");
 }
 
+Vector3 Node3D::GlobalPosition(){
+    Node* ancestor = Parent();
+    while(ancestor != nullptr){
+        Node3D* node3D = dynamic_cast<Node3D*>(ancestor);
+        if(node3D == nullptr) ancestor = ancestor->Parent();
+        else return node3D->GlobalPosition() + position.rotateBy(node3D->GlobalOrientation()) * node3D->GlobalScale();
+    }
+    //Didn't find an ancestor of type Node3D
+    return position;
+}
 
+Quaternion Node3D::GlobalOrientation(){
+    Node* ancestor = Parent();
+    while(ancestor != nullptr){
+        Node3D* node3D = dynamic_cast<Node3D*>(ancestor);
+        if(node3D == nullptr) ancestor = ancestor->Parent();
+        else return node3D->GlobalOrientation() * orientation;
+    }
+    //Didn't find an ancestor of type Node3D
+    return orientation;
+}
+
+Vector3 Node3D::GlobalScale(){
+    Node* ancestor = Parent();
+    while(ancestor != nullptr){
+        Node3D* node3D = dynamic_cast<Node3D*>(ancestor);
+        if(node3D == nullptr) ancestor = ancestor->Parent();
+        else return scale * node3D->GlobalScale();
+    }
+    //Didn't find an ancestor of type Node3D
+    return scale;
+}
 
 Vector3 Node3D::getUp(){
     Quaternion result = orientation * Vector3::UP * orientation.conjugate();
