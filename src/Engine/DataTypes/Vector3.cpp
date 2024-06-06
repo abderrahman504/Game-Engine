@@ -29,6 +29,7 @@ namespace DataTypes{
     Vector3 Vector3::operator/(float scalar){
         return Vector3(x/scalar, y/scalar, z/scalar);
     }
+    
     Vector3 Vector3::operator+(Vector3 other){
         return Vector3(x+other.x, y+other.y, z+other.z);
     }
@@ -41,24 +42,30 @@ namespace DataTypes{
     Vector3 Vector3::operator/(Vector3 other){
         return Vector3(x/other.x, y/other.y, z/other.z);
     }
+
     float Vector3::dot(Vector3 other){
         return x*other.x + y*other.y + z*other.z;
     }
     Vector3 Vector3::cross(Vector3 other){
         return Vector3(y*other.z - z*other.y, z*other.x - x*other.z, x*other.y - y*other.x);
     }
+
     float Vector3::angleTo(Vector3 other){
         float cosine = this->normalize().dot(other.normalize());
         cosine = cosine > 1.0 ? 1.0 : cosine;
         float result = acos(cosine);
         return result;
     }
+
     float Vector3::length(){
         return sqrt(x*x + y*y + z*z);
     }
     Vector3 Vector3::normalize(){
-        return (*this)/length();
+        if(x == 0 && y == 0 && z == 0)
+            return *this;
+        else return *this / length();
     }
+
     Vector3 Vector3::rotateBy(Quaternion quaternion){
         quaternion = quaternion.normalize();
         Quaternion q = quaternion * *this * quaternion.conjugate();
