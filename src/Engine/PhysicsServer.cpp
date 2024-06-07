@@ -117,6 +117,8 @@ void findCollisions()
             for(int j=0; j < layer_map[layer_num]->size(); j++)
             {
                 BodyGizmo* other = (*layer_map[layer_num])[j];
+                //Don't check collision between a body and itself.
+                if(other == gizmo) continue; 
                 //Check if collision between these two bodies was already detected
                 bool already_collided = gizmo->collided_with.find(other) != gizmo->collided_with.end();
                 if(already_collided) continue;
@@ -164,7 +166,7 @@ bool checkCollisionBetween(BodyGizmo* a, BodyGizmo* b)
             //Check type of colliders and call appropriate collision checking function
             bool res = false;
             if(is_sphere_collider2 && is_sphere_collider)
-                bool res = checkSphereCollision((SphereCollider*)collider1, (SphereCollider*)collider2, &a_info, &b_info);
+                res = checkSphereCollision((SphereCollider*)collider1, (SphereCollider*)collider2, &a_info, &b_info);
             //Add other if statements when new colliders are added to the engine
 
             if(res){
