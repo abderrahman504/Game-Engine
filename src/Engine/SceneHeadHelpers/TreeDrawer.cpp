@@ -11,15 +11,15 @@
 
 using namespace Engine;
 using namespace Engine::Nodes;
-std::map<int, Camera3D*> activeCameras = std::map<int, Camera3D*>();
+// std::map<int, Camera3D*> activeCameras = std::map<int, Camera3D*>();
 
 
 void applyMaterial(Material material);
 Camera3D defaultCamera();
 
-void findCameras(Node* root)
+std::map<int, Camera3D*> findCameras(Node* root)
 {
-    activeCameras.clear();
+    std::map<int, Camera3D*> activeCameras = std::map<int, Camera3D*>();
     std::stack<Node*> stack;
     stack.push(root);
     while(stack.size() != 0)
@@ -35,6 +35,7 @@ void findCameras(Node* root)
             stack.push(children[i]);
         }
     }
+    return activeCameras;
 }
 
 void getCameraOrientationAndPosition(Camera3D* camera, Vector3* pos, Vector3* forward, Vector3* up)
@@ -88,8 +89,9 @@ void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root, bool m
 
 void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    findCameras(root);
+    std::map<int, Camera3D*> activeCameras = findCameras(root);
     Camera3D defaultCam = defaultCamera();
+
     if(activeCameras.size() == 0) activeCameras[VIEWPORT_1] = &defaultCam;
     for(auto it = activeCameras.begin(); it != activeCameras.end(); it++)
     {
