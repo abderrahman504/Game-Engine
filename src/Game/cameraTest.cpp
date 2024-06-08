@@ -19,7 +19,7 @@ namespace Game{
             if(moveDir.length() != 0)
             {
                 moveDir = moveDir.normalize().rotateBy(Orientation());
-                float speed = 300;
+                float speed = 100;
                 Position(Position() + moveDir * speed * deltaTime);
             }
             Vector2 mouseDir = inputServer.getMouseMotion();
@@ -36,9 +36,7 @@ namespace Game{
                 rotateAround(getUp().cross(getForward()), yAngle);
                 Vector3 direction = getForward();
                 lookTowards(getForward(), Vector3::UP);
-
             }
-
         }
     };
 }
