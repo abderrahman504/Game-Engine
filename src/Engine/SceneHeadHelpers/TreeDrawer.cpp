@@ -13,7 +13,7 @@ using namespace Engine;
 using namespace Engine::Nodes;
 
 std::map<int, Camera3D*> activeCameras = std::map<int, Camera3D*>();
-int lightCount = 0;
+// int lightCount = 0;
 
 
 void applyMaterial(Material material);
@@ -90,10 +90,46 @@ void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root, bool m
     gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.x + cameraForward.x, cameraPos.y + cameraForward.y, cameraPos.z + cameraForward.z, cameraUp.x, cameraUp.y, cameraUp.z);
 }
 
+
+void placeLights(Node* root)
+{
+    std::stack<Node*> stack;
+    stack.push(root);
+    int lightCount = 0;
+    while(stack.size() != 0 && lightCount != 8)
+    {
+        Node* node = stack.top();
+        stack.pop();
+        Light3D* light = dynamic_cast<Light3D*>(node);
+        if(light != nullptr)
+        {
+            //Place light in scene
+            glDisable(GL_LIGHTING);
+            int lightID = getLightID(++lightCount);
+            Light3D* light = (Light3D*)node;
+            float pos[4] = {light->GlobalPosition().x, light->GlobalPosition().y, light->GlobalPosition().z, 1};
+            float amb[4] = {light->color.r*light->ambient, light->color.g*light->ambient, light->color.b*light->ambient, 1};
+            float diff[4] = {light->color.r*light->diffuse, light->color.g*light->diffuse, light->color.b*light->diffuse, 1};
+            float spec[4] = {light->color.r*light->specular, light->color.g*light->specular, light->color.b*light->specular, 1};
+            glLightfv(lightID, GL_POSITION, pos);
+            glLightfv(lightID, GL_AMBIENT, amb);
+            glLightfv(lightID, GL_DIFFUSE, diff);
+            glLightfv(lightID, GL_SPECULAR, spec);
+            glEnable(GL_LIGHTING);
+            // glEnable(lightID);
+        }
+        std::vector<Node*> children = node->getChildren();
+        for(int i=0; i<children.size(); i++)
+        {
+            stack.push(children[i]);
+        }
+    }
+}
+
 void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    lightCount = 0;
-    turnOffLights();
+    // lightCount = 0;
+    // turnOffLights();
     findCameras(root);
     Camera3D defaultCam = defaultCamera();
     if(activeCameras.size() == 0) activeCameras[VIEWPORT_1] = &defaultCam;
@@ -101,6 +137,7 @@ void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
     {
         Camera3D* camera = it->second;
         drawCameraViewport(camera, windowSize, root, activeCameras.size() > 1);
+        placeLights(root);
         drawNode(root);
     }
     glutSwapBuffers();
@@ -136,25 +173,7 @@ void TreeDrawer::drawNode(Node* node)
         glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
         glDisableClientState(GL_VERTEX_ARRAY);
     }
-    //If Light3D then place it in scene
-    if(isLight3D)
-    {
-        // glPushMatrix();
-        // glLoadIdentity();
-        int lightID = getLightID(++lightCount);
-        Light3D* light = (Light3D*)node;
-        // float pos[4] = {light->Position().x, light->Position().y, light->Position().z, 1};
-        float pos[4] = {1, 1, 1, 1};
-        float amb[4] = {light->color.r*light->ambient, light->color.g*light->ambient, light->color.b*light->ambient, 1};
-        float diff[4] = {light->color.r*light->diffuse, light->color.g*light->diffuse, light->color.b*light->diffuse, 1};
-        float spec[4] = {light->color.r*light->specular, light->color.g*light->specular, light->color.b*light->specular, 1};
-        glLightfv(lightID, GL_POSITION, pos);
-        glLightfv(lightID, GL_AMBIENT, amb);
-        glLightfv(lightID, GL_DIFFUSE, diff);
-        glLightfv(lightID, GL_SPECULAR, spec);
-        glEnable(GL_LIGHT0);
-        // glPopMatrix();
-    }
+    
 
     std::vector<Nodes::Node*> children = node->getChildren();
     for (int i=0; i<children.size(); i++)
