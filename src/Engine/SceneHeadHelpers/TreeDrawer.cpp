@@ -116,7 +116,7 @@ void placeLights(Node* root)
             glLightfv(lightID, GL_DIFFUSE, diff);
             glLightfv(lightID, GL_SPECULAR, spec);
             glEnable(GL_LIGHTING);
-            // glEnable(lightID);
+            glEnable(lightID);
         }
         std::vector<Node*> children = node->getChildren();
         for(int i=0; i<children.size(); i++)
