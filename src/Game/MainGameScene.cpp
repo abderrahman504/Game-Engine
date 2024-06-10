@@ -21,8 +21,8 @@ Engine::Nodes::Node* MainGameScene::constructTree()
 
     Light3D* sunLight = new Light3D();
     sunLight->color = Color::fromRGBInt(255, 218, 143, 1);
-    sunLight->ambient = 1;
-    sunLight->diffuse = 1;
+    sunLight->ambient = 0;
+    sunLight->diffuse = 0.8;
     sunLight->specular = 1;
     sunLight->setName("SunLight");
     sun->addChild(sunLight);
