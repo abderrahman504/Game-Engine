@@ -26,7 +26,7 @@ class LightTestScene : public SceneHead
         lightMarker->material->ambient_diffuse = 0;
         lightMarker->material->specular = 0;
         lightMarker->material->emission = 0.7;
-        lightMarker->Position(Vector3(0, 20, -100));
+        lightMarker->position = (Vector3(0, 20, -100));
         Light3D* light = new Light3D();
         light->color = Color::fromRGBFloat(1,1,1,1);
         light->ambient = 0.3;
@@ -41,7 +41,7 @@ class LightTestScene : public SceneHead
             sphere->material->ambient_diffuse = 0.6;
             sphere->material->specular = 0.3;
             sphere->material->shininess = 80;
-            sphere->Position(lightMarker->Position() + Vector3(50*cos(i*2*PI/10), -10, 50*sin(i*2*PI/10)));
+            sphere->position = (lightMarker->position + Vector3(50*cos(i*2*PI/10), -10, 50*sin(i*2*PI/10)));
             root->addChild(sphere);
         }
 
@@ -54,12 +54,12 @@ class LightTestScene : public SceneHead
         //Create two controllable nodes for controlling the camera and the sphere
         Game::CameraTest* cameraCont = new Game::CameraTest();
         cameraCont->setName("Camera Controller");
-        cameraCont->Position(Vector3(0, 0, 0));
+        cameraCont->position = (Vector3(0, 0, 0));
 
 
         ControllableNode* SphereCont = new ControllableNode();
         SphereCont->setName("Sphere Controller");
-        SphereCont->Position(Vector3(0, 10, -120));
+        SphereCont->position = (Vector3(0, 10, -120));
         SphereCont->forward = 'i';
         SphereCont->back = 'k';
         SphereCont->left = 'j';

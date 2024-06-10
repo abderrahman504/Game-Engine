@@ -23,7 +23,7 @@ class ControllableNode : public Node3D
         if(inputServer.isKeyPressed(down)) moveDir = moveDir + Vector3::DOWN;
         if(moveDir.length() != 0)
         {
-            moveDir = moveDir.normalize().rotateBy(Orientation());
+            moveDir = moveDir.normalize().rotateBy(orientation);
             float speed = 70;
             position = position + moveDir * speed * deltaTime;
         }
