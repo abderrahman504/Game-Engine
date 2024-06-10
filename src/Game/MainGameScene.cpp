@@ -55,8 +55,6 @@ Engine::Nodes::Node* MainGameScene::constructTree()
 	neptune->orbitRadius = 2400;
 	neptune->orbitSpeed = 0.5 *  PI / 180;
 
-    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, -20, -100));
-   	// root->addChild(spaceship);
 
 	//Controllable Camera
     CameraTest* cameraParent = new CameraTest();
@@ -65,8 +63,13 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     camera->setFar(8000);
     cameraParent->addChild(camera);
 	cameraParent->position = Vector3(0, 0, 200);
-    // cameraParent->addChild(spaceship);
     root->addChild(cameraParent);
+    
+    CylinderMesh* cylinder = new CylinderMesh(30, 70, 30);
+    cylinder->position = Vector3(0, 0, -250);
+    cylinder->material->color[0] = 1;
+    // pyramid->lookTowards(Vector3::DOWN, Vector3::FORWARD);
+    root->addChild(cylinder);
 
 	//Minimap Camera
     Camera3D* camera2 = new Camera3D();
