@@ -117,7 +117,7 @@ void TreeDrawer::drawNode(Node* node)
         ((Node3D*)node)->orientation.angleAndAxis(&angle, &axis);
         Vector3 scale = ((Node3D*)node)->scale;
         glTranslatef(position.x, position.y, position.z);
-        glRotatef(angle * PI / 180.0, axis.x, axis.y, axis.z);
+        glRotatef(angle * 180 / PI, axis.x, axis.y, axis.z);
         glScalef(scale.x, scale.y, scale.z);
     }
     //If Mesh3D then draw its vertices
