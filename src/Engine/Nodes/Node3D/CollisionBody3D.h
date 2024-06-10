@@ -10,8 +10,8 @@ namespace Nodes
     class CollisionBody3D : public Node3D
     {
         public:
-        unsigned short collisionLayer = 0;
-        unsigned short collisionMask = 0;
+        unsigned short collisionLayer = 1;
+        unsigned short collisionMask = 1;
         bool disabled = false;
 
         CollisionBody3D();
