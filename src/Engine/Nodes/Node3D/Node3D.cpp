@@ -50,6 +50,11 @@ Vector3 Node3D::getForward(){
     Quaternion result = orientation * Vector3::FORWARD * orientation.conjugate();
     return Vector3(result.i, result.j, result.k).normalize();
 }
+Vector3 Node3D::getRight(){
+    Quaternion result = orientation * Vector3::RIGHT * orientation.conjugate();
+    return Vector3(result.i, result.j, result.k).normalize();
+}
+
 void Node3D::lookAt(Vector3 point, Vector3 up){
     lookTowards(point - position, up);
 }

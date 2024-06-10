@@ -11,6 +11,11 @@ namespace Nodes{
     class Node{
         friend class Engine::SceneHead;
 
+        //Tree management variables
+        bool is_ready = false;
+
+
+        //Node attributes
         std::string name;
         Node* parent = nullptr;
         std::vector<Node*> children = std::vector<Node*>();

@@ -10,5 +10,8 @@
 #include "Node3D/CollisionBody3D.h"
 #include "Node3D/Collider3D.h"
 #include "Node3D/SphereCollider.h"
-
+#include "Node3D/Light3D.h"
+// #include "Node3D/PhysicsBody3D.h"
+// #include "Node3D/KinematicBody3D.h"
+// #include "Node3D/BoxCollider3D.h"
 #endif

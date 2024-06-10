@@ -4,24 +4,29 @@
 
 using namespace Game;
 SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, int resolution,Vector3 vector3);
-Planet* createPlanet(Planet* parent,std::string planetName,float radius,float red,float green,float blue);
+Planet* createPlanet(Node3D* parent,std::string planetName,float radius,float red,float green,float blue);
 
 Engine::Nodes::Node* MainGameScene::constructTree()
 {
 	Node* root = new Node();
 	root->setName("Solar System");
-	Planet* sun = new Planet(150, 100);
-	sun->orbitSpeed = 0;
-	Material* sunMaterial = sun->material;
-	sunMaterial->color[0] = 255/256.0;
-	sunMaterial->color[1] = 255/256.0;
-	sunMaterial->color[2] = 0.0;
-	sunMaterial->ambient_diffuse = 1;
-	sunMaterial->shininess = 0;
-	sunMaterial->specular = 0;
+	SphereMesh* sun = new SphereMesh(150, 50);
+	sun->material->color = Color(255, 255, 0, 255);
+	sun->material->ambient_diffuse = 1;
+	sun->material->specular = 1;
+    sun->material->emission = 0.8;
 	sun->position = Vector3(0, 0, 0);
 	sun->setName("Sun");
 	root->addChild(sun);
+
+    Light3D* sunLight = new Light3D();
+    sunLight->color = Color::fromRGBInt(255, 218, 143, 1);
+    sunLight->ambient = 1;
+    sunLight->diffuse = 1;
+    sunLight->specular = 1;
+    sunLight->setName("SunLight");
+    sun->addChild(sunLight);
+
 	// mercury
 	Planet* mercury = createPlanet(sun,"Mercury",20,0.941,0.906,0.902);
 	mercury->orbitRadius = 400;
@@ -55,21 +60,19 @@ Engine::Nodes::Node* MainGameScene::constructTree()
 	neptune->orbitRadius = 2400;
 	neptune->orbitSpeed = 0.5 *  PI / 180;
 
+    // SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, -20, -100));
+   	// root->addChild(spaceship);
 
 	//Controllable Camera
     CameraTest* cameraParent = new CameraTest();
     Camera3D* camera = new Camera3D();
     camera->active = true;
-    camera->setFar(8000);
+    camera->setFar(10000);
+    cameraParent->setName("Controllable");
     cameraParent->addChild(camera);
 	cameraParent->position = Vector3(0, 0, 200);
     root->addChild(cameraParent);
     
-    CylinderMesh* cylinder = new CylinderMesh(30, 70, 30);
-    cylinder->position = Vector3(0, 0, -250);
-    cylinder->material->color[0] = 1;
-    // pyramid->lookTowards(Vector3::DOWN, Vector3::FORWARD);
-    root->addChild(cylinder);
 
 	//Minimap Camera
     Camera3D* camera2 = new Camera3D();
@@ -86,19 +89,17 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     return root;
 }
 
-Planet* createPlanet(Planet* parent,std::string planetName, float radius,
+Planet* createPlanet(Node3D* parent,std::string planetName, float radius,
 float red,float green,float blue)
 {
     Planet* planet = new Planet(radius, 100);
     Material* planetMaterial = planet->material;
     // Earth
     planetMaterial = planet->material;
-    planetMaterial->color[0] = red;
-    planetMaterial->color[1] = green;
-    planetMaterial->color[2] = blue;
-    planetMaterial->ambient_diffuse = 1;
-    planetMaterial->shininess = 0;
-    planetMaterial->specular = 0;
+    planetMaterial->color = Color::fromRGBFloat(red, green, blue, 1);
+    planetMaterial->ambient_diffuse = 0.8;
+    planetMaterial->shininess = 100;
+    planetMaterial->specular = 1;
     planet->setName(planetName);
     parent->addChild(planet);
     return planet;
@@ -111,9 +112,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
 
     Material* spaceshipMaterial = spaceship->material;
     // set color of spaceship to be red
-    spaceshipMaterial->color[0] = 1;
-    spaceshipMaterial->color[1] = 0;
-    spaceshipMaterial->color[2] = 0;
+    spaceshipMaterial->color = Color::fromRGBFloat(1, 0, 0, 1);
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
@@ -123,9 +122,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     SpaceShipMesh* spaceship1= new SpaceShipMesh(baseWidth/1.5, baseHeight/3,height/2, resolution);
     spaceshipMaterial = spaceship1->material;
     // set color of spaceship to be red
-    spaceshipMaterial->color[0] = 1;
-    spaceshipMaterial->color[1] = 1;
-    spaceshipMaterial->color[2] = 0;
+    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
@@ -135,9 +132,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     SpaceShipMesh* spaceship2 = new SpaceShipMesh(baseWidth/1.5, baseHeight/3,height/2, resolution);
     spaceshipMaterial = spaceship2->material;
     // set color of spaceship to be red
-    spaceshipMaterial->color[0] = 1;
-    spaceshipMaterial->color[1] = 1;
-    spaceshipMaterial->color[2] = 0;
+    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
@@ -147,9 +142,7 @@ SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, i
     SphereMesh* spaceshiphead = new SphereMesh(height/10, resolution);
     spaceshipMaterial = spaceshiphead->material;
     // set color of spaceship to be red
-    spaceshipMaterial->color[0] = 1;
-    spaceshipMaterial->color[1] = 1;
-    spaceshipMaterial->color[2] = 0;
+    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;

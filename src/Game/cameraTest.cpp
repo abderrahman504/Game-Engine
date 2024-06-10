@@ -36,9 +36,7 @@ namespace Game{
                 if(getForward().dot(Vector3::UP) == 0)
                     rotateAround(right, -0.01);
                 lookTowards(getForward(), Vector3::UP);
-
             }
-
         }
     };
 }

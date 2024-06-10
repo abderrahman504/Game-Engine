@@ -25,8 +25,10 @@ class Node3D : public Node
     
     //Gets the up direction of this node3d relative to its parent.
     Vector3 getUp();
-    //Gets the forward direction of this node3d relative to its parent.
+    //Gets the forward direction of this node3d relative to its parent coordinate system.
     Vector3 getForward();
+    //Gets the right direction of this node3d relative to its parent coordinate system.
+    Vector3 getRight();
     //Orients the node3d to look at position ```point``` with its up direction facing ```up```.
     void lookAt(Vector3 point, Vector3 up);
     //Orients the node3d to look towards ```direction``` with its up direction facing ```up```.

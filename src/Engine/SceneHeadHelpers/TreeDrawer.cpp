@@ -12,10 +12,13 @@
 using namespace Engine;
 using namespace Engine::Nodes;
 // std::map<int, Camera3D*> activeCameras = std::map<int, Camera3D*>();
+// int lightCount = 0;
 
 
 void applyMaterial(Material material);
 Camera3D defaultCamera();
+int getLightID(int lightCount);
+void turnOffLights();
 
 std::map<int, Camera3D*> findCameras(Node* root)
 {
@@ -87,9 +90,49 @@ void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root, bool m
     gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z, cameraPos.x + cameraForward.x, cameraPos.y + cameraForward.y, cameraPos.z + cameraForward.z, cameraUp.x, cameraUp.y, cameraUp.z);
 }
 
+
+void placeLights(Node* root)
+{
+    std::stack<Node*> stack;
+    stack.push(root);
+    int lightCount = 0;
+    while(stack.size() != 0 && lightCount != 8)
+    {
+        Node* node = stack.top();
+        stack.pop();
+        Light3D* light = dynamic_cast<Light3D*>(node);
+        if(light != nullptr)
+        {
+            //Place light in scene
+            glDisable(GL_LIGHTING);
+            int lightID = getLightID(++lightCount);
+            Light3D* light = (Light3D*)node;
+            float pos[4] = {light->GlobalPosition().x, light->GlobalPosition().y, light->GlobalPosition().z, 1};
+            float amb[4] = {light->color.r*light->ambient, light->color.g*light->ambient, light->color.b*light->ambient, 1};
+            float diff[4] = {light->color.r*light->diffuse, light->color.g*light->diffuse, light->color.b*light->diffuse, 1};
+            float spec[4] = {light->color.r*light->specular, light->color.g*light->specular, light->color.b*light->specular, 1};
+            glLightfv(lightID, GL_POSITION, pos);
+            glLightfv(lightID, GL_AMBIENT, amb);
+            glLightfv(lightID, GL_DIFFUSE, diff);
+            glLightfv(lightID, GL_SPECULAR, spec);
+            glEnable(GL_LIGHTING);
+            // glEnable(lightID);
+        }
+        std::vector<Node*> children = node->getChildren();
+        for(int i=0; i<children.size(); i++)
+        {
+            stack.push(children[i]);
+        }
+    }
+}
+
 void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     std::map<int, Camera3D*> activeCameras = findCameras(root);
+
+    // lightCount = 0;
+    // turnOffLights();
+    findCameras(root);
     Camera3D defaultCam = defaultCamera();
 
     if(activeCameras.size() == 0) activeCameras[VIEWPORT_1] = &defaultCam;
@@ -97,6 +140,7 @@ void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
     {
         Camera3D* camera = it->second;
         drawCameraViewport(camera, windowSize, root, activeCameras.size() > 1);
+        placeLights(root);
         drawNode(root);
     }
     glutSwapBuffers();
@@ -107,6 +151,7 @@ void TreeDrawer::drawNode(Node* node)
     //Check the type of the node
     bool isNode3D = dynamic_cast<Node3D*>(node) != nullptr;
     bool isMesh3D = dynamic_cast<Mesh3D*>(node) != nullptr;
+    bool isLight3D = dynamic_cast<Light3D*>(node) != nullptr;
     //If Node3D then apply its transformation before drawing
     if(isNode3D)
     {
@@ -131,6 +176,8 @@ void TreeDrawer::drawNode(Node* node)
         glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
         glDisableClientState(GL_VERTEX_ARRAY);
     }
+    
+
     std::vector<Nodes::Node*> children = node->getChildren();
     for (int i=0; i<children.size(); i++)
     {
@@ -143,14 +190,39 @@ void TreeDrawer::drawNode(Node* node)
 
 void applyMaterial(Material material)
 {
-    float amb[4] = {material.color[0]*material.ambient_diffuse, material.color[1]*material.ambient_diffuse, material.color[2]*material.ambient_diffuse, material.color[3]};
+    float amb[4] = {material.color.r*material.ambient_diffuse, material.color.g*material.ambient_diffuse, material.color.b*material.ambient_diffuse, material.color.a};
     float spec[4] = {1*material.specular, 1*material.specular, 1*material.specular, 1};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, amb);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, spec);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material.shininess);
+    float emi[4] = {material.color.r*material.emission, material.color.g*material.emission, material.color.b*material.emission, material.color.a};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, amb);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
+    glMaterialf(GL_FRONT, GL_SHININESS, material.shininess);
+    glMaterialfv(GL_FRONT, GL_EMISSION, emi);
 }
 
 Camera3D defaultCamera()
 {
     return Camera3D();
+}
+
+int getLightID(int lightCount)
+{
+    switch(lightCount)
+    {
+        case 1: return GL_LIGHT0;
+        case 2: return GL_LIGHT1;
+        case 3: return GL_LIGHT2;
+        case 4: return GL_LIGHT3;
+        case 5: return GL_LIGHT4;
+        case 6: return GL_LIGHT5;
+        case 7: return GL_LIGHT6;
+        case 8: return GL_LIGHT7;
+        default: return GL_LIGHT7;
+    }
+}
+
+void turnOffLights(){
+    for(int i=1; i<=8; i++)
+    {
+        glDisable(getLightID(i));
+    }
 }
