@@ -1,14 +1,16 @@
 #include "MainGameScene.h"
 #include "Planet.h"
 #include "cameraTest.cpp"
+#include "enemy.h"
 
 using namespace Game;
-SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, int resolution,Vector3 vector3);
+SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, int resolution,Vector3 vector3,bool isEnemy);
 Planet* createPlanet(Node3D* parent,std::string planetName,float radius,float red,float green,float blue);
 
 Engine::Nodes::Node* MainGameScene::constructTree()
 {
     Node* root = new Node();
+    Enemy* enemy=new Enemy();
     root->setName("Solar System");
     SphereMesh* sun = new SphereMesh(150, 50);
     sun->material->color = Color(255, 255, 0, 255);
@@ -60,9 +62,21 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     neptune->orbitRadius = 2400;
     neptune->orbitSpeed = 0.5 *  PI / 180;
 
-    // SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, -20, -100));
-    // root->addChild(spaceship);
+    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-10, 50, 200),false);
+    SpaceShipMesh* enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300),true);
+    SpaceShipMesh* enemy_spaceship1 = drawSpaceship(10, 10, 20, 100, Vector3(-40, -30, 300),true);
+    SpaceShipMesh* enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300),true);
+    SpaceShipMesh* enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300),true);
+    SpaceShipMesh* enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400),true);
+    enemy->addChild(enemy_spaceship);
+    enemy->addChild(enemy_spaceship1);
+    enemy->addChild(enemy_spaceship2);
+    enemy->addChild(enemy_spaceship3);
+    enemy->addChild(enemy_spaceship4);
+    enemy->attachEnemy(spaceship);
 
+    root->addChild(spaceship);
+    root->addChild(enemy);
     //Controllable Camera
     CameraTest* cameraParent = new CameraTest();
     Camera3D* camera = new Camera3D();
@@ -106,13 +120,16 @@ Planet* createPlanet(Node3D* parent,std::string planetName, float radius,
 }
 
 
-SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, int resolution,Vector3 vector3)
+SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, int resolution,Vector3 vector3,bool isEnemy)
 {
     SpaceShipMesh* spaceship =new SpaceShipMesh(baseWidth, baseHeight, height, resolution);
 
     Material* spaceshipMaterial = spaceship->material;
     // set color of spaceship to be red
+    if(isEnemy)
     spaceshipMaterial->color = Color::fromRGBFloat(1, 0, 0, 1);
+    else
+    spaceshipMaterial->color = Color::fromRGBFloat(0, 0, 1, 1);
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;

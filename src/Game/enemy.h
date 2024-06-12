@@ -12,12 +12,14 @@
 
 
 namespace Game {
-    class Enemy : public Player {
 
+    class Enemy : public Player {
+    SpaceShipMesh* player;
     public:
         Enemy();
         void move();
-        void attachEnemy(Player* player)
+        void attachEnemy(SpaceShipMesh* player);
+        void idle(double deltaTime);
     };
 }
 
