@@ -8,16 +8,16 @@ Planet* createPlanet(Node3D* parent,std::string planetName,float radius,float re
 
 Engine::Nodes::Node* MainGameScene::constructTree()
 {
-	Node* root = new Node();
-	root->setName("Solar System");
-	SphereMesh* sun = new SphereMesh(150, 50);
-	sun->material->color = Color(255, 255, 0, 255);
-	sun->material->ambient_diffuse = 1;
-	sun->material->specular = 1;
+    Node* root = new Node();
+    root->setName("Solar System");
+    SphereMesh* sun = new SphereMesh(150, 50);
+    sun->material->color = Color(255, 255, 0, 255);
+    sun->material->ambient_diffuse = 1;
+    sun->material->specular = 1;
     sun->material->emission = 0.8;
-	sun->position = Vector3(0, 0, 0);
-	sun->setName("Sun");
-	root->addChild(sun);
+    sun->position = Vector3(0, 0, 0);
+    sun->setName("Sun");
+    root->addChild(sun);
 
     Light3D* sunLight = new Light3D();
     sunLight->color = Color::fromRGBInt(255, 218, 143, 1);
@@ -27,62 +27,54 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     sunLight->setName("SunLight");
     sun->addChild(sunLight);
 
-	// mercury
-	Planet* mercury = createPlanet(sun,"Mercury",20,0.941,0.906,0.902);
-	mercury->orbitRadius = 400;
-	mercury->orbitSpeed = 30 * PI / 180;
+    // mercury
+    Planet* mercury = createPlanet(sun,"Mercury",20,0.941,0.906,0.902);
+    mercury->orbitRadius = 400;
+    mercury->orbitSpeed = 30 * PI / 180;
     // venus
-	Planet* venus = createPlanet(sun,"Venus",25,195/256.0,141/256.0,14/256.0);
-	venus->orbitRadius = 560;
-	venus->orbitSpeed = 20 * PI / 180;
+    Planet* venus = createPlanet(sun,"Venus",25,195/256.0,141/256.0,14/256.0);
+    venus->orbitRadius = 560;
+    venus->orbitSpeed = 20 * PI / 180;
     // Earth
-	Planet* earth = createPlanet(sun,"Earth",35,65/256.0,175/256.0,239/256.0);
-	earth->orbitRadius = 800;
-	earth->orbitSpeed = 15 * PI / 180;
+    Planet* earth = createPlanet(sun,"Earth",35,65/256.0,175/256.0,239/256.0);
+    earth->orbitRadius = 800;
+    earth->orbitSpeed = 15 * PI / 180;
     //Moon
-	Planet* moon = createPlanet(earth,"Moon",10,0.4,0.4,0.4);
-	moon->orbitRadius = 140;
-	moon->orbitSpeed = 70 * PI / 180;
+    Planet* moon = createPlanet(earth,"Moon",10,0.4,0.4,0.4);
+    moon->orbitRadius = 140;
+    moon->orbitSpeed = 70 * PI / 180;
     //Mars
-	Planet* mars = createPlanet(sun,"Mars",30,1,0,0);
-	mars->orbitRadius = 1000;
-	mars->orbitSpeed = 10 * PI / 180;
+    Planet* mars = createPlanet(sun,"Mars",30,1,0,0);
+    mars->orbitRadius = 1000;
+    mars->orbitSpeed = 10 * PI / 180;
     //Saturn
-	Planet* saturn = createPlanet(sun,"Saturn",60,0.78,0.54,0.45);
-	saturn->orbitRadius = 1400;
-	saturn->orbitSpeed = 3 * PI / 180;
-  	// jupiter
-   	Planet* jupiter = createPlanet(sun,"Jupiter",80,0.78,0.74,0.45);
-	jupiter->orbitRadius = 1800;
-	jupiter->orbitSpeed = 1 * PI / 180;
+    Planet* saturn = createPlanet(sun,"Saturn",60,0.78,0.54,0.45);
+    saturn->orbitRadius = 1400;
+    saturn->orbitSpeed = 3 * PI / 180;
+    // jupiter
+    Planet* jupiter = createPlanet(sun,"Jupiter",80,0.78,0.74,0.45);
+    jupiter->orbitRadius = 1800;
+    jupiter->orbitSpeed = 1 * PI / 180;
     //neptune
-   	Planet* neptune = createPlanet(sun,"Neptune",70,0.06,0.5,0.7);
-	neptune->orbitRadius = 2400;
-	neptune->orbitSpeed = 0.5 *  PI / 180;
+    Planet* neptune = createPlanet(sun,"Neptune",70,0.06,0.5,0.7);
+    neptune->orbitRadius = 2400;
+    neptune->orbitSpeed = 0.5 *  PI / 180;
 
-     SpaceShipMesh* spaceship = new SpaceShipMesh(10, 10, 20, 100);
-    Material* spaceshipMaterial = spaceship->material;
-    // set color of spaceship to be red
-    spaceshipMaterial->color = Color::fromRGBFloat(1, 0, 0, 1);
-    spaceshipMaterial->ambient_diffuse = 1;
-    spaceshipMaterial->shininess = 0;
-    spaceshipMaterial->specular = 0;
-    spaceship->position = Vector3(0, 0, 200);
-    spaceship->setName("Spaceship");
-   	 root->addChild(spaceship);
+    // SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, -20, -100));
+    // root->addChild(spaceship);
 
-	//Controllable Camera
+    //Controllable Camera
     CameraTest* cameraParent = new CameraTest();
     Camera3D* camera = new Camera3D();
     camera->active = true;
     camera->setFar(10000);
     cameraParent->setName("Controllable");
     cameraParent->addChild(camera);
-	cameraParent->position = Vector3(0, 0, 200);
+    cameraParent->position = Vector3(0, 0, 200);
     root->addChild(cameraParent);
-    
 
-	//Minimap Camera
+
+    //Minimap Camera
     Camera3D* camera2 = new Camera3D();
     camera2->active = true;
     camera2->viewport = Engine::VIEWPORT_2;
@@ -98,7 +90,7 @@ Engine::Nodes::Node* MainGameScene::constructTree()
 }
 
 Planet* createPlanet(Node3D* parent,std::string planetName, float radius,
-float red,float green,float blue)
+                     float red,float green,float blue)
 {
     Planet* planet = new Planet(radius, 100);
     Material* planetMaterial = planet->material;
