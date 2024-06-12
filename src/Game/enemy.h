@@ -17,7 +17,7 @@ namespace Game {
     public:
         Enemy();
         void move();
-        void attachEnemy(Player* player)
+        void attachEnemy(Player* player);
     };
 }
 

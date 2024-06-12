@@ -1,7 +1,7 @@
 #include "MainGameScene.h"
 #include "Planet.h"
 #include "cameraTest.cpp"
-
+#include "MainPlayer.h"
 using namespace Game;
 SpaceShipMesh * drawSpaceship(float baseWidth, float baseHeight, float height, int resolution,Vector3 vector3);
 Planet* createPlanet(Node3D* parent,std::string planetName,float radius,float red,float green,float blue);
@@ -60,18 +60,35 @@ Engine::Nodes::Node* MainGameScene::constructTree()
     neptune->orbitRadius = 2400;
     neptune->orbitSpeed = 0.5 *  PI / 180;
 
-    // SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, -20, -100));
-    // root->addChild(spaceship);
 
-    //Controllable Camera
-    CameraTest* cameraParent = new CameraTest();
-    Camera3D* camera = new Camera3D();
+
+
+
+    SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, 0, 20));
+    Camera3D * camera = new Camera3D();
     camera->active = true;
     camera->setFar(10000);
-    cameraParent->setName("Controllable");
-    cameraParent->addChild(camera);
-    cameraParent->position = Vector3(0, 0, 200);
-    root->addChild(cameraParent);
+    MainPlayer* player = new MainPlayer(10,20,10,10,100,150);
+    player->setName("Player");
+    player->position = Vector3(0, 0, 200);
+    player->addChild(spaceship);
+    player->addChild(camera);
+    root->addChild(player);
+
+
+
+
+
+
+    //Controllable Camera
+//    CameraTest* cameraParent = new CameraTest();
+//    Camera3D* camera = new Camera3D();
+//    camera->active = true;
+//    camera->setFar(10000);
+//    cameraParent->setName("Controllable");
+//    cameraParent->addChild(camera);
+//    cameraParent->position = Vector3(0, 0, 200);
+//    root->addChild(camera);
 
 
     //Minimap Camera

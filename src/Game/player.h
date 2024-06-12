@@ -7,23 +7,23 @@
 
 #include "../Engine.h"
 #include <stdio.h>
+#include "Bullet.h"
 
 namespace Game{
     class Player : public Engine::Nodes::CollisionBody3D{
+        protected:
         int health;
         float speed;
-        float rotationSpeed;
         float acceleration;
+        float rotationSpeed;
+        float maxSpeed;
         float rotationAcceleration;
-
         public:
-        Player();
-        Mesh3D* mesh;
-        void attachMesh(Engine::Nodes::Mesh3D* mesh);
-        void move();
+        Player(){
 
-
-
+        };
+//        void move();
+//        void shoot();
     };
 }
 
