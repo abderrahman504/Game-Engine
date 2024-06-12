@@ -60,8 +60,16 @@ Engine::Nodes::Node* MainGameScene::constructTree()
 	neptune->orbitRadius = 2400;
 	neptune->orbitSpeed = 0.5 *  PI / 180;
 
-    // SpaceShipMesh* spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, -20, -100));
-   	// root->addChild(spaceship);
+     SpaceShipMesh* spaceship = new SpaceShipMesh(10, 10, 20, 100);
+    Material* spaceshipMaterial = spaceship->material;
+    // set color of spaceship to be red
+    spaceshipMaterial->color = Color::fromRGBFloat(1, 0, 0, 1);
+    spaceshipMaterial->ambient_diffuse = 1;
+    spaceshipMaterial->shininess = 0;
+    spaceshipMaterial->specular = 0;
+    spaceship->position = Vector3(0, 0, 200);
+    spaceship->setName("Spaceship");
+   	 root->addChild(spaceship);
 
 	//Controllable Camera
     CameraTest* cameraParent = new CameraTest();

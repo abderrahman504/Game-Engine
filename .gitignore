@@ -5,3 +5,5 @@ Debug/
 *.vcxproj*
 .idea
 *.exe
+spaceship.mtl
+spaceship.obj

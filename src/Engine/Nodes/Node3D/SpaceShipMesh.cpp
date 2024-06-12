@@ -11,7 +11,9 @@ SpaceShipMesh::SpaceShipMesh(float baseWidth, float baseHeight, float height, in
     this->baseWidth = baseWidth;
     this->baseHeight = baseHeight;
     this->height = height;
-    buildMesh(baseWidth, baseHeight, height, resolution, &vertices, &indeces, &countIndeces, &countPrimitives);
+    this->LoadOBJ("C:\\Users\\ahmed\\Desktop\\Game-Engine\\spaceship.obj");
+    this->scale= Vector3(2,2,2);
+//    buildMesh(baseWidth, baseHeight, height, resolution, &vertices, &indeces, &countIndeces, &countPrimitives);
     setName("SpaceShipMesh");
 }
 
@@ -24,14 +26,6 @@ float SpaceShipMesh::BaseHeight() { return baseHeight; }
 float SpaceShipMesh::Height() { return height; }
 
 void SpaceShipMesh::buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices, unsigned int ***indeces, int **countIndeces, int *countPrimitives) {
-//    *countPrimitives = resolution;
-//    *countIndeces = new int[resolution];
-//    *indeces = new unsigned int*[resolution];
-//    for (int i =  0; i < resolution; i++){
-//        (*indeces)[i] = new unsigned int[2*(resolution+1)];
-//        (*countIndeces)[i] = 2*(resolution+1);
-//    }
-//    *vertices = new float[((resolution+1) * (resolution)) * 3];
 
     *countPrimitives = resolution + 1; // Add 1 for the base of the spaceship
     *countIndeces = new int[resolution + 1]; // Add 1 for the base of the spaceship
