@@ -48,6 +48,7 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     glutMouseWheelFunc(mouse_wheel);
     glutMouseFunc(mouse_key);
     glutPassiveMotionFunc(mouse_motion);
+    glutMotionFunc(mouse_motion);
     glutEntryFunc(mouse_entry);
     //Other callbacks
     glutIdleFunc(glutIdle);
@@ -73,12 +74,29 @@ void SceneHead::Start(){
     glutMainLoop();
 }
 
+InputServer& SceneHead::getInputServer() {return *inputServer;}
+PhysicsServer& SceneHead::getPhysicsServer(){return *physicsServer;}
+
+void SceneHead::hideCursor(){
+    glutSetCursor(GLUT_CURSOR_NONE);
+}
+
+void SceneHead::showCursor(){
+    glutSetCursor(GLUT_CURSOR_RIGHT_ARROW);
+}
+
+void SceneHead::freezeCursor(){
+    inputServer->cursor_frozen = true;
+}
+
+void SceneHead::unfreazeCursor(){
+    inputServer->cursor_frozen = false;
+}
+
+
 void SceneHead::onTreeReady(){
     this->scene_root->propegateReady(this);
 }
-
-InputServer& SceneHead::getInputServer() {return *inputServer;}
-PhysicsServer& SceneHead::getPhysicsServer(){return *physicsServer;}
 
 void glutIdle() {sceneHead->idle();}
 void SceneHead::idle()
@@ -103,7 +121,7 @@ void SceneHead::idle()
         //Draw scene
         glutPostRedisplay();
         //Reset input for next frame
-        inputServer->onIdle();
+        inputServer->onIdle(windowSize);
     }
 }
 

@@ -12,6 +12,7 @@ typedef int KeyState;
 Vector2 mouse_pos, prev_mouse_pos;
 bool mouse_just_entered;
 std::unordered_map<int, KeyState> key_map = std::unordered_map<int, KeyState>();
+Vector2 win_size;
 
 
 void InputServer::init()
@@ -98,9 +99,16 @@ void InputServer::mouseEntry(int state){
     mouse_just_entered = state == GLUT_ENTERED;
 }
 
-void InputServer::onIdle()
+void InputServer::onIdle(Vector2 window_size)
 {
+    win_size = window_size;
     prev_mouse_pos = mouse_pos;
+    //place mouse at center of window if cursor_frozen is true
+    if(cursor_frozen)
+    {
+        glutWarpPointer(window_size.x / 2, window_size.y / 2);
+        prev_mouse_pos = Vector2(window_size.x / 2, window_size.y / 2);
+    }
     //Iterate on key_map
     for(auto it = key_map.begin(); it != key_map.end(); it++)
     {
