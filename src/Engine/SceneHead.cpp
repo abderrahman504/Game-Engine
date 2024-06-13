@@ -4,11 +4,13 @@
 #include <GL/freeglut.h>
 #include <chrono>
 #include <stack>
+#include "../simpledrawtext.h"
 #include <stdio.h>
 
 #define FRAMERATE_CAP 140.0
 #define PHYSICS_FRAME_CAP 60.0
-
+bool isGameStarted = false;
+SimpleDrawText sdt;
 using namespace Engine::Nodes;
 using namespace Engine;
 
@@ -23,6 +25,7 @@ static unsigned long long last_physics;
 static Vector2 windowSize;
 
 void glutIdle();
+void displayText();
 void glutDraw();
 void resize(int width, int height);
 void keyboard_key(unsigned char key, int x, int y);
@@ -34,12 +37,26 @@ void mouse_motion(int x, int y);
 void mouse_wheel(int wheel, int direction, int x, int y);
 void free_nodes();
 
+
+void displayText(){
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    sdt.drawText("Main Menu", 250, 500, 1, 0, 0,0.3);
+    sdt.drawText("Press '1' to start the game", 250, 400, 1, 0, 0,0.2);
+    sdt.drawText("Press '0' to exit the game", 250, 300, 1, 0, 0,0.2);
+    sdt.render();
+
+    glutSwapBuffers();
+
+}
 void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServerParam){
+    std::cout<<"scene head entered"<<std::endl;
     sceneHead = this;
     inputServer = inputServerParam;
     physicsServer = physicsServerParam;
     treeDrawer = new TreeDrawer();
-
     //Input callbacks
     glutKeyboardFunc(keyboard_key);
     glutKeyboardUpFunc(keyboard_key_up);
@@ -70,7 +87,8 @@ void SceneHead::Start(){
     this->onTreeReady();
     inputServer->init();
     last_idle = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-    glutMainLoop();
+   glutMainLoop();
+
 }
 
 void SceneHead::onTreeReady(){
@@ -107,7 +125,10 @@ void SceneHead::idle()
     }
 }
 
-void glutDraw() {sceneHead->draw();}
+void glutDraw() {
+    if(!isGameStarted) displayText();
+    else sceneHead->draw();
+}
 void SceneHead::draw(){
     treeDrawer->drawScene(scene_root, windowSize);
 }
@@ -121,7 +142,17 @@ void resize(int width, int height)
     glMatrixMode(GL_MODELVIEW);
 }
 
-void keyboard_key(unsigned char key, int x, int y){sceneHead->keyboard(key, x, y);}
+void keyboard_key(unsigned char key, int x, int y){
+    if(key=='1'){
+        isGameStarted=true;
+        glutPostRedisplay();
+    }
+    else if(key=='0'){
+        exit(0);
+    }
+
+    sceneHead->keyboard(key, x, y);
+}
 void SceneHead::keyboard(unsigned char key, int x, int y){inputServer->keyboardInput(key, true, x, y);}
 
 void keyboard_key_up(unsigned char key, int x, int y){sceneHead->keyboardUp(key, x, y);}

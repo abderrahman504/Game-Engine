@@ -88,7 +88,7 @@ void Enemy::destroy() {
         }
     }
     this->Parent()->removeChild(this);
-    delete this;
+    queueFree();
 }
 
 void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {

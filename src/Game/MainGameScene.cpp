@@ -3,14 +3,15 @@
 #include "cameraTest.cpp"
 #include "MainPlayer.h"
 #include "enemy.h"
+#include "TextureLoader.h"
 
 using namespace Game;
 
 SpaceShipMesh *
 drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, Vector3 vector3, bool isEnemy);
 
-Planet *createPlanet(Node3D *parent, std::string planetName, float radius, float red, float green, float blue);
-
+Planet* createPlanet(Node3D* parent, std::string planetName, float radius, float red, float green, float blue);
+void renderPlanet(Planet* planet);
 Engine::Nodes::Node *MainGameScene::constructTree() {
     Node *root = new Node();
     Enemy *enemy = new Enemy();
@@ -36,7 +37,8 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
     mercury->orbitRadius = 400;
     mercury->orbitSpeed = 30 * PI / 180;
-    // venus
+    renderPlanet(mercury);
+//     venus
     Planet *venus = createPlanet(sun, "Venus", 25, 195 / 256.0, 141 / 256.0, 14 / 256.0);
     venus->orbitRadius = 560;
     venus->orbitSpeed = 20 * PI / 180;
@@ -124,6 +126,8 @@ Planet *createPlanet(Node3D *parent, std::string planetName, float radius,
     parent->addChild(planet);
     return planet;
 }
+
+
 
 
 SpaceShipMesh *

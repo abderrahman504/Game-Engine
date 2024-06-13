@@ -1,6 +1,7 @@
 #ifndef MATERIAL_GUARD
 #define MATERIAL_GUARD
 #include "Color.h"
+#include "../../Game/TextureLoader.h"
 
 namespace Engine{
 namespace DataTypes{
@@ -13,9 +14,12 @@ namespace DataTypes{
         float ambient_diffuse = 1; //Represents the percentage of ambient & diffuse light reflected by this material.
         float emission = 0; //Represents the percentage of light emitted by this material.
         float specular = 1; // Reperesents the percentage of specular light reflected by this material.
-        
+        Texture* texture;
+        bool useTexture = false;
+        GLuint textureID;
         Material();
         Material(Color color, float amb_dif, float emi, float spec, int shine);
+
         
     };
 }}

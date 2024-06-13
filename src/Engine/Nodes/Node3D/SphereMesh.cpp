@@ -12,6 +12,7 @@ SphereMesh::SphereMesh(float radius, int resolution)
     setName("SphereMesh");
 }
 
+
 float SphereMesh::Radius(){return radius;}
 
 
