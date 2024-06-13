@@ -21,16 +21,15 @@ Bullet::Bullet(float radius, float height, int resolution, float speed,float max
     material->shininess = 0;
     material->specular = 0;
     this->mesh->material = material;
-    this->mesh->position = Vector3(0,0,0);
-    this->addChild(this->mesh);
+    addChild(this->mesh);
+    Collider3D* collider = new SphereCollider(radius > 0.5*height ? radius : 0.5*height);
+    addChild(collider);
 
 }
 
 
 void Bullet::destroy(){
-
-    this->Parent()->removeChild(this);
-    delete this;
+    queueFree();
 }
 
 

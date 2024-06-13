@@ -13,7 +13,6 @@ Planet *createPlanet(Node3D *parent, std::string planetName, float radius, float
 
 Engine::Nodes::Node *MainGameScene::constructTree() {
     Node *root = new Node();
-    Enemy *enemy = new Enemy();
     root->setName("Solar System");
     SphereMesh *sun = new SphereMesh(150, 50);
     sun->material->color = Color(255, 255, 0, 255);
@@ -65,12 +64,20 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     neptune->orbitRadius = 2400;
     neptune->orbitSpeed = 0.5 * PI / 180;
 
-    SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
+
+
 //    SpaceShipMesh *enemy_spaceship1 = drawSpaceship(10, 10, 20, 100, Vector3(-40, -30, 300), true);
 //    SpaceShipMesh *enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300), true);
 //    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
 //    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
+    Enemy *enemy = new Enemy();
+    enemy->position = Vector3(0, 200, 100);
+    // PyramidMesh* mesh = new PyramidMesh(20, 10, 10);
+    // mesh->lookTowards(Vector3::DOWN, Vector3::FORWARD);
+    // enemy->addChild(mesh);
+    SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
     enemy->addChild(enemy_spaceship);
+    enemy->addChild(new SphereCollider(30));
 //    enemy->addChild(enemy_spaceship1);
 //    enemy->addChild(enemy_spaceship2);
 //    enemy->addChild(enemy_spaceship3);
@@ -80,17 +87,18 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
     SpaceShipMesh *spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, 0, 20), false);
     Camera3D *camera = new Camera3D();
-    camera->active = true;
+    // camera->position = Vector3(0, 20, 30);
     camera->setFar(10000);
     MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
+    
     enemy->attachEnemy(dynamic_cast<Player *>(player) );
     player->setName("Player");
     player->position = Vector3(0, 0, 200);
-    player->addChild(spaceship);
+    // player->addChild(spaceship);
     player->addChild(camera);
+    player->addChild(new SphereCollider(30));
+
     root->addChild(player);
-
-
 
 
 

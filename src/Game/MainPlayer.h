@@ -27,6 +27,8 @@ namespace Game{
             this->rotationAcceleration = rotationAcceleration;
             this->health = health;
             this->maxSpeed = maxSpeed;
+            collisionLayer = 0b0001; //Player exists on layer 1
+            collisionMask = 0b0010; //Player scans for layer 2
         }
         void shoot();
         void destroy();
