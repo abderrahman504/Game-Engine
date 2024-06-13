@@ -11,9 +11,9 @@
 
 using namespace Engine;
 using namespace Engine::Nodes;
-// std::map<int, Camera3D*> activeCameras = std::map<int, Camera3D*>();
-// int lightCount = 0;
 
+
+static Vector2 win_size;
 
 void applyMaterial(Material material);
 Camera3D defaultCamera();
@@ -66,7 +66,7 @@ void getCameraOrientationAndPosition(Camera3D* camera, Vector3* pos, Vector3* fo
     *up = cameraUp;
 }
 
-void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root, bool multipleCameras)
+void drawCameraViewport(Camera3D* camera, Vector2 windowSize, bool multipleCameras)
 {
     Vector3 cameraPos, cameraForward, cameraUp;
     getCameraOrientationAndPosition(camera, &cameraPos, &cameraForward, &cameraUp);
@@ -139,11 +139,63 @@ void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
     for(auto it = activeCameras.begin(); it != activeCameras.end(); it++)
     {
         Camera3D* camera = it->second;
-        drawCameraViewport(camera, windowSize, root, activeCameras.size() > 1);
+        drawCameraViewport(camera, windowSize, activeCameras.size() > 1);
+        if(it->first == VIEWPORT_1)
+            drawSceneUI(root, camera);
         placeLights(root);
         drawNode(root);
     }
     glutSwapBuffers();
+}
+
+void TreeDrawer::drawSceneUI(Node* root, Camera3D* camera)
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    Vector2 view_plane = Vector2(100 * camera->getAspect().x / camera->getAspect().y, 100);
+    glOrtho(0, view_plane.x, 0, view_plane.y, 0, 10);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glDisable(GL_LIGHTING);
+    std::stack<Node*> stack;
+    stack.push(root);
+    while(!stack.empty())
+    {
+        Node* node = stack.top();
+        stack.pop();
+        UI* ui = dynamic_cast<UI*>(node);
+        if(ui != nullptr){
+            drawNodeUI(ui, view_plane);
+        }
+
+        std::vector<Node*> children = node->getChildren();
+        for(int i=0; i<children.size(); i++){
+            stack.push(children[i]);
+        }
+    }
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_LIGHTING);
+}
+
+void TreeDrawer::drawNodeUI(UI* node, Vector2 view_plane_dims)
+{
+    bool isLabel = dynamic_cast<Label*>(node) != nullptr;
+    if(isLabel)
+    {
+        Label* label = (Label*)node;
+        glColor4f(label->color.r, label->color.g, label->color.b, label->color.a);
+        // glColor3f(1, 1, 1);
+        glRasterPos3f(label->position.x * view_plane_dims.x, label->position.y * view_plane_dims.y, 0);
+        for(int i=0; i<label->text.size(); i++){
+            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, label->text[i]);
+        }
+    }
 }
 
 void TreeDrawer::drawNode(Node* node)
