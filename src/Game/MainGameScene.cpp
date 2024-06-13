@@ -91,7 +91,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 //    enemy->addChild(enemy_spaceship3);
 //    enemy->addChild(enemy_spaceship4);
     root->addChild(enemy);
-    enemy->addChild(enemy_collider);
+    // enemy->addChild(enemy_collider);
 
 
     SpaceShipMesh *spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, 0, 20), false);
@@ -108,7 +108,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     player->addChild(new SphereCollider(30));
 
     root->addChild(player);
-    player->addChild(collider);
+    // player->addChild(collider);
 
 
 

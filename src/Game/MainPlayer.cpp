@@ -55,30 +55,30 @@ void MainPlayer::idle(double deltaTime) {
 
     //if mouse left button is pressed shoot
     if (inputServer.isKeyJustPressed(MOUSE_LEFT)) {
-        shoot();
+        // shoot();
     }
 
 }
 
 
 void MainPlayer::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
-    std::cout << "Collision between player and " << other->getName() << "\n";
+    // std::cout << "Collision between player and " << other->getName() << "\n";
 
-    if (other->getName() == "Bullet") {
-        Bullet *bullet = dynamic_cast<Bullet *>(other);
-        bullet->destroy();
-        if (bullet->Parent()->getName() == "Player") return;
-        health -= bullet->getDamage();
-        if (health <= 0) {
-            destroy();
-        }
-    }
-    if (other->getName() == "Enemy") {
-        health -= 10;
-        if (health <= 0) {
-            destroy();
-        }
-    }
+    // if (other->getName() == "Bullet") {
+    //     Bullet *bullet = dynamic_cast<Bullet *>(other);
+    //     bullet->destroy();
+    //     if (bullet->Parent()->getName() == "Player") return;
+    //     health -= bullet->getDamage();
+    //     if (health <= 0) {
+    //         destroy();
+    //     }
+    // }
+    // if (other->getName() == "Enemy") {
+    //     health -= 10;
+    //     if (health <= 0) {
+    //         destroy();
+    //     }
+    // }
 }
 
 void MainPlayer::destroy() {

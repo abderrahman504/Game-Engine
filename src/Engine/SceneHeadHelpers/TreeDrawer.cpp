@@ -193,10 +193,9 @@ void TreeDrawer::drawNode(Node* node)
         glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
         glDisableClientState(GL_VERTEX_ARRAY);
     }
-
-        std::cout << "Drawing Mesh3D" << std::endl;
         
     }
+
     
 
     std::vector<Nodes::Node*> children = node->getChildren();
@@ -204,7 +203,6 @@ void TreeDrawer::drawNode(Node* node)
     {
         drawNode(children[i]);
     }
-    //Undo node3d transformation
     if(isNode3D) glPopMatrix();
 }
 
