@@ -170,6 +170,7 @@ void TreeDrawer::drawNode(Node* node)
     {
         Mesh3D* mesh = (Mesh3D*)node;
         Material* material = mesh->material;
+
         applyMaterial(*material);
 
 

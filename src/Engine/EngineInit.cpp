@@ -11,6 +11,7 @@ namespace Engine{
     void initEngine(int argc, char** argv)
     {
         engine_started = true;
+        std::cout<<"Engine initialized"<<std::endl;
         glutInit(&argc, argv);
 
         glutInitContextVersion(4, 3);

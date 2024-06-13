@@ -6,13 +6,14 @@ namespace Engine{
 namespace Nodes{
     class SphereMesh : public Mesh3D
     {
-        protected:
+    protected:
         float radius;
 
-
-        public:
+    public:
         SphereMesh(float radius, int resolution);
         float Radius();
+
+
     };
 }}
 

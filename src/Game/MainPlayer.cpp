@@ -62,7 +62,8 @@ void MainPlayer::idle(double deltaTime) {
 
 
 void MainPlayer::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
-    std::cout << "Collision with " << other->getName() << std::endl;
+    std::cout << "Collision between player and " << other->getName() << "\n";
+
     if (other->getName() == "Bullet") {
         Bullet *bullet = dynamic_cast<Bullet *>(other);
         bullet->destroy();
@@ -89,8 +90,7 @@ void MainPlayer::destroy() {
             bullet->destroy();
         }
     }
-    this->Parent()->removeChild(this);
-
-    delete this;
+    
+    queueFree();
 }
 

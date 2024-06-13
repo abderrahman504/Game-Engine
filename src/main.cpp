@@ -2,6 +2,7 @@
 #include "Game/MainGameScene.h"
 #include "Game/LightTestScene.cpp"
 #include <stdio.h>
+#include <GL/freeglut.h>
 #include "Game/SoundManager.h"
 
 
@@ -16,9 +17,7 @@ int main(int argc, char** argv)
     }
     initEngine(argc, argv);
     SceneHead* scene = new Game::MainGameScene();
-//     SceneHead* scene = new LightTestScene();
     setMainScene(scene);
-
     SoundManager::cleanup();
     return 0;
 

@@ -16,42 +16,43 @@ Enemy::Enemy() {
     player = nullptr;
     shootingInterval = 3.0; // Adjust as necessary
     timeSinceLastShot = 0.0;
+    collisionLayer = 0b0010; //Enemy exists on layer 2
+    collisionMask = 0; // Enemy doesn't scan for any layers
     setName("Enemy");
 }
 
 
 void Enemy::shoot() {
     Bullet *bullet = new Bullet(1, 1, 100, 50, 100, 20);
-    std::vector < Node * > children = getChildren();
-    for (int i = 0; i < children.size(); i++) {
-        SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
-        if (enemy == nullptr) continue;
-        bullet->position = enemy->position;
-        bullet->orientation = enemy->orientation;
-        bullet->lookTowards(enemy->getForward(), Vector3::UP);
-        bullet->moveDir = enemy->getForward();
-    }
+    //Set bullet position and move direction
+    bullet->position = position;
+    bullet->orientation = orientation;
+    bullet->lookTowards(getForward(), getUp());
+    bullet->moveDir = getForward();
+    //Set bullet collision layer and mask to collide only with player and not with enemy
+    bullet->collisionLayer = 0b0100; //Bullet exists on layer 3
+    bullet->collisionMask =  0b0001; //Bullet scans layer 1 (the player exists in that layer)
+
+    // std::vector < Node * > children = getChildren();
+    // for (int i = 0; i < children.size(); i++) {
+    //     SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
+    //     if (enemy == nullptr) continue;
+    //     bullet->position = enemy->position;
+    //     bullet->orientation = enemy->orientation;
+    //     bullet->lookTowards(enemy->getForward(), Vector3::UP);
+    //     bullet->moveDir = enemy->getForward();
+    // }
     bullet->setName("Bullet");
-    this->Parent()->addChild(bullet);
+    Parent()->addChild(bullet);
 }
 
 void Enemy::idle(double deltaTime) {
-    std::vector < Node * > children = getChildren();
-    for (int i = 0; i < children.size(); i++) {
-        SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
-        if (enemy == nullptr) continue;
-        if (player) { // Check if player is not a nullptr
-            // Calculate the direction vector from the enemy to the player
-            double dirX = player->position.x - enemy->position.x;
-            double dirY = player->position.y - enemy->position.y;
-            double dirZ = player->position.z - enemy->position.z;
+    if (player) { // Check if player is not a nullptr
+        // Calculate the direction vector from the enemy to the player
+        Vector3 dir = player->position - position;
 
-            // Normalize the direction vector
-            double length = std::sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
-            if (length > 0) { // Prevent division by zero
-                dirX /= length;
-                dirY /= length;
-                dirZ /= length;
+        // Normalize the direction vector
+        dir = dir.normalize();
 
                 // Move the enemy towards the player
                 double speed = 10.0; // Adjust speed as necessary
@@ -68,6 +69,7 @@ void Enemy::idle(double deltaTime) {
     }
     timeSinceLastShot += deltaTime;
     if (timeSinceLastShot >= shootingInterval) {
+        std::cout << "Enemy is shooting" << std::endl;
         this->shoot();
         timeSinceLastShot = 0.0; // Reset the timer
     }
@@ -86,8 +88,7 @@ void Enemy::destroy() {
             bullet->destroy();
         }
     }
-    this->Parent()->removeChild(this);
-    delete this;
+    queueFree();
 }
 
 void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
