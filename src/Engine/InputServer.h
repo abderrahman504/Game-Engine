@@ -19,7 +19,7 @@ namespace Engine{
         void mouseKey(int button, int state, int x, int y);
         void mouseWheel(int wheel, int direction, int x, int y);
         void mouseEntry(int state);
-        void onIdle(Vector2 window_size);
+        void onIdle(DataTypes::Vector2 window_size);
         void init();
 
         public:

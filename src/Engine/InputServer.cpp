@@ -9,10 +9,10 @@ using namespace Engine::DataTypes;
 enum {PRESSED, RELEASED, HELD, NONE};
 
 typedef int KeyState;
-Vector2 mouse_pos, prev_mouse_pos;
-bool mouse_just_entered;
-std::unordered_map<int, KeyState> key_map = std::unordered_map<int, KeyState>();
-Vector2 win_size;
+static Vector2 mouse_pos, prev_mouse_pos;
+static bool mouse_just_entered;
+static std::unordered_map<int, KeyState> key_map = std::unordered_map<int, KeyState>();
+static Vector2 win_size;
 
 
 void InputServer::init()
