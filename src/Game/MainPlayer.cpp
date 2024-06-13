@@ -15,6 +15,10 @@ void MainPlayer::shoot() {
     bullet->lookTowards(getForward(), Vector3::UP);
     bullet->moveDir = getForward();
     this->Parent()->addChild(bullet);
+
+    SoundManager::setVolume(255);
+    SoundManager::setPlayDuration(100);
+    SoundManager::loadAndPlay("../resources/sounds/laser-gun-81720.mp3");
 }
 
 void MainPlayer::idle(double deltaTime) {
@@ -50,7 +54,7 @@ void MainPlayer::idle(double deltaTime) {
     }
 
     //if mouse left button is pressed shoot
-    if (inputServer.isMousePressed(0)) {
+    if (inputServer.isKeyJustPressed(MOUSE_LEFT)) {
         shoot();
     }
 
@@ -58,6 +62,7 @@ void MainPlayer::idle(double deltaTime) {
 
 
 void MainPlayer::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
+    std::cout << "Collision with " << other->getName() << std::endl;
     if (other->getName() == "Bullet") {
         Bullet *bullet = dynamic_cast<Bullet *>(other);
         bullet->destroy();

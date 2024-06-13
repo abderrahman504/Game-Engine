@@ -68,7 +68,6 @@ void Enemy::idle(double deltaTime) {
     }
     timeSinceLastShot += deltaTime;
     if (timeSinceLastShot >= shootingInterval) {
-        std::cout << "Enemy is shooting" << std::endl;
         this->shoot();
         timeSinceLastShot = 0.0; // Reset the timer
     }

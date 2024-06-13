@@ -9,12 +9,13 @@
 #include "../Engine.h"
 #include <stdio.h>
 #include "player.h"
+#include "SoundManager.h"
 namespace Game{
     class MainPlayer : public Player{
     private:
         int score;
         Vector3 velocity = Vector3::ZERO;
-        const float damping = 0.95f;      // Adjust as necessary
+        const float damping = 0.95f;     
         protected:
         void idle(double deltaTime);
         void onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info);

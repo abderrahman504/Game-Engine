@@ -4,6 +4,7 @@
 #include "MainPlayer.h"
 #include "enemy.h"
 
+
 using namespace Game;
 
 SpaceShipMesh *
@@ -24,6 +25,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sun->setName("Sun");
     root->addChild(sun);
 
+
     Light3D *sunLight = new Light3D();
     sunLight->color = Color::fromRGBInt(255, 218, 143, 1);
     sunLight->ambient = 0;
@@ -31,6 +33,9 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sunLight->specular = 1;
     sunLight->setName("SunLight");
     sun->addChild(sunLight);
+
+    // set texture of the sun
+    // sun->material->setTexture("/home/ahmed/Downloads/Game-Engine/earth.jpeg");
 
     // mercury
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
@@ -44,7 +49,10 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *earth = createPlanet(sun, "Earth", 35, 65 / 256.0, 175 / 256.0, 239 / 256.0);
     earth->orbitRadius = 800;
     earth->orbitSpeed = 15 * PI / 180;
-    //Moon
+    
+    earth->material->setTextureCoordinates(earth->TexCoords(), earth->TexCoordsSize());
+    earth->material->setTexture("../resources/images/earth.jpeg");
+    // Moon
     Planet *moon = createPlanet(earth, "Moon", 10, 0.4, 0.4, 0.4);
     moon->orbitRadius = 140;
     moon->orbitSpeed = 70 * PI / 180;
@@ -70,12 +78,14 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 //    SpaceShipMesh *enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300), true);
 //    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
 //    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
+    SphereCollider *enemy_collider = new SphereCollider(30);
     enemy->addChild(enemy_spaceship);
 //    enemy->addChild(enemy_spaceship1);
 //    enemy->addChild(enemy_spaceship2);
 //    enemy->addChild(enemy_spaceship3);
 //    enemy->addChild(enemy_spaceship4);
     root->addChild(enemy);
+    enemy->addChild(enemy_collider);
 
 
     SpaceShipMesh *spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, 0, 20), false);
@@ -83,12 +93,14 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     camera->active = true;
     camera->setFar(10000);
     MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
+    SphereCollider *collider = new SphereCollider(30);
     enemy->attachEnemy(dynamic_cast<Player *>(player) );
     player->setName("Player");
     player->position = Vector3(0, 0, 200);
     player->addChild(spaceship);
     player->addChild(camera);
     root->addChild(player);
+    player->addChild(collider);
 
 
 

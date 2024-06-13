@@ -171,10 +171,30 @@ void TreeDrawer::drawNode(Node* node)
         Mesh3D* mesh = (Mesh3D*)node;
         Material* material = mesh->material;
         applyMaterial(*material);
+
+
+        if(material->texture != nullptr){
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
+            glTexCoordPointer(2, GL_FLOAT, 0, material->textureCoordinates);
+            material->bindTexture();
+            glEnable(GL_TEXTURE_2D);
+            glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
+            glDisableClientState(GL_VERTEX_ARRAY);
+            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+            glDisable(GL_TEXTURE_2D);
+        }
+        else
+        {
         glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
         glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
         glDisableClientState(GL_VERTEX_ARRAY);
+    }
+
+        std::cout << "Drawing Mesh3D" << std::endl;
+        
     }
     
 
