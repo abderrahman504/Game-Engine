@@ -14,12 +14,17 @@
 namespace Game {
 
     class Enemy : public Player {
-    SpaceShipMesh* player;
+        Player *player;
+        double shootingInterval;
+        double timeSinceLastShot;
+        void onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info);
     public:
         Enemy();
-        void move();
-        void attachEnemy(SpaceShipMesh* player);
+        void attachEnemy(Player *player);
         void idle(double deltaTime);
+        void shoot();
+        void destroy();
+
     };
 }
 

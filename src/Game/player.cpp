@@ -5,6 +5,3 @@
 #include "player.h"
 
 using namespace Game;
-Player::Player() {
-
-}

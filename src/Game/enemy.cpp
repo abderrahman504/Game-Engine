@@ -5,45 +5,107 @@
 #include "enemy.h"
 
 using namespace Game;
+
 Enemy::Enemy() {
-
+    health = 100;
+    speed = 10;
+    acceleration = 10;
+    rotationSpeed = 10;
+    maxSpeed = 10;
+    rotationAcceleration = 10;
+    player = nullptr;
+    shootingInterval = 3.0; // Adjust as necessary
+    timeSinceLastShot = 0.0;
+    setName("Enemy");
 }
+
+
+void Enemy::shoot() {
+    Bullet *bullet = new Bullet(1, 1, 100, 50, 100, 20);
+    std::vector < Node * > children = getChildren();
+    for (int i = 0; i < children.size(); i++) {
+        SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
+        if (enemy == nullptr) continue;
+        bullet->position = enemy->position;
+        bullet->orientation = enemy->orientation;
+        bullet->lookTowards(enemy->getForward(), Vector3::UP);
+        bullet->moveDir = enemy->getForward();
+    }
+    bullet->setName("Bullet");
+    this->Parent()->addChild(bullet);
+}
+
 void Enemy::idle(double deltaTime) {
-    std::vector<Node *> children= getChildren();
-  for(int i=0;i<children.size();i++) {
-      SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
-      if (player) { // Check if player is not a nullptr
-          // Calculate the direction vector from the enemy to the player
-          double dirX = player->position.x - enemy->position.x;
-          double dirY = player->position.y - enemy->position.y;
-          double dirZ = player->position.z - enemy->position.z;
+    std::vector < Node * > children = getChildren();
+    for (int i = 0; i < children.size(); i++) {
+        SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
+        if (enemy == nullptr) continue;
+        if (player) { // Check if player is not a nullptr
+            // Calculate the direction vector from the enemy to the player
+            double dirX = player->position.x - enemy->position.x;
+            double dirY = player->position.y - enemy->position.y;
+            double dirZ = player->position.z - enemy->position.z;
 
-          // Normalize the direction vector
-          double length = std::sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
-          if (length > 0) { // Prevent division by zero
-              dirX /= length;
-              dirY /= length;
-              dirZ /= length;
+            // Normalize the direction vector
+            double length = std::sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
+            if (length > 0) { // Prevent division by zero
+                dirX /= length;
+                dirY /= length;
+                dirZ /= length;
 
-              // Move the enemy towards the player
-              double speed = 10.0; // Adjust speed as necessary
-
-                 enemy-> position.x += dirX * speed * deltaTime;
-
-                  enemy->position.y += dirY * speed * deltaTime;
-
-                  enemy-> position.z += dirZ * speed * deltaTime;
-          }
-
-          // Debug output
-          std::cout << "Enemy Position: (" << position.x << ", " << position.y << ", " << position.z << ")\n";
-          std::cout << "Player Position: (" << player->position.x << ", " << player->position.y << ", "
-                    << player->position.z << ")\n";
-      }
-  }
+                // Move the enemy towards the player
+                double speed = 10.0; // Adjust speed as necessary
+                enemy->position.x += dirX * speed * deltaTime;
+                enemy->position.y += dirY * speed * deltaTime;
+                enemy->position.z += dirZ * speed * deltaTime;
+                // rotate the enemy towards the player
+                Vector3 enemyForward = Vector3(dirX, dirY, dirZ);
+                Vector3 enemyUp = Vector3(0, 1, 0);
+                Vector3 enemyRight = enemyForward.cross(enemyUp);
+                enemy->lookTowards(enemyForward, enemyUp);
+            }
+        }
+    }
+    timeSinceLastShot += deltaTime;
+    if (timeSinceLastShot >= shootingInterval) {
+        std::cout << "Enemy is shooting" << std::endl;
+        this->shoot();
+        timeSinceLastShot = 0.0; // Reset the timer
+    }
 }
 
-void Enemy::attachEnemy(SpaceShipMesh* player) {
-this->player=player;
+void Enemy::attachEnemy(Player *player) {
+    this->player = player;
+}
 
+
+void Enemy::destroy() {
+    std::vector < Node * > children = getChildren();
+    for (int i = 0; i < children.size(); i++) {
+        if (children[i]->getName() == "Bullet") {
+            Bullet *bullet = dynamic_cast<Bullet *>(children[i]);
+            bullet->destroy();
+        }
+    }
+    this->Parent()->removeChild(this);
+    delete this;
+}
+
+void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
+    std::cout << "Enemy collided with " << other->getName() << std::endl;
+    if (other->getName() == "Bullet") {
+        Bullet *bullet = dynamic_cast<Bullet *>(other);
+        bullet->destroy();
+        if (bullet->Parent()->getName() == "Enemy") return;
+        health -= bullet->getDamage();
+        if (health <= 0) {
+            destroy();
+        }
+    }
+    if (other->getName() == "Player") {
+        health -= 10;
+        if (health <= 0) {
+            destroy();
+        }
+    }
 }

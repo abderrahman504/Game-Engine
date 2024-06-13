@@ -22,8 +22,8 @@ namespace Game{
         Player(){
 
         };
-//        void move();
-//        void shoot();
+        void shoot();
+        void destroy();
     };
 }
 
