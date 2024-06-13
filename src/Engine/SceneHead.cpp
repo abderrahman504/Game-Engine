@@ -58,7 +58,7 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
-    glClearColor(0,0,0, 1.0);
+    glClearColor(0, 0, 0, 1.0);
 
     //Setting global lighting
     float global_ambience[4] = {0.2, 0.2, 0.2, 1.0};
