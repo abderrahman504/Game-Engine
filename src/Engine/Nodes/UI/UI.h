@@ -1,6 +1,6 @@
 #ifndef UI_GUARD
 #define UI_GUARD
-#include "../Node.h";
+#include "../Node.h"
 #include "../../DataTypes.h"
 
 using namespace Engine::DataTypes;
@@ -20,6 +20,11 @@ namespace Nodes{
         Vector2 scale = Vector2::ONE;
         //Angle of the node with the positive x-axis in radians
         float rotation = 0;
+        
+
+        UI(){
+            setName("UI");
+        }
 
     };
 
