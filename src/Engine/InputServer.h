@@ -10,6 +10,8 @@ namespace Engine{
     class InputServer
     {
         friend class SceneHead;
+        bool cursor_frozen = false;
+
         private:
         void keyboardInput(unsigned char key, bool down, int x, int y);
         void specialInput(int key, bool down, int x, int y);
@@ -17,7 +19,7 @@ namespace Engine{
         void mouseKey(int button, int state, int x, int y);
         void mouseWheel(int wheel, int direction, int x, int y);
         void mouseEntry(int state);
-        void onIdle();
+        void onIdle(DataTypes::Vector2 window_size);
         void init();
 
         public:
