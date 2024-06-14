@@ -5,6 +5,7 @@
 #include "MainPlayer.h"
 
 
+bool isMuosefreaze = false;
 using namespace Game;
 
 
@@ -33,6 +34,17 @@ void MainPlayer::idle(double deltaTime) {
     if (inputServer.isKeyPressed('q')) rotateAround(Vector3::UP, 0.01);
     if (inputServer.isKeyPressed('e')) rotateAround(Vector3::UP, -0.01);
     if (inputServer.isKeyPressed('r')) shoot();
+    if (inputServer.isKeyPressed('j')){
+        if (isMuosefreaze){
+            getSceneHead().unfreazeCursor();
+            isMuosefreaze = false;
+        }
+        else{
+            getSceneHead().freezeCursor();
+            isMuosefreaze = true;
+        }
+            
+    }
     if (moveDir.length() != 0) {
         moveDir = moveDir.normalize().rotateBy(orientation);
         float speed = 150;
@@ -55,7 +67,7 @@ void MainPlayer::idle(double deltaTime) {
 
     //if mouse left button is pressed shoot
     if (inputServer.isKeyJustPressed(MOUSE_LEFT)) {
-        // shoot();
+        shoot();
     }
 
 }
