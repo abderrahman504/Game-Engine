@@ -63,6 +63,9 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sunLight->setName("SunLight");
     sun->addChild(sunLight);
 
+
+    sun->material->setTextureCoordinates(sun->TexCoords(), sun->TexCoordsSize());
+    sun->material->setTexture("../resources/images/sun2.jpeg");
     // set texture of the sun
     // sun->material->setTexture("/home/ahmed/Downloads/Game-Engine/earth.jpeg");
 
@@ -79,6 +82,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 //    venus->material->setTextureCoordinates(venus->TexCoords(), venus->TexCoordsSize());
 //    venus->material->setTexture("../resources/images/venus.jpg");
     // Earth
+
     Planet *earth = createPlanet(sun, "Earth", 35, 65 / 256.0, 175 / 256.0, 239 / 256.0);
     earth->orbitRadius = 800;
     earth->orbitSpeed = 15 * PI / 180;
@@ -92,7 +96,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     moon->material->setTextureCoordinates(moon->TexCoords(), moon->TexCoordsSize());
     moon->material->setTexture("../resources/images/moon.jpg");
     //Mars
-    Planet *mars = createPlanet(sun, "Mars", 30, 1, 0, 0);
+    Planet *mars = createPlanet(sun, "Mars", 30,  0.78, 0.54, 0.45);
     mars->orbitRadius = 1000;
     mars->orbitSpeed = 10 * PI / 180;
     mars->material->setTextureCoordinates(mars->TexCoords(), mars->TexCoordsSize());
@@ -103,7 +107,14 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     saturn->orbitSpeed = 3 * PI / 180;
     saturn->material->setTextureCoordinates(saturn->TexCoords(), saturn->TexCoordsSize());
     saturn->material->setTexture("../resources/images/saturn.jpg");
+    DiskMesh3D* saturn_rings = new DiskMesh3D(100, 130, 0.5, 50);
+    saturn_rings->material->color = Color::fromRGBInt(115, 104, 80, 1);
+    saturn_rings->material->ambient_diffuse = 0.5;
+    saturn_rings->material->specular = 0;
+    saturn_rings->rotateAround(Vector3::RIGHT, 10* PI / 180);
+    saturn->addChild(saturn_rings);
     // jupiter
+
     Planet *jupiter = createPlanet(sun, "Jupiter", 80, 0.78, 0.74, 0.45);
     jupiter->orbitRadius = 1800;
     jupiter->orbitSpeed = 1 * PI / 180;
@@ -112,13 +123,24 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *neptune = createPlanet(sun, "Neptune", 70, 0.06, 0.5, 0.7);
     neptune->orbitRadius = 2400;
     neptune->orbitSpeed = 0.5 * PI / 180;
+    neptune->material->setTextureCoordinates(neptune->TexCoords(), neptune->TexCoordsSize());
+    neptune->material->setTexture("../resources/images/neptune.jpeg");
 
+
+
+
+//    SpaceShipMesh *enemy_spaceship1 = drawSpaceship(10, 10, 20, 100, Vector3(-40, -30, 300), true);
+//    SpaceShipMesh *enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300), true);
+//    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
+//    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
     Enemy *enemy = new Enemy();
     root->addChild(enemy);
     // enemy->addChild(enemy_collider);
 
+
+    SpaceShipMesh *spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, 0, 20), false);
     Camera3D *camera = new Camera3D();
-    // camera->position = Vector3(0, 20, 30);
+    camera->active = true;
     camera->setFar(10000);
     MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
     
@@ -184,39 +206,39 @@ drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, V
     spaceship->position = vector3;
     spaceship->setName("Spaceship");
 
-    SpaceShipMesh *spaceship1 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
-    spaceshipMaterial = spaceship1->material;
-    // set color of spaceship to be red
-    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    spaceshipMaterial->ambient_diffuse = 1;
-    spaceshipMaterial->shininess = 0;
-    spaceshipMaterial->specular = 0;
-    spaceship1->position = Vector3(5, 0, height / 5.5);
+    // SpaceShipMesh *spaceship1 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
+    // spaceshipMaterial = spaceship1->material;
+    // // set color of spaceship to be red
+    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    // spaceshipMaterial->ambient_diffuse = 1;
+    // spaceshipMaterial->shininess = 0;
+    // spaceshipMaterial->specular = 0;
+    // spaceship1->position = Vector3(5, 0, height / 5.5);
 
-    spaceship1->setName("right wing");
-    SpaceShipMesh *spaceship2 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
-    spaceshipMaterial = spaceship2->material;
-    // set color of spaceship to be red
-    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    spaceshipMaterial->ambient_diffuse = 1;
-    spaceshipMaterial->shininess = 0;
-    spaceshipMaterial->specular = 0;
-    spaceship2->position = Vector3(-5, 0, height / 5.5);
-    spaceship2->setName("left wing");
+    // spaceship1->setName("right wing");
+    // SpaceShipMesh *spaceship2 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
+    // spaceshipMaterial = spaceship2->material;
+    // // set color of spaceship to be red
+    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    // spaceshipMaterial->ambient_diffuse = 1;
+    // spaceshipMaterial->shininess = 0;
+    // spaceshipMaterial->specular = 0;
+    // spaceship2->position = Vector3(-5, 0, height / 5.5);
+    // spaceship2->setName("left wing");
 
-    SphereMesh *spaceshiphead = new SphereMesh(height / 10, resolution);
-    spaceshipMaterial = spaceshiphead->material;
-    // set color of spaceship to be red
-    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    spaceshipMaterial->ambient_diffuse = 1;
-    spaceshipMaterial->shininess = 0;
-    spaceshipMaterial->specular = 0;
-    spaceshiphead->position = Vector3(0, 1.2, -7.5);
-    spaceshiphead->setName("head");
+    // SphereMesh *spaceshiphead = new SphereMesh(height / 10, resolution);
+    // spaceshipMaterial = spaceshiphead->material;
+    // // set color of spaceship to be red
+    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    // spaceshipMaterial->ambient_diffuse = 1;
+    // spaceshipMaterial->shininess = 0;
+    // spaceshipMaterial->specular = 0;
+    // spaceshiphead->position = Vector3(0, 1.2, -7.5);
+    // spaceshiphead->setName("head");
 
-    spaceship->addChild(spaceship1);
-    spaceship->addChild(spaceship2);
-    spaceship->addChild(spaceshiphead);
+    // spaceship->addChild(spaceship1);
+    // spaceship->addChild(spaceship2);
+    // spaceship->addChild(spaceshiphead);
 
     return spaceship;
 }

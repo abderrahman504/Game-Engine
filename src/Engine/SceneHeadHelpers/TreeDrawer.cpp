@@ -269,7 +269,7 @@ void TreeDrawer::drawNode(Node* node)
         glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
         glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
         glDisableClientState(GL_VERTEX_ARRAY);
-    }
+        }
         
     }
 

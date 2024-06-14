@@ -17,12 +17,10 @@ namespace Engine {
             float baseHeight;
             float height;
 
-            void buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices, float **texCoords,
-                           unsigned int ***indeces, int **countIndeces, int *countPrimitives);
-
         public:
             SpaceShipMesh(float baseWidth, float baseHeight, float height, int resolution);
 
+            ~SpaceShipMesh();   
             float BaseWidth();
 
             float BaseHeight();

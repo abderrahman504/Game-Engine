@@ -31,7 +31,7 @@ namespace Nodes{
         int CountPrimitives();
         int TexCoordsSize();
         float* TexCoords();
-        bool LoadOBJ(const char* path);
+        bool LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives);
         void Scale(float scaleFactor);
     };
 }}

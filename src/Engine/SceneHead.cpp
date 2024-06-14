@@ -224,4 +224,3 @@ void free_nodes()
     }
     node_freeing_queue.clear();
 }
-

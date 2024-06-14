@@ -39,54 +39,54 @@ int Mesh3D::CountPrimitives(){return countPrimitives;}
 int Mesh3D::TexCoordsSize(){return texCoordsSize;}
 float* Mesh3D::TexCoords(){return texCoords;}
 
+bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives) {
+    std::vector<float> vertice;
+    std::vector<unsigned int> indice;
+    std::ifstream in_file(path);
 
-bool Mesh3D::LoadOBJ(const char* path) {
-    std::vector<float> temp_vertices;
-    std::vector<unsigned int> temp_indices;
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file: " << path << std::endl;
+    if (!in_file.is_open()) {
+        std::cerr << "ERROR::OBJLOADER::Could not open file." << std::endl;
         return false;
     }
 
-    std::string line;
-    while (std::getline(file, line)) {
-        std::istringstream s(line);
-        std::string type;
-        s >> type;
-        if (type == "v") {
+    std::string line, prefix;
+    while (std::getline(in_file, line)) {
+        std::istringstream ss(line);
+        ss >> prefix;
+
+        if (prefix == "v") {
             float x, y, z;
-            s >> x >> y >> z;
-            temp_vertices.push_back(x);
-            temp_vertices.push_back(y);
-            temp_vertices.push_back(z);
-        } else if (type == "f") {
-            for (int i = 0; i < 3; ++i) {
-                unsigned int vertexIndex, textureIndex, normalIndex;
-                char slash;
-                s >> vertexIndex >> slash >> textureIndex >> slash >> normalIndex;
-                temp_indices.push_back(vertexIndex - 1); // Adjust for OpenGL indexing
+            ss >> x >> y >> z;
+            vertice.push_back(x);
+            vertice.push_back(y);
+            vertice.push_back(z);
+        } else if (prefix == "f") {
+            std::string vertexStr;
+            unsigned int vertexIndex[3];
+            int i = 0;
+            while (ss >> vertexStr) {
+                std::istringstream vertexStream(vertexStr);
+                std::string indexStr;
+                std::getline(vertexStream, indexStr, '/');
+                vertexIndex[i++] = std::stoi(indexStr) - 1;
+            }
+            for (int j = 0; j < 3; ++j) {
+                indice.push_back(vertexIndex[j]);
             }
         }
     }
 
-    file.close();
+    *vertices = new float[vertice.size()];
+    *indices = new unsigned int*[1];
+    (*indices)[0] = new unsigned int[indice.size()];
+    *countIndices = new int[1];
+    (*countIndices)[0] = indice.size();
+    *countPrimitives = 1;
 
-    // Allocate memory for vertices
-    vertices = new float[temp_vertices.size()];
-    std::copy(temp_vertices.begin(), temp_vertices.end(), vertices);
-
-    // Allocate memory for indices
-    countPrimitives = temp_indices.size() / 3;
-    indeces = new unsigned int*[countPrimitives];
-    countIndeces = new int[countPrimitives];
-    for (int i = 0; i < countPrimitives; ++i) {
-        indeces[i] = new unsigned int[3];
-        countIndeces[i] = 3;
-        for (int j = 0; j < 3; ++j) {
-            indeces[i][j] = temp_indices[i * 3 + j];
-        }
-    }
+    std::copy(vertice.begin(), vertice.end(), *vertices);
+    std::copy(indice.begin(), indice.end(), (*indices)[0]);
+    
+    
 
     return true;
 }
