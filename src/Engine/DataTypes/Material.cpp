@@ -5,7 +5,7 @@ using namespace Engine::DataTypes;
 
 Material::Material() : textureCoordinates(nullptr), textureCoordinatesSize(0)
 {
-    texture = new Texture();
+    // texture = new Texture();
 }
 Material::Material(Color color, float amb_dif, float emi, float spec, int shine) : textureCoordinates(nullptr), textureCoordinatesSize(0)
 {
