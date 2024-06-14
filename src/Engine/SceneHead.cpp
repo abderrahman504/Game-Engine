@@ -4,11 +4,13 @@
 #include <GL/freeglut.h>
 #include <chrono>
 #include <stack>
+#include "simpledrawtext.h"
 #include <stdio.h>
 
 #define FRAMERATE_CAP 140.0
 #define PHYSICS_FRAME_CAP 60.0
-
+bool isGameStarted = false;
+SimpleDrawText sdt;
 using namespace Engine::Nodes;
 using namespace Engine;
 
@@ -23,6 +25,7 @@ static unsigned long long last_physics;
 static Vector2 windowSize;
 
 void glutIdle();
+void displayText();
 void glutDraw();
 void resize(int width, int height);
 void keyboard_key(unsigned char key, int x, int y);
@@ -49,11 +52,11 @@ void displayText(){
 
 }
 void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServerParam){
+    std::cout<<"scene head entered"<<std::endl;
     sceneHead = this;
     inputServer = inputServerParam;
     physicsServer = physicsServerParam;
     treeDrawer = new TreeDrawer();
-
     //Input callbacks
     glutKeyboardFunc(keyboard_key);
     glutKeyboardUpFunc(keyboard_key_up);
@@ -85,7 +88,8 @@ void SceneHead::Start(){
     this->onTreeReady();
     inputServer->init();
     last_idle = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-    glutMainLoop();
+   glutMainLoop();
+
 }
 
 InputServer& SceneHead::getInputServer() {return *inputServer;}
@@ -142,7 +146,10 @@ void SceneHead::idle()
     }
 }
 
-void glutDraw() {sceneHead->draw();}
+void glutDraw() {
+    if(!isGameStarted) displayText();
+    else sceneHead->draw();
+}
 void SceneHead::draw(){
     treeDrawer->drawScene(scene_root, windowSize);
 }

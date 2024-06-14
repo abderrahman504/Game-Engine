@@ -21,6 +21,7 @@ Enemy::Enemy() {
     setName("Enemy");
 }
 
+
 void Enemy::shoot() {
     Bullet *bullet = new Bullet(1, 1, 100, 50, 100, 20);
     //Set bullet position and move direction
@@ -42,26 +43,16 @@ void Enemy::shoot() {
          bullet->moveDir = enemy->getForward();
      }
     bullet->setName("Bullet");
-    this->Parent()->addChild(bullet);
+    Parent()->addChild(bullet);
 }
 
 void Enemy::idle(double deltaTime) {
-    std::vector < Node * > children = getChildren();
-    for (int i = 0; i < children.size(); i++) {
-        SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
-        if (enemy == nullptr) continue;
-        if (player) { // Check if player is not a nullptr
-            // Calculate the direction vector from the enemy to the player
-            double dirX = player->position.x - enemy->position.x;
-            double dirY = player->position.y - enemy->position.y;
-            double dirZ = player->position.z - enemy->position.z;
+    if (player) { // Check if player is not a nullptr
+        // Calculate the direction vector from the enemy to the player
+        Vector3 dir = player->position - position;
 
-            // Normalize the direction vector
-            double length = std::sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
-            if (length > 0) { // Prevent division by zero
-                dirX /= length;
-                dirY /= length;
-                dirZ /= length;
+        // Normalize the direction vector
+        dir = dir.normalize();
 
         // Move the enemy towards the player
         double speed = 20.0; // Adjust speed as necessary
@@ -94,25 +85,24 @@ void Enemy::destroy() {
             bullet->destroy();
         }
     }
-    this->Parent()->removeChild(this);
-    delete this;
+    queueFree();
 }
 
 void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
-    std::cout << "Enemy collided with " << other->getName() << std::endl;
-    if (other->getName() == "Bullet") {
-        Bullet *bullet = dynamic_cast<Bullet *>(other);
-        bullet->destroy();
-        if (bullet->Parent()->getName() == "Enemy") return;
-        health -= bullet->getDamage();
-        if (health <= 0) {
-            destroy();
-        }
-    }
-    if (other->getName() == "Player") {
-        health -= 10;
-        if (health <= 0) {
-            destroy();
-        }
-    }
+    // std::cout << "Enemy collided with " << other->getName() << std::endl;
+    // if (other->getName() == "Bullet") {
+    //     Bullet *bullet = dynamic_cast<Bullet *>(other);
+    //     bullet->destroy();
+    //     if (bullet->Parent()->getName() == "Enemy") return;
+    //     health -= bullet->getDamage();
+    //     if (health <= 0) {
+    //         destroy();
+    //     }
+    // }
+    // if (other->getName() == "Player") {
+    //     health -= 10;
+    //     if (health <= 0) {
+    //         destroy();
+    //     }
+    // }
 }

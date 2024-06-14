@@ -6,7 +6,10 @@
 #include <stdio.h>
 #include <GL/freeglut.h>
 
+
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 
 using namespace Engine;
@@ -30,6 +33,7 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+#ifdef _WIN32
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, int nCmdShow)
 {
     if (!SoundManager::initialize()) {
@@ -41,3 +45,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
     main(argc, argv);
     return 0;
 }
+
+#endif
