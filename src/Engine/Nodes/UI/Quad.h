@@ -9,9 +9,7 @@ namespace Nodes{
     {
         public:
 
-        bool normalized_size = false;
         Vector2 size = Vector2(20, 20);
-        Color color = Color::WHITE;
 
         Quad(){
             setName("Quad");

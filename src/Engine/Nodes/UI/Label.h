@@ -12,7 +12,7 @@ namespace Nodes{
         public:
         std::string text = "";
 
-        Color color = Color::WHITE;
+        
 
         Label(){
             setName("Label");

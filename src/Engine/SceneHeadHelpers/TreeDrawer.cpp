@@ -154,7 +154,7 @@ void TreeDrawer::drawSceneUI(Node* root, Camera3D* camera)
     glPushMatrix();
     glLoadIdentity();
     Vector2 view_plane = Vector2(100 * camera->getAspect().x / camera->getAspect().y, 100);
-    glOrtho(0, view_plane.x, 0, view_plane.y, 0, 10);
+    glOrtho(0, view_plane.x, 0, view_plane.y, -100, 100);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
@@ -187,33 +187,37 @@ void TreeDrawer::drawNodeUI(UI* node, Vector2 view_plane_dims)
 {
     Label* label = dynamic_cast<Label*>(node);
     Quad* quad = dynamic_cast<Quad*>(node);
+    glColor4f(node->color.r, node->color.g, node->color.b, node->color.a);
     if(label != nullptr)
     {
-        glColor4f(label->color.r, label->color.g, label->color.b, label->color.a);
-        glRasterPos3f(label->position.x * view_plane_dims.x, label->position.y * view_plane_dims.y, 0);
+        if(label->normalized_coordinates){
+            glRasterPos3f(label->position.x * view_plane_dims.x, label->position.y * view_plane_dims.y, node->z_index);
+        }
+        else{
+            glRasterPos3f(label->position.x, label->position.y, node->z_index);
+        }
         for(int i=0; i<label->text.size(); i++){
             glutBitmapCharacter(GLUT_BITMAP_9_BY_15, label->text[i]);
         }
     }
     if(quad != nullptr)
     {
-        glColor4f(quad->color.r, quad->color.g, quad->color.b, quad->color.a);
-        if(quad->normalized_size)
+        if(quad->normalized_coordinates)
         {
             glBegin(GL_QUADS);
-            glVertex2f(quad->position.x * view_plane_dims.x, quad->position.y * view_plane_dims.y);
-            glVertex2f((quad->position.x + quad->size.x) * view_plane_dims.x, quad->position.y * view_plane_dims.y);
-            glVertex2f((quad->position.x + quad->size.x) * view_plane_dims.x, (quad->position.y + quad->size.y) * view_plane_dims.y);
-            glVertex2f(quad->position.x * view_plane_dims.x, (quad->position.y + quad->size.y) * view_plane_dims.y);
+            glVertex3f(quad->position.x * view_plane_dims.x, quad->position.y * view_plane_dims.y, node->z_index);
+            glVertex3f((quad->position.x + quad->size.x) * view_plane_dims.x, quad->position.y * view_plane_dims.y, node->z_index);
+            glVertex3f((quad->position.x + quad->size.x) * view_plane_dims.x, (quad->position.y + quad->size.y) * view_plane_dims.y, node->z_index);
+            glVertex3f(quad->position.x * view_plane_dims.x, (quad->position.y + quad->size.y) * view_plane_dims.y, node->z_index);
             glEnd();
         }
         else
         {
             glBegin(GL_QUADS);
-            glVertex2f(quad->position.x, quad->position.y);
-            glVertex2f(quad->position.x + quad->size.x, quad->position.y);
-            glVertex2f(quad->position.x + quad->size.x, quad->position.y + quad->size.y);
-            glVertex2f(quad->position.x, quad->position.y + quad->size.y);
+            glVertex3f(quad->position.x, quad->position.y, node->z_index);
+            glVertex3f(quad->position.x + quad->size.x, quad->position.y, node->z_index);
+            glVertex3f(quad->position.x + quad->size.x, quad->position.y + quad->size.y, node->z_index);
+            glVertex3f(quad->position.x, quad->position.y + quad->size.y, node->z_index);
             glEnd();
         }
     }
