@@ -22,16 +22,24 @@ Mesh3D::~Mesh3D(){
             delete[] vertices;
             delete[] indeces[i];
         }
+        if(texCoords != nullptr){
+            delete[] texCoords;
+        }
         delete[] vertices;
         delete[] indeces;
         delete[] countIndeces;
         delete material;
+
     }
 }
 float* Mesh3D::Vertices(){return vertices;}
 unsigned int** Mesh3D::Indeces(){return indeces;}
 int* Mesh3D::CountIndeces(){return countIndeces;}
 int Mesh3D::CountPrimitives(){return countPrimitives;}
+int Mesh3D::TexCoordsSize(){return texCoordsSize;}
+float* Mesh3D::TexCoords(){return texCoords;}
+
+
 bool Mesh3D::LoadOBJ(const char* path) {
     std::vector<float> temp_vertices;
     std::vector<unsigned int> temp_indices;

@@ -15,12 +15,12 @@ namespace Nodes{
         public:
         DataTypes::Material *material = new DataTypes::Material();
         protected:
-        //The vertices of the mesh
         float* vertices = nullptr;
-        //The indeces of the mesh
         unsigned int** indeces = nullptr;
         int* countIndeces = nullptr;
         int countPrimitives = 0;
+        float *texCoords = nullptr;
+        int texCoordsSize = 0;
 
         public:
         Mesh3D();
@@ -29,6 +29,8 @@ namespace Nodes{
         unsigned int** Indeces();
         int* CountIndeces();
         int CountPrimitives();
+        int TexCoordsSize();
+        float* TexCoords();
         bool LoadOBJ(const char* path);
         void Scale(float scaleFactor);
     };

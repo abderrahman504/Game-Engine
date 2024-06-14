@@ -4,7 +4,7 @@
 #include <GL/freeglut.h>
 #include <chrono>
 #include <stack>
-#include "../simpledrawtext.h"
+#include "simpledrawtext.h"
 #include <stdio.h>
 
 #define FRAMERATE_CAP 140.0

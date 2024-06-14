@@ -1,28 +1,38 @@
 #ifndef MATERIAL_GUARD
 #define MATERIAL_GUARD
 #include "Color.h"
-#include "../../Game/TextureLoader.h"
+#include "Texture.h"
+#include <string>
+#include <iostream>
 
-namespace Engine{
-namespace DataTypes{
+namespace Engine
+{
+    namespace DataTypes
+    {
 
-    struct Material{
+        class Material
+        {
 
-        Color color = Color::WHITE; //Sets the color of the material. The fourth value is the alpha value.
-        int shininess = 80; //Represents the shininess of the material.
-        //All these values must be in range [0,1]
-        float ambient_diffuse = 1; //Represents the percentage of ambient & diffuse light reflected by this material.
-        float emission = 0; //Represents the percentage of light emitted by this material.
-        float specular = 1; // Reperesents the percentage of specular light reflected by this material.
-        Texture* texture;
-        bool useTexture = false;
-        GLuint textureID;
-        Material();
-        Material(Color color, float amb_dif, float emi, float spec, int shine);
+        public:
+            Color color = Color();
+            int shininess = 80;
+            float ambient_diffuse = 1; // Represents the percentage of ambient & diffuse light reflected by this material.
+            float emission = 0;        // Represents the percentage of light emitted by this material.
+            float specular = 1;
 
-        
-    };
-}}
+            void setTexture(const std::string &texturePath);
+            void setTextureCoordinates(float *texCoords, int texCoordsSize);
+            float *textureCoordinates;
+            Texture *texture = nullptr; // The texture of the material.
+            void bindTexture();
+            Material();
+            ~Material();
+            Material(Color color, float amb_dif, float emi, float spec, int shine);
 
+        private:
+            int textureCoordinatesSize;
+        };
+    }
+}
 
 #endif

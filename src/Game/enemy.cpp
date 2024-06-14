@@ -66,7 +66,7 @@ void Enemy::idle(double deltaTime) {
         timeSinceLastShot += deltaTime;
         if (timeSinceLastShot >= shootingInterval) {
             std::cout << "Enemy is shooting" << std::endl;
-            this->shoot();
+            // this->shoot();
             timeSinceLastShot = 0.0; // Reset the timer
         }
     }
@@ -89,20 +89,20 @@ void Enemy::destroy() {
 }
 
 void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
-    std::cout << "Enemy collided with " << other->getName() << std::endl;
-    if (other->getName() == "Bullet") {
-        Bullet *bullet = dynamic_cast<Bullet *>(other);
-        bullet->destroy();
-        if (bullet->Parent()->getName() == "Enemy") return;
-        health -= bullet->getDamage();
-        if (health <= 0) {
-            destroy();
-        }
-    }
-    if (other->getName() == "Player") {
-        health -= 10;
-        if (health <= 0) {
-            destroy();
-        }
-    }
+    // std::cout << "Enemy collided with " << other->getName() << std::endl;
+    // if (other->getName() == "Bullet") {
+    //     Bullet *bullet = dynamic_cast<Bullet *>(other);
+    //     bullet->destroy();
+    //     if (bullet->Parent()->getName() == "Enemy") return;
+    //     health -= bullet->getDamage();
+    //     if (health <= 0) {
+    //         destroy();
+    //     }
+    // }
+    // if (other->getName() == "Player") {
+    //     health -= 10;
+    //     if (health <= 0) {
+    //         destroy();
+    //     }
+    // }
 }

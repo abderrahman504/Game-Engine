@@ -3,7 +3,7 @@
 #include "cameraTest.cpp"
 #include "MainPlayer.h"
 #include "enemy.h"
-#include "TextureLoader.h"
+
 
 using namespace Game;
 
@@ -24,6 +24,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sun->setName("Sun");
     root->addChild(sun);
 
+
     Light3D *sunLight = new Light3D();
     sunLight->color = Color::fromRGBInt(255, 218, 143, 1);
     sunLight->ambient = 0;
@@ -32,11 +33,13 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sunLight->setName("SunLight");
     sun->addChild(sunLight);
 
+    // set texture of the sun
+    // sun->material->setTexture("/home/ahmed/Downloads/Game-Engine/earth.jpeg");
+
     // mercury
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
     mercury->orbitRadius = 400;
     mercury->orbitSpeed = 30 * PI / 180;
-    renderPlanet(mercury);
 //     venus
     Planet *venus = createPlanet(sun, "Venus", 25, 195 / 256.0, 141 / 256.0, 14 / 256.0);
     venus->orbitRadius = 560;
@@ -45,7 +48,10 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *earth = createPlanet(sun, "Earth", 35, 65 / 256.0, 175 / 256.0, 239 / 256.0);
     earth->orbitRadius = 800;
     earth->orbitSpeed = 15 * PI / 180;
-    //Moon
+    
+    earth->material->setTextureCoordinates(earth->TexCoords(), earth->TexCoordsSize());
+    earth->material->setTexture("../resources/images/earth.jpeg");
+    // Moon
     Planet *moon = createPlanet(earth, "Moon", 10, 0.4, 0.4, 0.4);
     moon->orbitRadius = 140;
     moon->orbitSpeed = 70 * PI / 180;
@@ -85,6 +91,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 //    enemy->addChild(enemy_spaceship3);
 //    enemy->addChild(enemy_spaceship4);
     root->addChild(enemy);
+    // enemy->addChild(enemy_collider);
 
 
     SpaceShipMesh *spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, 0, 20), false);
@@ -101,6 +108,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     player->addChild(new SphereCollider(30));
 
     root->addChild(player);
+    // player->addChild(collider);
 
 
 
