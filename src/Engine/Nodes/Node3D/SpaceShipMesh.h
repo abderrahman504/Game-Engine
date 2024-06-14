@@ -23,6 +23,7 @@ namespace Engine {
         public:
             SpaceShipMesh(float baseWidth, float baseHeight, float height, int resolution);
 
+            ~SpaceShipMesh();   
             float BaseWidth();
 
             float BaseHeight();

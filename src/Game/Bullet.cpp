@@ -29,6 +29,7 @@ Bullet::Bullet(float radius, float height, int resolution, float speed,float max
 
 
 void Bullet::destroy(){
+    this->Parent()->removeChild(this);
     queueFree();
 }
 

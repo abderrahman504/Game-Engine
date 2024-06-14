@@ -41,52 +41,227 @@ float* Mesh3D::TexCoords(){return texCoords;}
 
 
 bool Mesh3D::LoadOBJ(const char* path) {
-    std::vector<float> temp_vertices;
-    std::vector<unsigned int> temp_indices;
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file: " << path << std::endl;
-        return false;
-    }
+    std::vector<float> vertice;
+    std::vector<unsigned int> indices;
+    std::vector<float> texCoord;
+    std::vector<float> normal;
 
-    std::string line;
-    while (std::getline(file, line)) {
-        std::istringstream s(line);
-        std::string type;
-        s >> type;
-        if (type == "v") {
+    std::stringstream ss;
+    std::ifstream in_file(path);
+	std::string line = "";
+	std::string prefix = "";
+    GLint temp_glint = 0;
+
+	//File open error check
+	if (!in_file.is_open())
+	{
+		throw "ERROR::OBJLOADER::Could not open file.";
+	}
+    while (std::getline(in_file, line))
+    {
+        ss.clear();
+        ss.str(line);
+        ss >> prefix;
+        if(prefix == "v"){
             float x, y, z;
-            s >> x >> y >> z;
-            temp_vertices.push_back(x);
-            temp_vertices.push_back(y);
-            temp_vertices.push_back(z);
-        } else if (type == "f") {
-            for (int i = 0; i < 3; ++i) {
-                unsigned int vertexIndex, textureIndex, normalIndex;
-                char slash;
-                s >> vertexIndex >> slash >> textureIndex >> slash >> normalIndex;
-                temp_indices.push_back(vertexIndex - 1); // Adjust for OpenGL indexing
-            }
+            ss >> x >> y >> z;
+            vertice.push_back(x);
+            vertice.push_back(y);
+            vertice.push_back(z);
+        }
+        else if(prefix == "vt"){
+            float x, y;
+            ss >> x >> y;
+            texCoord.push_back(x);
+            texCoord.push_back(y);
+        }
+        else if(prefix == "vn"){
+            float x, y, z;
+            ss >> x >> y >> z;
+            normal.push_back(x);
+            normal.push_back(y);
+            normal.push_back(z);
+        }
+        else if(prefix == "f"){
+            int counter = 0;
+			while (ss >> temp_glint)
+			{
+				if (counter == 0)
+					indices.push_back(temp_glint-1);
+				// else if (counter == 1)
+					// indices.push_back(temp_glint);
+				// else if (counter == 2)
+				// 	vertex_normal_indicies.push_back(temp_glint);
+
+				//Handling characters
+				if (ss.peek() == '/')
+				{
+					++counter;
+					ss.ignore(1, '/');
+				}
+				else if (ss.peek() == ' ')
+				{
+					++counter;
+					ss.ignore(1, ' ');
+				}
+
+				//Reset the counter
+				if (counter > 2)
+					counter = 0;
+			}	
         }
     }
 
-    file.close();
-
-    // Allocate memory for vertices
-    vertices = new float[temp_vertices.size()];
-    std::copy(temp_vertices.begin(), temp_vertices.end(), vertices);
-
-    // Allocate memory for indices
-    countPrimitives = temp_indices.size() / 3;
-    indeces = new unsigned int*[countPrimitives];
+    countPrimitives = indices.size();
     countIndeces = new int[countPrimitives];
-    for (int i = 0; i < countPrimitives; ++i) {
+    indeces = new unsigned int*[countPrimitives];
+    for (int i = 0; i < countPrimitives; i++) {
         indeces[i] = new unsigned int[3];
         countIndeces[i] = 3;
-        for (int j = 0; j < 3; ++j) {
-            indeces[i][j] = temp_indices[i * 3 + j];
-        }
     }
-
+    vertices = new float[vertice.size()];
+    texCoords = new float[texCoord.size()];
+    texCoordsSize = texCoord.size();
+    for (int i = 0; i < vertice.size(); i++) {
+        vertices[i] = vertice[i];
+    }
+    for (int i = 0; i < texCoord.size(); i++) {
+        texCoords[i] = texCoord[i];
+    }
+    for (int i = 0; i < indices.size(); i++) {
+        indeces[i][0] = indices[i];
+        indeces[i][1] = indices[i + 1];
+        indeces[i][2] = indices[i + 2];
+    }
     return true;
+    
+
+
 }
+
+
+
+
+// static std::vector<Vertex> loadOBJ(const char* file_name)
+// {
+// 	//Vertex portions
+// 	std::vector<glm::fvec3> vertex_positions;
+// 	std::vector<glm::fvec2> vertex_texcoords;
+// 	std::vector<glm::fvec3> vertex_normals;
+
+// 	//Face vectors
+// 	std::vector<GLint> vertex_position_indicies;
+// 	std::vector<GLint> vertex_texcoord_indicies;
+// 	std::vector<GLint> vertex_normal_indicies;
+
+// 	//Vertex array
+// 	std::vector<Vertex> vertices;
+
+// 	std::stringstream ss;
+// 	std::ifstream in_file(file_name);
+// 	std::string line = "";
+// 	std::string prefix = "";
+// 	glm::vec3 temp_vec3;
+// 	glm::vec2 temp_vec2;
+// 	GLint temp_glint = 0;
+
+// 	//File open error check
+// 	if (!in_file.is_open())
+// 	{
+// 		throw "ERROR::OBJLOADER::Could not open file.";
+// 	}
+
+// 	//Read one line at a time
+// 	while (std::getline(in_file, line))
+// 	{
+// 		//Get the prefix of the line
+// 		ss.clear();
+// 		ss.str(line);
+// 		ss >> prefix;
+
+// 		if (prefix == "#")
+// 		{
+
+// 		}
+// 		else if (prefix == "o")
+// 		{
+
+// 		}
+// 		else if (prefix == "s")
+// 		{
+
+// 		}
+// 		else if (prefix == "use_mtl")
+// 		{
+
+// 		}
+// 		else if (prefix == "v") //Vertex position
+// 		{
+// 			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+// 			vertex_positions.push_back(temp_vec3);
+// 		}
+// 		else if (prefix == "vt")
+// 		{
+// 			ss >> temp_vec2.x >> temp_vec2.y;
+// 			vertex_texcoords.push_back(temp_vec2);
+// 		}
+// 		else if (prefix == "vn")
+// 		{
+// 			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+// 			vertex_normals.push_back(temp_vec3);
+// 		}
+// 		else if (prefix == "f")
+// 		{
+// 			int counter = 0;
+// 			while (ss >> temp_glint)
+// 			{
+// 				//Pushing indices into correct arrays
+// 				if (counter == 0)
+// 					vertex_position_indicies.push_back(temp_glint);
+// 				else if (counter == 1)
+// 					vertex_texcoord_indicies.push_back(temp_glint);
+// 				else if (counter == 2)
+// 					vertex_normal_indicies.push_back(temp_glint);
+
+// 				//Handling characters
+// 				if (ss.peek() == '/')
+// 				{
+// 					++counter;
+// 					ss.ignore(1, '/');
+// 				}
+// 				else if (ss.peek() == ' ')
+// 				{
+// 					++counter;
+// 					ss.ignore(1, ' ');
+// 				}
+
+// 				//Reset the counter
+// 				if (counter > 2)
+// 					counter = 0;
+// 			}	
+// 		}
+// 		else
+// 		{
+
+// 		}
+// 	}
+
+// 	//Build final vertex array (mesh)
+// 	vertices.resize(vertex_position_indicies.size(), Vertex());
+
+// 	//Load in all indices
+// 	for (size_t i = 0; i < vertices.size(); ++i)
+// 	{
+// 		vertices[i].position = vertex_positions[vertex_position_indicies[i] - 1];
+// 		vertices[i].texcoord = vertex_texcoords[vertex_texcoord_indicies[i] - 1];
+// 		vertices[i].normal = vertex_normals[vertex_normal_indicies[i] - 1];
+// 		vertices[i].color = glm::vec3(1.f, 1.f, 1.f);
+// 	}
+
+// 	//DEBUG
+// 	std::cout << "Nr of vertices: " << vertices.size() << "\n";
+
+// 	//Loaded success
+// 	std::cout << "OBJ file loaded!" << "\n";
+// 	return vertices;
+// }
