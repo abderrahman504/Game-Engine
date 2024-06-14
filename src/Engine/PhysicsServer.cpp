@@ -97,6 +97,7 @@ void findBodies(Node* root)
                 }
                 layer = layer >> 1;
                 mask = mask >> 1;
+                bit_count++;
             }
         }
         vector<Node*> children = node->getChildren();
