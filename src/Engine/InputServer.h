@@ -28,6 +28,7 @@ namespace Engine{
         bool isKeyJustReleased(int key);
         DataTypes::Vector2 getMousePosition();
         DataTypes::Vector2 getMouseMotion();
+        bool isMousePressed(int button);
     };
 }
 

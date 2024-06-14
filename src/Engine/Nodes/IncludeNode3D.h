@@ -5,6 +5,7 @@
 #include "Node3D/SphereMesh.h"
 #include "Node3D/PyramidMesh.h"
 #include "Node3D/CylinderMesh.h"
+#include "Node3D/DiskMesh3D.h"
 #include "Node3D/Camera3D.h"
 #include "Node3D/SpaceShipMesh.h"
 #include "Node3D/CollisionBody3D.h"

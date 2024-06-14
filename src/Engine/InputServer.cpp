@@ -132,3 +132,15 @@ Vector2 InputServer::getMousePosition(){
 Vector2 InputServer::getMouseMotion(){
     return mouse_pos - prev_mouse_pos;
 }
+
+bool InputServer::isMousePressed(int button){
+    switch(button)
+    {
+        case MOUSE_LEFT: return key_map[MOUSE_LEFT] == HELD;
+        case MOUSE_RIGHT: return key_map[MOUSE_RIGHT] == HELD;
+        case MOUSE_MIDDLE: return key_map[MOUSE_MIDDLE] == HELD;
+        case MOUSE_SCROLL_UP: return key_map[MOUSE_SCROLL_UP] == RELEASED;
+        case MOUSE_SCROLL_DOWN: return key_map[MOUSE_SCROLL_DOWN] == RELEASED;
+    }
+    return false;
+}

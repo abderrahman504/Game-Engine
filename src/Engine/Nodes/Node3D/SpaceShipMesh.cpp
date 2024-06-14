@@ -6,12 +6,15 @@
 
 using namespace Engine::Nodes;
 
+void buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices,float **texCoords ,unsigned int ***indices, int **countIndices, int *countPrimitives);
 
 SpaceShipMesh::SpaceShipMesh(float baseWidth, float baseHeight, float height, int resolution) {
     this->baseWidth = baseWidth;
     this->baseHeight = baseHeight;
     this->height = height;
-    buildMesh(baseWidth, baseHeight, height, resolution, &vertices, &indeces, &countIndeces, &countPrimitives);
+   this->LoadOBJ("/home/ahmed/Downloads/Game-Engine/space2.obj",&vertices,&indeces,&countIndeces,&countPrimitives);
+//    this->scale= Vector3(2,2,2);
+    // buildMesh(baseWidth, baseHeight, height, resolution, &vertices,&texCoords, &indeces, &countIndeces, &countPrimitives);
     setName("SpaceShipMesh");
 }
 
@@ -23,66 +26,51 @@ float SpaceShipMesh::BaseHeight() { return baseHeight; }
 
 float SpaceShipMesh::Height() { return height; }
 
-void SpaceShipMesh::buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices, unsigned int ***indeces, int **countIndeces, int *countPrimitives) {
-//    *countPrimitives = resolution;
-//    *countIndeces = new int[resolution];
-//    *indeces = new unsigned int*[resolution];
-//    for (int i =  0; i < resolution; i++){
-//        (*indeces)[i] = new unsigned int[2*(resolution+1)];
-//        (*countIndeces)[i] = 2*(resolution+1);
-//    }
-//    *vertices = new float[((resolution+1) * (resolution)) * 3];
+void buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices,float **texCoords ,unsigned int ***indeces, int **countIndeces, int *countPrimitives) 
+{
+    *countPrimitives = 2; //The top and bottom sides are 2 triangle strips. The inner and outer walls of the disk are 2 triangle strips.
+    *countIndeces = new int[2];
+    *indeces = new unsigned int*[2];
+    //Base indices
+    (*indeces)[0] = new unsigned int[2* (resolution+1)];
+    (*countIndeces)[0] = 2* (resolution+1);
 
-    *countPrimitives = resolution + 1; // Add 1 for the base of the spaceship
-    *countIndeces = new int[resolution + 1]; // Add 1 for the base of the spaceship
-    *indeces = new unsigned int*[resolution + 1]; // Add 1 for the base of the spaceship
-    for (int i =  0; i <= resolution; i++){ // Add 1 for the base of the spaceship
-        (*indeces)[i] = new unsigned int[2*(resolution+1)];
-        (*countIndeces)[i] = 2*(resolution+1);
-    }
-    *vertices = new float[((resolution+1) * (resolution + 1)) * 3];
+    //Wall indices
+    (*indeces)[1] = new unsigned int[2* (resolution+1)];
+    (*countIndeces)[1] = 2* (resolution+1);
 
-    float stepSize = height / resolution;
-    float angleIncrement = 2.0f * PI / resolution;
+    *vertices = new float[(2 + resolution) * 3]; //First 2 are the top and base center. the rest are vertices of the base.
+    //Base center
+    (*vertices)[0] = 0;
+    (*vertices)[1] = 0;
+    (*vertices)[2] = 0;
+    //Top
+    (*vertices)[3] = 0;
+    (*vertices)[4] = height;
+    (*vertices)[5] = 0;
 
-    // Generate vertices for the spaceship
-    int vertexIndex = 0;
-    for (int i = 0; i <= resolution; i++) {
-        float currentHeight = i * stepSize;
-        float currentRadius = (baseWidth / 2) * (1.0f - currentHeight / height);
-        float yCoord = -baseHeight / 2.0f + currentHeight;
-
-        for (int j = 0; j < resolution; j++) {
-            float angle = j * angleIncrement;
-            float xCoord = currentRadius * cos(angle);
-            float zCoord = currentRadius * sin(angle);
-            (*vertices)[vertexIndex++] = xCoord;
-            (*vertices)[vertexIndex++] = zCoord;
-            (*vertices)[vertexIndex++] = -yCoord;
-        }
+    //Building vertices
+    for(int i=0; i < resolution; i++)
+    {
+        float angle = 2 * PI * i / resolution;
+        //Base
+        (*vertices)[(2 + i)*3 + 0] = baseWidth * cos(angle);
+        (*vertices)[(2 + i)*3 + 1] = 0;
+        (*vertices)[(2 + i)*3 + 2] = baseHeight * sin(angle);
     }
 
-    float baseRadius = baseWidth / 2;
-    for (int j = 0; j < resolution; j++) {
-        float angle = j * angleIncrement;
-        float xCoord = baseRadius * cos(angle);
-        float zCoord = baseRadius * sin(angle);
-        float yCoord = -baseHeight / 2.0f; // Base is at the bottom of the cone
-        (*vertices)[vertexIndex++] = xCoord;
-        (*vertices)[vertexIndex++] = zCoord;
-        (*vertices)[vertexIndex++] = yCoord;
-    }
+    //Setting indices
 
-    // Generate indices for the spaceship
-    for (int i = 0; i < resolution; i++) {
-        for (int j = 0; j <= resolution; j++) {
-            (*indeces)[i][2 * j] = i * resolution + j % resolution;
-            (*indeces)[i][2 * j + 1] = (i + 1) * resolution + j % resolution;
-        }
-    }
-    for (int j = 0; j < resolution; j++) {
-        (*indeces)[resolution][2 * j] = resolution * resolution + j;
-        (*indeces)[resolution][2 * j + 1] = resolution * resolution + (j + 1) % resolution;
+    for(int i=0; i <= resolution; i++)
+    {
+        //Base indeces
+        (*indeces)[0][2*i] = 0;
+        (*indeces)[0][2*i + 1] = 2+(i%resolution);
+
+        //Wall indeces
+        (*indeces)[1][2*i] = 1;
+        (*indeces)[1][2*i + 1] = 2+(i%resolution);
+
     }
 
 }

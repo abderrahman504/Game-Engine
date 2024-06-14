@@ -6,6 +6,7 @@
 #include "DataTypes/Transform3D.h"
 #include "DataTypes/Material.h"
 #include "DataTypes/Color.h"
+#include "DataTypes/Texture.h"
 
 #define PI 3.14159265358979323846
 

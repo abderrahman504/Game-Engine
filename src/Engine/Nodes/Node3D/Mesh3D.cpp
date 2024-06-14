@@ -1,6 +1,18 @@
 #include "Mesh3D.h"
 using namespace Engine::Nodes;
 
+void Mesh3D::Scale(float scaleFactor) {
+    // Iterate through all vertices and scale them
+    for (int i = 0; i < countPrimitives; ++i) {
+        for (int j = 0; j < countIndeces[i]; ++j) {
+            int vertexIndex = indeces[i][j];
+            vertices[vertexIndex * 3] *= scaleFactor;        // Scale X coordinate
+            vertices[vertexIndex * 3 + 1] *= scaleFactor;    // Scale Y coordinate
+            vertices[vertexIndex * 3 + 2] *= scaleFactor;    // Scale Z coordinate
+        }
+    }
+}
+
 Mesh3D::Mesh3D(){
     setName("Mesh3D");
 }
@@ -10,13 +22,71 @@ Mesh3D::~Mesh3D(){
             delete[] vertices;
             delete[] indeces[i];
         }
+        if(texCoords != nullptr){
+            delete[] texCoords;
+        }
         delete[] vertices;
         delete[] indeces;
         delete[] countIndeces;
         delete material;
+
     }
 }
 float* Mesh3D::Vertices(){return vertices;}
 unsigned int** Mesh3D::Indeces(){return indeces;}
 int* Mesh3D::CountIndeces(){return countIndeces;}
 int Mesh3D::CountPrimitives(){return countPrimitives;}
+int Mesh3D::TexCoordsSize(){return texCoordsSize;}
+float* Mesh3D::TexCoords(){return texCoords;}
+
+bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives) {
+    std::vector<float> vertice;
+    std::vector<unsigned int> indice;
+    std::ifstream in_file(path);
+
+    if (!in_file.is_open()) {
+        std::cerr << "ERROR::OBJLOADER::Could not open file." << std::endl;
+        return false;
+    }
+
+    std::string line, prefix;
+    while (std::getline(in_file, line)) {
+        std::istringstream ss(line);
+        ss >> prefix;
+
+        if (prefix == "v") {
+            float x, y, z;
+            ss >> x >> y >> z;
+            vertice.push_back(x);
+            vertice.push_back(y);
+            vertice.push_back(z);
+        } else if (prefix == "f") {
+            std::string vertexStr;
+            unsigned int vertexIndex[3];
+            int i = 0;
+            while (ss >> vertexStr) {
+                std::istringstream vertexStream(vertexStr);
+                std::string indexStr;
+                std::getline(vertexStream, indexStr, '/');
+                vertexIndex[i++] = std::stoi(indexStr) - 1;
+            }
+            for (int j = 0; j < 3; ++j) {
+                indice.push_back(vertexIndex[j]);
+            }
+        }
+    }
+
+    *vertices = new float[vertice.size()];
+    *indices = new unsigned int*[1];
+    (*indices)[0] = new unsigned int[indice.size()];
+    *countIndices = new int[1];
+    (*countIndices)[0] = indice.size();
+    *countPrimitives = 1;
+
+    std::copy(vertice.begin(), vertice.end(), *vertices);
+    std::copy(indice.begin(), indice.end(), (*indices)[0]);
+    
+    
+
+    return true;
+}
