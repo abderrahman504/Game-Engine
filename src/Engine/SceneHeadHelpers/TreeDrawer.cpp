@@ -185,15 +185,36 @@ void TreeDrawer::drawSceneUI(Node* root, Camera3D* camera)
 
 void TreeDrawer::drawNodeUI(UI* node, Vector2 view_plane_dims)
 {
-    bool isLabel = dynamic_cast<Label*>(node) != nullptr;
-    if(isLabel)
+    Label* label = dynamic_cast<Label*>(node);
+    Quad* quad = dynamic_cast<Quad*>(node);
+    if(label != nullptr)
     {
-        Label* label = (Label*)node;
         glColor4f(label->color.r, label->color.g, label->color.b, label->color.a);
-        // glColor3f(1, 1, 1);
         glRasterPos3f(label->position.x * view_plane_dims.x, label->position.y * view_plane_dims.y, 0);
         for(int i=0; i<label->text.size(); i++){
             glutBitmapCharacter(GLUT_BITMAP_9_BY_15, label->text[i]);
+        }
+    }
+    if(quad != nullptr)
+    {
+        glColor4f(quad->color.r, quad->color.g, quad->color.b, quad->color.a);
+        if(quad->normalized_size)
+        {
+            glBegin(GL_QUADS);
+            glVertex2f(quad->position.x * view_plane_dims.x, quad->position.y * view_plane_dims.y);
+            glVertex2f((quad->position.x + quad->size.x) * view_plane_dims.x, quad->position.y * view_plane_dims.y);
+            glVertex2f((quad->position.x + quad->size.x) * view_plane_dims.x, (quad->position.y + quad->size.y) * view_plane_dims.y);
+            glVertex2f(quad->position.x * view_plane_dims.x, (quad->position.y + quad->size.y) * view_plane_dims.y);
+            glEnd();
+        }
+        else
+        {
+            glBegin(GL_QUADS);
+            glVertex2f(quad->position.x, quad->position.y);
+            glVertex2f(quad->position.x + quad->size.x, quad->position.y);
+            glVertex2f(quad->position.x + quad->size.x, quad->position.y + quad->size.y);
+            glVertex2f(quad->position.x, quad->position.y + quad->size.y);
+            glEnd();
         }
     }
 }

@@ -14,12 +14,7 @@ namespace Nodes{
         public:
         //Position of the node in the viewport in normalized coordinates.
         Vector2 position = Vector2::ZERO;
-        //Size of the node in the viewport in normalized coordinates.
-        Vector2 size = Vector2::ZERO;
         
-        Vector2 scale = Vector2::ONE;
-        //Angle of the node with the positive x-axis in radians
-        float rotation = 0;
         
 
         UI(){
