@@ -6,6 +6,7 @@
 
 using namespace Engine::Nodes;
 
+void buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices,float **texCoords ,unsigned int ***indices, int **countIndices, int *countPrimitives);
 
 SpaceShipMesh::SpaceShipMesh(float baseWidth, float baseHeight, float height, int resolution) {
     this->baseWidth = baseWidth;
@@ -25,51 +26,51 @@ float SpaceShipMesh::BaseHeight() { return baseHeight; }
 
 float SpaceShipMesh::Height() { return height; }
 
-void SpaceShipMesh::buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices, float **texCoords, unsigned int ***indices, int **countIndices, int *countPrimitives) {
-    *countPrimitives = resolution + 1;
-    *countIndices = new int[resolution + 1];
-    *indices = new unsigned int*[resolution + 1];
-    for (int i = 0; i <= resolution; i++) {
-        (*indices)[i] = new unsigned int[2 * (resolution + 1)];
-        (*countIndices)[i] = 2 * (resolution + 1);
-    }
-    
-    int numVertices = (resolution + 1) * (resolution + 1);
-    *vertices = new float[numVertices * 3];
-    *texCoords = new float[numVertices * 2];
+void buildMesh(float baseWidth, float baseHeight, float height, int resolution, float **vertices,float **texCoords ,unsigned int ***indeces, int **countIndeces, int *countPrimitives) 
+{
+    *countPrimitives = 2; //The top and bottom sides are 2 triangle strips. The inner and outer walls of the disk are 2 triangle strips.
+    *countIndeces = new int[2];
+    *indeces = new unsigned int*[2];
+    //Base indices
+    (*indeces)[0] = new unsigned int[2* (resolution+1)];
+    (*countIndeces)[0] = 2* (resolution+1);
 
-    float stepSize = height / resolution;
-    float angleIncrement = 2.0f * M_PI / resolution;
+    //Wall indices
+    (*indeces)[1] = new unsigned int[2* (resolution+1)];
+    (*countIndeces)[1] = 2* (resolution+1);
 
-    int vertexIndex = 0;
-    int texCoordIndex = 0;
+    *vertices = new float[(2 + resolution) * 3]; //First 2 are the top and base center. the rest are vertices of the base.
+    //Base center
+    (*vertices)[0] = 0;
+    (*vertices)[1] = 0;
+    (*vertices)[2] = 0;
+    //Top
+    (*vertices)[3] = 0;
+    (*vertices)[4] = height;
+    (*vertices)[5] = 0;
 
-    // Compute vertices and texture coordinates
-    for (int i = 0; i <= resolution; i++) {
-        float currentHeight = i * stepSize;
-        float currentRadius = (baseWidth / 2) * (1.0f - currentHeight / height);
-        float yCoord = -baseHeight / 2.0f + currentHeight;
-
-        for (int j = 0; j <= resolution; j++) {
-            float angle = j * angleIncrement;
-            float xCoord = currentRadius * cos(angle);
-            float zCoord = currentRadius * sin(angle);
-
-            (*vertices)[vertexIndex++] = xCoord;
-            (*vertices)[vertexIndex++] = zCoord;
-            (*vertices)[vertexIndex++] = -yCoord;
-
-            // Calculate texture coordinates
-            (*texCoords)[texCoordIndex++] = (float)j / resolution;
-            (*texCoords)[texCoordIndex++] = 1.0f - (float)i / resolution;
-        }
+    //Building vertices
+    for(int i=0; i < resolution; i++)
+    {
+        float angle = 2 * PI * i / resolution;
+        //Base
+        (*vertices)[(2 + i)*3 + 0] = baseWidth * cos(angle);
+        (*vertices)[(2 + i)*3 + 1] = 0;
+        (*vertices)[(2 + i)*3 + 2] = baseHeight * sin(angle);
     }
 
-    // Generate indices
-    for (int i = 0; i < resolution; i++) {
-        for (int j = 0; j <= resolution; j++) {
-            (*indices)[i][2 * j] = i * (resolution + 1) + j;
-            (*indices)[i][2 * j + 1] = (i + 1) * (resolution + 1) + j;
-        }
+    //Setting indices
+
+    for(int i=0; i <= resolution; i++)
+    {
+        //Base indeces
+        (*indeces)[0][2*i] = 0;
+        (*indeces)[0][2*i + 1] = 2+(i%resolution);
+
+        //Wall indeces
+        (*indeces)[1][2*i] = 1;
+        (*indeces)[1][2*i + 1] = 2+(i%resolution);
+
     }
+
 }

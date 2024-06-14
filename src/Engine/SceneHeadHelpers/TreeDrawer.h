@@ -12,6 +12,8 @@ namespace Engine{
         
         private:
         void drawNode(Nodes::Node* node);
+        void drawSceneUI(Nodes::Node* root, Nodes::Camera3D* camera);
+        void drawNodeUI(Nodes::UI* node, Vector2 view_plane_dims);
     };
 }
 

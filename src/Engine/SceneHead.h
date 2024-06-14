@@ -40,6 +40,15 @@ namespace Engine{
         void Start();
         InputServer& getInputServer();
         PhysicsServer& getPhysicsServer();
+        //Makes the mouse cursor invisible
+        void hideCursor();
+        //Makes the mouse cursor visible
+        void showCursor();
+        //Freezes the mouse cursor in place
+        void freezeCursor();
+        //Unfreezes the mouse cursor
+        void unfreazeCursor();
+
         
         protected:
         //Builds the scene tree and returns the root node

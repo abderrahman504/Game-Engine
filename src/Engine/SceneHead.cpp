@@ -34,6 +34,20 @@ void mouse_motion(int x, int y);
 void mouse_wheel(int wheel, int direction, int x, int y);
 void free_nodes();
 
+
+void displayText(){
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    sdt.drawText("Main Menu", 250, 500, 1, 0, 0,0.3);
+    sdt.drawText("Press '1' to start the game", 250, 400, 1, 0, 0,0.2);
+    sdt.drawText("Press '0' to exit the game", 250, 300, 1, 0, 0,0.2);
+    sdt.render();
+
+    glutSwapBuffers();
+
+}
 void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServerParam){
     sceneHead = this;
     inputServer = inputServerParam;
@@ -48,6 +62,7 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     glutMouseWheelFunc(mouse_wheel);
     glutMouseFunc(mouse_key);
     glutPassiveMotionFunc(mouse_motion);
+    glutMotionFunc(mouse_motion);
     glutEntryFunc(mouse_entry);
     //Other callbacks
     glutIdleFunc(glutIdle);
@@ -57,7 +72,7 @@ void SceneHead::Init(InputServer *inputServerParam, PhysicsServer *physicsServer
     
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
-    glClearColor(0,0,0, 1.0);
+    glClearColor(0, 0, 0, 1.0);
 
     //Setting global lighting
     float global_ambience[4] = {0.2, 0.2, 0.2, 1.0};
@@ -73,14 +88,34 @@ void SceneHead::Start(){
     glutMainLoop();
 }
 
+InputServer& SceneHead::getInputServer() {return *inputServer;}
+PhysicsServer& SceneHead::getPhysicsServer(){return *physicsServer;}
+
+void SceneHead::hideCursor(){
+    glutSetCursor(GLUT_CURSOR_NONE);
+}
+
+void SceneHead::showCursor(){
+    glutSetCursor(GLUT_CURSOR_RIGHT_ARROW);
+}
+
+void SceneHead::freezeCursor(){
+    inputServer->cursor_frozen = true;
+}
+
+void SceneHead::unfreazeCursor(){
+    inputServer->cursor_frozen = false;
+}
+
+
 void SceneHead::onTreeReady(){
     this->scene_root->propegateReady(this);
 }
 
-InputServer& SceneHead::getInputServer() {return *inputServer;}
-PhysicsServer& SceneHead::getPhysicsServer(){return *physicsServer;}
-
-void glutIdle() {sceneHead->idle();}
+void glutIdle() {
+    if(isGameStarted)
+        sceneHead->idle();
+}
 void SceneHead::idle()
 {
     unsigned long long now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -103,7 +138,7 @@ void SceneHead::idle()
         //Draw scene
         glutPostRedisplay();
         //Reset input for next frame
-        inputServer->onIdle();
+        inputServer->onIdle(windowSize);
     }
 }
 
@@ -121,7 +156,19 @@ void resize(int width, int height)
     glMatrixMode(GL_MODELVIEW);
 }
 
-void keyboard_key(unsigned char key, int x, int y){sceneHead->keyboard(key, x, y);}
+void keyboard_key(unsigned char key, int x, int y){
+    if(key=='1'){
+        isGameStarted=true;
+        glEnable(GL_LIGHTING);
+        glEnable(GL_DEPTH_TEST);
+        glutPostRedisplay();
+    }
+    else if(key=='0'){
+        exit(0);
+    }
+
+    sceneHead->keyboard(key, x, y);
+}
 void SceneHead::keyboard(unsigned char key, int x, int y){inputServer->keyboardInput(key, true, x, y);}
 
 void keyboard_key_up(unsigned char key, int x, int y){sceneHead->keyboardUp(key, x, y);}

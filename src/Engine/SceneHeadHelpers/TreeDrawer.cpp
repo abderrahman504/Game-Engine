@@ -11,9 +11,9 @@
 
 using namespace Engine;
 using namespace Engine::Nodes;
-// std::map<int, Camera3D*> activeCameras = std::map<int, Camera3D*>();
-// int lightCount = 0;
 
+
+static Vector2 win_size;
 
 void applyMaterial(Material material);
 Camera3D defaultCamera();
@@ -66,7 +66,7 @@ void getCameraOrientationAndPosition(Camera3D* camera, Vector3* pos, Vector3* fo
     *up = cameraUp;
 }
 
-void drawCameraViewport(Camera3D* camera, Vector2 windowSize, Node* root, bool multipleCameras)
+void drawCameraViewport(Camera3D* camera, Vector2 windowSize, bool multipleCameras)
 {
     Vector3 cameraPos, cameraForward, cameraUp;
     getCameraOrientationAndPosition(camera, &cameraPos, &cameraForward, &cameraUp);
@@ -139,11 +139,88 @@ void TreeDrawer::drawScene(Nodes::Node* root, Vector2 windowSize){
     for(auto it = activeCameras.begin(); it != activeCameras.end(); it++)
     {
         Camera3D* camera = it->second;
-        drawCameraViewport(camera, windowSize, root, activeCameras.size() > 1);
+        drawCameraViewport(camera, windowSize, activeCameras.size() > 1);
+        if(it->first == VIEWPORT_1)
+            drawSceneUI(root, camera);
         placeLights(root);
         drawNode(root);
     }
     glutSwapBuffers();
+}
+
+void TreeDrawer::drawSceneUI(Node* root, Camera3D* camera)
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    Vector2 view_plane = Vector2(100 * camera->getAspect().x / camera->getAspect().y, 100);
+    glOrtho(0, view_plane.x, 0, view_plane.y, -100, 100);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glDisable(GL_LIGHTING);
+    std::stack<Node*> stack;
+    stack.push(root);
+    while(!stack.empty())
+    {
+        Node* node = stack.top();
+        stack.pop();
+        UI* ui = dynamic_cast<UI*>(node);
+        if(ui != nullptr){
+            drawNodeUI(ui, view_plane);
+        }
+
+        std::vector<Node*> children = node->getChildren();
+        for(int i=0; i<children.size(); i++){
+            stack.push(children[i]);
+        }
+    }
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_LIGHTING);
+}
+
+void TreeDrawer::drawNodeUI(UI* node, Vector2 view_plane_dims)
+{
+    Label* label = dynamic_cast<Label*>(node);
+    Quad* quad = dynamic_cast<Quad*>(node);
+    glColor4f(node->color.r, node->color.g, node->color.b, node->color.a);
+    if(label != nullptr)
+    {
+        if(label->normalized_coordinates){
+            glRasterPos3f(label->position.x * view_plane_dims.x, label->position.y * view_plane_dims.y, node->z_index);
+        }
+        else{
+            glRasterPos3f(label->position.x, label->position.y, node->z_index);
+        }
+        for(int i=0; i<label->text.size(); i++){
+            glutBitmapCharacter(GLUT_BITMAP_9_BY_15, label->text[i]);
+        }
+    }
+    if(quad != nullptr)
+    {
+        if(quad->normalized_coordinates)
+        {
+            glBegin(GL_QUADS);
+            glVertex3f(quad->position.x * view_plane_dims.x, quad->position.y * view_plane_dims.y, node->z_index);
+            glVertex3f((quad->position.x + quad->size.x) * view_plane_dims.x, quad->position.y * view_plane_dims.y, node->z_index);
+            glVertex3f((quad->position.x + quad->size.x) * view_plane_dims.x, (quad->position.y + quad->size.y) * view_plane_dims.y, node->z_index);
+            glVertex3f(quad->position.x * view_plane_dims.x, (quad->position.y + quad->size.y) * view_plane_dims.y, node->z_index);
+            glEnd();
+        }
+        else
+        {
+            glBegin(GL_QUADS);
+            glVertex3f(quad->position.x, quad->position.y, node->z_index);
+            glVertex3f(quad->position.x + quad->size.x, quad->position.y, node->z_index);
+            glVertex3f(quad->position.x + quad->size.x, quad->position.y + quad->size.y, node->z_index);
+            glVertex3f(quad->position.x, quad->position.y + quad->size.y, node->z_index);
+            glEnd();
+        }
+    }
 }
 
 void TreeDrawer::drawNode(Node* node)
@@ -192,7 +269,7 @@ void TreeDrawer::drawNode(Node* node)
         glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
         glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void**)mesh->Indeces(), mesh->CountPrimitives());
         glDisableClientState(GL_VERTEX_ARRAY);
-    }
+        }
         
     }
 

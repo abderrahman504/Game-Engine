@@ -22,13 +22,15 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sun->material->specular = 1;
     sun->material->emission = 0.8;
     sun->position = Vector3(0, 0, 0);
+    sun->material->setTextureCoordinates(sun->TexCoords(), sun->TexCoordsSize());
+    sun->material->setTexture("../resources/images/sun.png");
     sun->setName("Sun");
     root->addChild(sun);
 
 
     Light3D *sunLight = new Light3D();
     sunLight->color = Color::fromRGBInt(255, 218, 143, 1);
-    sunLight->ambient = 0;
+    sunLight->ambient = 0.5;
     sunLight->diffuse = 0.8;
     sunLight->specular = 1;
     sunLight->setName("SunLight");
@@ -43,16 +45,14 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
     mercury->orbitRadius = 400;
     mercury->orbitSpeed = 30 * PI / 180;
-    mercury->material->setTextureCoordinates(mercury->TexCoords(), mercury->TexCoordsSize());
-    mercury->material->setTexture("../resources/images/mercury.jpeg");
+//    mercury->material->setTextureCoordinates(mercury->TexCoords(), mercury->TexCoordsSize());
+//    mercury->material->setTexture("../resources/images/mercury.jpg");
 //     venus
     Planet *venus = createPlanet(sun, "Venus", 25, 195 / 256.0, 141 / 256.0, 14 / 256.0);
     venus->orbitRadius = 560;
     venus->orbitSpeed = 20 * PI / 180;
-    venus->material->setTextureCoordinates(venus->TexCoords(), venus->TexCoordsSize());
-    venus->material->setTexture("../resources/images/venus.jpeg");
-
-
+//    venus->material->setTextureCoordinates(venus->TexCoords(), venus->TexCoordsSize());
+//    venus->material->setTexture("../resources/images/venus.jpg");
     // Earth
 
     Planet *earth = createPlanet(sun, "Earth", 35, 65 / 256.0, 175 / 256.0, 239 / 256.0);
@@ -66,34 +66,32 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     moon->orbitRadius = 140;
     moon->orbitSpeed = 70 * PI / 180;
     moon->material->setTextureCoordinates(moon->TexCoords(), moon->TexCoordsSize());
-    moon->material->setTexture("../resources/images/moon.jpeg");
-    Light3D *moonlight = new Light3D();
-    moonlight->color = Color::fromRGBInt(255, 213, 143, 1);
-    moonlight->ambient = 0;
-    moonlight->diffuse = 0.8;
-    moonlight->specular = 1;
-    moonlight->setName("moonlight");
-    moon->addChild(moonlight);
+    moon->material->setTexture("../resources/images/moon.jpg");
     //Mars
     Planet *mars = createPlanet(sun, "Mars", 30,  0.78, 0.54, 0.45);
     mars->orbitRadius = 1000;
     mars->orbitSpeed = 10 * PI / 180;
     mars->material->setTextureCoordinates(mars->TexCoords(), mars->TexCoordsSize());
-    mars->material->setTexture("../resources/images/mars.jpeg");
+    mars->material->setTexture("../resources/images/mars.jpg");
     //Saturn
     Planet *saturn = createPlanet(sun, "Saturn", 60, 0.78, 0.54, 0.45);
     saturn->orbitRadius = 1400;
     saturn->orbitSpeed = 3 * PI / 180;
     saturn->material->setTextureCoordinates(saturn->TexCoords(), saturn->TexCoordsSize());
-    saturn->material->setTexture("../resources/images/saturn.jpeg");
+    saturn->material->setTexture("../resources/images/saturn.jpg");
+    DiskMesh3D* saturn_rings = new DiskMesh3D(100, 130, 0.5, 50);
+    saturn_rings->material->color = Color::fromRGBInt(115, 104, 80, 1);
+    saturn_rings->material->ambient_diffuse = 0.5;
+    saturn_rings->material->specular = 0;
+    saturn_rings->rotateAround(Vector3::RIGHT, 10* PI / 180);
+    saturn->addChild(saturn_rings);
     // jupiter
 
     Planet *jupiter = createPlanet(sun, "Jupiter", 80, 0.78, 0.74, 0.45);
     jupiter->orbitRadius = 1800;
     jupiter->orbitSpeed = 1 * PI / 180;
-    jupiter->material->setTextureCoordinates(jupiter->TexCoords(), jupiter->TexCoordsSize());
-    jupiter->material->setTexture("../resources/images/jupiter.jpeg");
-    // neptune
+
+    //neptune
     Planet *neptune = createPlanet(sun, "Neptune", 70, 0.06, 0.5, 0.7);
     neptune->orbitRadius = 2400;
     neptune->orbitSpeed = 0.5 * PI / 180;
@@ -101,32 +99,23 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     neptune->material->setTexture("../resources/images/neptune.jpeg");
 
 
-//  SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
+
 
 //    SpaceShipMesh *enemy_spaceship1 = drawSpaceship(10, 10, 20, 100, Vector3(-40, -30, 300), true);
 //    SpaceShipMesh *enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300), true);
 //    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
 //    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
-
+    Enemy *enemy = new Enemy();
     // enemy->position = Vector3(0, 200, 100);
     // PyramidMesh* mesh = new PyramidMesh(20, 10, 10);
     // mesh->lookTowards(Vector3::DOWN, Vector3::FORWARD);
     // enemy->addChild(mesh);
-//     SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
-//     enemy->addChild(enemy_spaceship);
-//     enemy->addChild(new SphereCollider(30));
-// //    enemy->addChild(enemy_spaceship1);
-// //    enemy->addChild(enemy_spaceship2);
-// //    enemy->addChild(enemy_spaceship3);
-// //    enemy->addChild(enemy_spaceship4);
-//     root->addChild(enemy);
-    // enemy->addChild(enemy_collider);
+    PyramidMesh *mesh = new PyramidMesh(20, 10, 10);
+    mesh->material->color = Color::fromRGBFloat(1, 0, 0, 1);
+    SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
+    enemy->addChild(enemy_spaceship);
 
-//    SpaceShipMesh *enemy_spaceship1 = drawSpaceship(10, 10, 20, 100, Vector3(-40, -30, 300), true);
-//    SpaceShipMesh *enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300), true);
-//    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
-//    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
-    // enemy->addChild(enemy_spaceship);
+//    enemy->addChild(new SphereCollider(30));
 //    enemy->addChild(enemy_spaceship1);
 //    enemy->addChild(enemy_spaceship2);
 //    enemy->addChild(enemy_spaceship3);

@@ -32,11 +32,11 @@ void buildSphereVertices(float radius, int resolution, float **vertices, float *
     int texCoordIndex = 0;
     for (int i = 0; i <= resolution; i++) {
         float v = (float)i / resolution; // A value from 0 to 1.
-        float theta = v * M_PI; // Polar angle.
+        float theta = v * PI; // Polar angle.
 
         for (int j = 0; j <= resolution; j++) {
             float u = (float)j / resolution; // A value from 0 to 1.
-            float phi = u * 2 * M_PI; // Azimuthal angle.
+            float phi = u * 2 * PI; // Azimuthal angle.
 
             float x = radius * sin(theta) * cos(phi);
             float y = radius * cos(theta);
