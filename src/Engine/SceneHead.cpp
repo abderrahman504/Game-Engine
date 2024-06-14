@@ -41,7 +41,7 @@ void free_nodes();
 void displayText(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glDisable(GL_DEPTH_TEST);
+    // glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
     sdt.drawText("Main Menu", 250, 500, 1, 0, 0,0.3);
     sdt.drawText("Press '1' to start the game", 250, 400, 1, 0, 0,0.2);
@@ -98,7 +98,10 @@ void SceneHead::onTreeReady(){
 InputServer& SceneHead::getInputServer() {return *inputServer;}
 PhysicsServer& SceneHead::getPhysicsServer(){return *physicsServer;}
 
-void glutIdle() {sceneHead->idle();}
+void glutIdle() {
+    if(isGameStarted)
+        sceneHead->idle();
+}
 void SceneHead::idle()
 {
     unsigned long long now = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -145,6 +148,8 @@ void resize(int width, int height)
 void keyboard_key(unsigned char key, int x, int y){
     if(key=='1'){
         isGameStarted=true;
+        glEnable(GL_LIGHTING);
+        glEnable(GL_DEPTH_TEST);
         glutPostRedisplay();
     }
     else if(key=='0'){
