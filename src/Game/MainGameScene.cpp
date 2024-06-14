@@ -21,13 +21,15 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sun->material->specular = 1;
     sun->material->emission = 0.8;
     sun->position = Vector3(0, 0, 0);
+    sun->material->setTextureCoordinates(sun->TexCoords(), sun->TexCoordsSize());
+    sun->material->setTexture("../resources/images/sun.png");
     sun->setName("Sun");
     root->addChild(sun);
 
 
     Light3D *sunLight = new Light3D();
     sunLight->color = Color::fromRGBInt(255, 218, 143, 1);
-    sunLight->ambient = 0;
+    sunLight->ambient = 0.5;
     sunLight->diffuse = 0.8;
     sunLight->specular = 1;
     sunLight->setName("SunLight");
@@ -40,10 +42,14 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
     mercury->orbitRadius = 400;
     mercury->orbitSpeed = 30 * PI / 180;
+//    mercury->material->setTextureCoordinates(mercury->TexCoords(), mercury->TexCoordsSize());
+//    mercury->material->setTexture("../resources/images/mercury.jpg");
 //     venus
     Planet *venus = createPlanet(sun, "Venus", 25, 195 / 256.0, 141 / 256.0, 14 / 256.0);
     venus->orbitRadius = 560;
     venus->orbitSpeed = 20 * PI / 180;
+//    venus->material->setTextureCoordinates(venus->TexCoords(), venus->TexCoordsSize());
+//    venus->material->setTexture("../resources/images/venus.jpg");
     // Earth
     Planet *earth = createPlanet(sun, "Earth", 35, 65 / 256.0, 175 / 256.0, 239 / 256.0);
     earth->orbitRadius = 800;
@@ -55,22 +61,30 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *moon = createPlanet(earth, "Moon", 10, 0.4, 0.4, 0.4);
     moon->orbitRadius = 140;
     moon->orbitSpeed = 70 * PI / 180;
+    moon->material->setTextureCoordinates(moon->TexCoords(), moon->TexCoordsSize());
+    moon->material->setTexture("../resources/images/moon.jpg");
     //Mars
     Planet *mars = createPlanet(sun, "Mars", 30, 1, 0, 0);
     mars->orbitRadius = 1000;
     mars->orbitSpeed = 10 * PI / 180;
+    mars->material->setTextureCoordinates(mars->TexCoords(), mars->TexCoordsSize());
+    mars->material->setTexture("../resources/images/mars.jpg");
     //Saturn
     Planet *saturn = createPlanet(sun, "Saturn", 60, 0.78, 0.54, 0.45);
     saturn->orbitRadius = 1400;
     saturn->orbitSpeed = 3 * PI / 180;
+    saturn->material->setTextureCoordinates(saturn->TexCoords(), saturn->TexCoordsSize());
+    saturn->material->setTexture("../resources/images/saturn.jpg");
     // jupiter
     Planet *jupiter = createPlanet(sun, "Jupiter", 80, 0.78, 0.74, 0.45);
     jupiter->orbitRadius = 1800;
     jupiter->orbitSpeed = 1 * PI / 180;
+
     //neptune
     Planet *neptune = createPlanet(sun, "Neptune", 70, 0.06, 0.5, 0.7);
     neptune->orbitRadius = 2400;
     neptune->orbitSpeed = 0.5 * PI / 180;
+
 
 
 
@@ -83,9 +97,12 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     // PyramidMesh* mesh = new PyramidMesh(20, 10, 10);
     // mesh->lookTowards(Vector3::DOWN, Vector3::FORWARD);
     // enemy->addChild(mesh);
+    PyramidMesh *mesh = new PyramidMesh(20, 10, 10);
+    mesh->material->color = Color::fromRGBFloat(1, 0, 0, 1);
     SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
     enemy->addChild(enemy_spaceship);
-    enemy->addChild(new SphereCollider(30));
+
+//    enemy->addChild(new SphereCollider(30));
 //    enemy->addChild(enemy_spaceship1);
 //    enemy->addChild(enemy_spaceship2);
 //    enemy->addChild(enemy_spaceship3);

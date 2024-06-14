@@ -16,7 +16,7 @@ Enemy::Enemy() {
     player = nullptr;
     shootingInterval = 3.0; // Adjust as necessary
     timeSinceLastShot = 0.0;
-    collisionLayer = 0b0010; //Enemy exists on layer 2
+    collisionLayer = 0; //Enemy exists on layer 2
     collisionMask = 0; // Enemy doesn't scan for any layers
     setName("Enemy");
 }
@@ -33,15 +33,15 @@ void Enemy::shoot() {
     bullet->collisionLayer = 0b0100; //Bullet exists on layer 3
     bullet->collisionMask =  0b0001; //Bullet scans layer 1 (the player exists in that layer)
 
-    // std::vector < Node * > children = getChildren();
-    // for (int i = 0; i < children.size(); i++) {
-    //     SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
-    //     if (enemy == nullptr) continue;
-    //     bullet->position = enemy->position;
-    //     bullet->orientation = enemy->orientation;
-    //     bullet->lookTowards(enemy->getForward(), Vector3::UP);
-    //     bullet->moveDir = enemy->getForward();
-    // }
+     std::vector < Node * > children = getChildren();
+     for (int i = 0; i < children.size(); i++) {
+         SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
+         if (enemy == nullptr) continue;
+         bullet->position = enemy->position;
+         bullet->orientation = enemy->orientation;
+         bullet->lookTowards(enemy->getForward(), Vector3::UP);
+         bullet->moveDir = enemy->getForward();
+     }
     bullet->setName("Bullet");
     Parent()->addChild(bullet);
 }
@@ -55,7 +55,7 @@ void Enemy::idle(double deltaTime) {
         dir = dir.normalize();
 
         // Move the enemy towards the player
-        double speed = 10.0; // Adjust speed as necessary
+        double speed = 20.0; // Adjust speed as necessary
         position = position + dir * speed * deltaTime;
 
         // rotate the enemy towards the player
@@ -66,7 +66,7 @@ void Enemy::idle(double deltaTime) {
         timeSinceLastShot += deltaTime;
         if (timeSinceLastShot >= shootingInterval) {
             std::cout << "Enemy is shooting" << std::endl;
-            // this->shoot();
+             this->shoot();
             timeSinceLastShot = 0.0; // Reset the timer
         }
     }
