@@ -199,39 +199,39 @@ drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, V
     spaceship->position = vector3;
     spaceship->setName("Spaceship");
 
-    SpaceShipMesh *spaceship1 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
-    spaceshipMaterial = spaceship1->material;
-    // set color of spaceship to be red
-    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    spaceshipMaterial->ambient_diffuse = 1;
-    spaceshipMaterial->shininess = 0;
-    spaceshipMaterial->specular = 0;
-    spaceship1->position = Vector3(5, 0, height / 5.5);
+    // SpaceShipMesh *spaceship1 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
+    // spaceshipMaterial = spaceship1->material;
+    // // set color of spaceship to be red
+    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    // spaceshipMaterial->ambient_diffuse = 1;
+    // spaceshipMaterial->shininess = 0;
+    // spaceshipMaterial->specular = 0;
+    // spaceship1->position = Vector3(5, 0, height / 5.5);
 
-    spaceship1->setName("right wing");
-    SpaceShipMesh *spaceship2 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
-    spaceshipMaterial = spaceship2->material;
-    // set color of spaceship to be red
-    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    spaceshipMaterial->ambient_diffuse = 1;
-    spaceshipMaterial->shininess = 0;
-    spaceshipMaterial->specular = 0;
-    spaceship2->position = Vector3(-5, 0, height / 5.5);
-    spaceship2->setName("left wing");
+    // spaceship1->setName("right wing");
+    // SpaceShipMesh *spaceship2 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
+    // spaceshipMaterial = spaceship2->material;
+    // // set color of spaceship to be red
+    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    // spaceshipMaterial->ambient_diffuse = 1;
+    // spaceshipMaterial->shininess = 0;
+    // spaceshipMaterial->specular = 0;
+    // spaceship2->position = Vector3(-5, 0, height / 5.5);
+    // spaceship2->setName("left wing");
 
-    SphereMesh *spaceshiphead = new SphereMesh(height / 10, resolution);
-    spaceshipMaterial = spaceshiphead->material;
-    // set color of spaceship to be red
-    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    spaceshipMaterial->ambient_diffuse = 1;
-    spaceshipMaterial->shininess = 0;
-    spaceshipMaterial->specular = 0;
-    spaceshiphead->position = Vector3(0, 1.2, -7.5);
-    spaceshiphead->setName("head");
+    // SphereMesh *spaceshiphead = new SphereMesh(height / 10, resolution);
+    // spaceshipMaterial = spaceshiphead->material;
+    // // set color of spaceship to be red
+    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    // spaceshipMaterial->ambient_diffuse = 1;
+    // spaceshipMaterial->shininess = 0;
+    // spaceshipMaterial->specular = 0;
+    // spaceshiphead->position = Vector3(0, 1.2, -7.5);
+    // spaceshiphead->setName("head");
 
-    spaceship->addChild(spaceship1);
-    spaceship->addChild(spaceship2);
-    spaceship->addChild(spaceshiphead);
+    // spaceship->addChild(spaceship1);
+    // spaceship->addChild(spaceship2);
+    // spaceship->addChild(spaceshiphead);
 
     return spaceship;
 }
