@@ -7,11 +7,10 @@
 
 using namespace Game;
 
-SpaceShipMesh *
-drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, Vector3 vector3, bool isEnemy);
+SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
 
 Planet* createPlanet(Node3D* parent, std::string planetName, float radius, float red, float green, float blue);
-void renderPlanet(Planet* planet);
+
 Engine::Nodes::Node *MainGameScene::constructTree() {
     Node *root = new Node();
     // Enemy *enemy = new Enemy();
@@ -99,47 +98,31 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     neptune->material->setTexture("../resources/images/neptune.jpeg");
 
 
-
-
-//    SpaceShipMesh *enemy_spaceship1 = drawSpaceship(10, 10, 20, 100, Vector3(-40, -30, 300), true);
-//    SpaceShipMesh *enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300), true);
-//    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
-//    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
+    // Creating Enemy
     Enemy *enemy = new Enemy();
-    // enemy->position = Vector3(0, 200, 100);
-    // PyramidMesh* mesh = new PyramidMesh(20, 10, 10);
-    // mesh->lookTowards(Vector3::DOWN, Vector3::FORWARD);
-    // enemy->addChild(mesh);
-    PyramidMesh *mesh = new PyramidMesh(20, 10, 10);
-    mesh->material->color = Color::fromRGBFloat(1, 0, 0, 1);
-    SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
+    enemy->position = Vector3(0, 0, 150);
+    SpaceShipMesh *enemy_spaceship = drawSpaceship(5, 5, 30, true);
     enemy->addChild(enemy_spaceship);
 
-//    enemy->addChild(new SphereCollider(30));
-//    enemy->addChild(enemy_spaceship1);
-//    enemy->addChild(enemy_spaceship2);
-//    enemy->addChild(enemy_spaceship3);
-//    enemy->addChild(enemy_spaceship4);
-    // root->addChild(enemy);
+    root->addChild(enemy);
 
 
-    SpaceShipMesh *spaceship = drawSpaceship(100, 10, 20, 100, Vector3(0, 0, 200), false);
+    // Creating Player
     Camera3D *camera = new Camera3D();
     camera->active = true;
     camera->setFar(10000);
     MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
-    // enemy->attachEnemy(dynamic_cast<Player *>(player) );
+    enemy->attachEnemy((Player*)player);
     player->setName("Player");
-    player->position = Vector3(0, 0, 200);
-    root->addChild(spaceship);
+    player->position = Vector3(0, 0, 300);
     player->addChild(camera);
     root->addChild(player);
     // player->addChild(collider);
 
 
 
+    // Minimap Camera
 
-    //Minimap Camera
     Camera3D *camera2 = new Camera3D();
     camera2->active = true;
     camera2->viewport = Engine::VIEWPORT_2;
@@ -172,9 +155,10 @@ Planet *createPlanet(Node3D *parent, std::string planetName, float radius,
 
 
 
-SpaceShipMesh *
-drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, Vector3 vector3, bool isEnemy) {
-    SpaceShipMesh *spaceship = new SpaceShipMesh(baseWidth, baseHeight, height, resolution);
+SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy) 
+{
+    
+    SpaceShipMesh *spaceship = new SpaceShipMesh(baseWidth, baseHeight, height, 50);
 
     Material *spaceshipMaterial = spaceship->material;
     // set color of spaceship to be red
@@ -185,41 +169,31 @@ drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, V
     spaceshipMaterial->ambient_diffuse = 1;
     spaceshipMaterial->shininess = 0;
     spaceshipMaterial->specular = 0;
-    spaceship->position = vector3;
-    spaceship->setName("Spaceship");
+    spaceship->setName("Spaceship Model");
+    spaceship->lookTowards(Vector3::DOWN, Vector3::FORWARD);
 
-    // SpaceShipMesh *spaceship1 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
-    // spaceshipMaterial = spaceship1->material;
-    // // set color of spaceship to be red
-    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    // spaceshipMaterial->ambient_diffuse = 1;
-    // spaceshipMaterial->shininess = 0;
-    // spaceshipMaterial->specular = 0;
-    // spaceship1->position = Vector3(5, 0, height / 5.5);
+    SpaceShipMesh *right_wing = new SpaceShipMesh(baseWidth / 2, baseHeight / 2, height / 3, 50);
+    spaceshipMaterial = right_wing->material;
+    // set color of spaceship to be red
+    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    spaceshipMaterial->ambient_diffuse = 1;
+    spaceshipMaterial->shininess = 0;
+    spaceshipMaterial->specular = 0;
+    right_wing->position = Vector3(5, baseWidth * 1.5, 0);
+    right_wing->setName("right wing");
 
-    // spaceship1->setName("right wing");
-    // SpaceShipMesh *spaceship2 = new SpaceShipMesh(baseWidth / 1.5, baseHeight / 3, height / 2, resolution);
-    // spaceshipMaterial = spaceship2->material;
-    // // set color of spaceship to be red
-    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    // spaceshipMaterial->ambient_diffuse = 1;
-    // spaceshipMaterial->shininess = 0;
-    // spaceshipMaterial->specular = 0;
-    // spaceship2->position = Vector3(-5, 0, height / 5.5);
-    // spaceship2->setName("left wing");
+    SpaceShipMesh *left_wing = new SpaceShipMesh(baseWidth / 2, baseHeight / 2, height / 3, 50);
+    spaceshipMaterial = left_wing->material;
+    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    spaceshipMaterial->ambient_diffuse = 1;
+    spaceshipMaterial->shininess = 0;
+    spaceshipMaterial->specular = 0;
+    left_wing->position = Vector3(-5, baseWidth * 1.5, 0);
+    left_wing->setName("left wing");
 
-    // SphereMesh *spaceshiphead = new SphereMesh(height / 10, resolution);
-    // spaceshipMaterial = spaceshiphead->material;
-    // // set color of spaceship to be red
-    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    // spaceshipMaterial->ambient_diffuse = 1;
-    // spaceshipMaterial->shininess = 0;
-    // spaceshipMaterial->specular = 0;
-    // spaceshiphead->position = Vector3(0, 1.2, -7.5);
-    // spaceshiphead->setName("head");
 
-    // spaceship->addChild(spaceship1);
-    // spaceship->addChild(spaceship2);
+    spaceship->addChild(right_wing);
+    spaceship->addChild(left_wing);
     // spaceship->addChild(spaceshiphead);
 
     return spaceship;

@@ -33,15 +33,15 @@ void Enemy::shoot() {
     bullet->collisionLayer = 0b0100; //Bullet exists on layer 3
     bullet->collisionMask =  0b0001; //Bullet scans layer 1 (the player exists in that layer)
 
-     std::vector < Node * > children = getChildren();
-     for (int i = 0; i < children.size(); i++) {
-         SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
-         if (enemy == nullptr) continue;
-         bullet->position = enemy->position;
-         bullet->orientation = enemy->orientation;
-         bullet->lookTowards(enemy->getForward(), Vector3::UP);
-         bullet->moveDir = enemy->getForward();
-     }
+    //  std::vector < Node * > children = getChildren();
+    //  for (int i = 0; i < children.size(); i++) {
+    //      SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
+    //      if (enemy == nullptr) continue;
+    //      bullet->position = enemy->position;
+    //      bullet->orientation = enemy->orientation;
+    //      bullet->lookTowards(enemy->getForward(), Vector3::UP);
+    //      bullet->moveDir = enemy->getForward();
+    //  }
     bullet->setName("Bullet");
     Parent()->addChild(bullet);
 }

@@ -12,9 +12,9 @@ SpaceShipMesh::SpaceShipMesh(float baseWidth, float baseHeight, float height, in
     this->baseWidth = baseWidth;
     this->baseHeight = baseHeight;
     this->height = height;
-   this->LoadOBJ("/home/ahmed/Downloads/Game-Engine/space2.obj",&vertices,&indeces,&countIndeces,&countPrimitives);
+//    this->LoadOBJ("/home/ahmed/Downloads/Game-Engine/space2.obj",&vertices,&indeces,&countIndeces,&countPrimitives);
 //    this->scale= Vector3(2,2,2);
-    // buildMesh(baseWidth, baseHeight, height, resolution, &vertices,&texCoords, &indeces, &countIndeces, &countPrimitives);
+    buildMesh(baseWidth, baseHeight, height, resolution, &vertices,&texCoords, &indeces, &countIndeces, &countPrimitives);
     setName("SpaceShipMesh");
 }
 
