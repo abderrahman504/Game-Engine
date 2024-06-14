@@ -76,7 +76,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     saturn->material->setTextureCoordinates(saturn->TexCoords(), saturn->TexCoordsSize());
     saturn->material->setTexture("../resources/images/saturn.jpg");
     DiskMesh3D* saturn_rings = new DiskMesh3D(100, 130, 0.5, 50);
-    saturn_rings->material->color = Color::fromRGBFloat(115, 104, 80, 1);
+    saturn_rings->material->color = Color::fromRGBInt(115, 104, 80, 1);
     saturn_rings->material->ambient_diffuse = 0.5;
     saturn_rings->material->specular = 0;
     saturn_rings->rotateAround(Vector3::RIGHT, 10* PI / 180);
@@ -99,7 +99,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 //    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
 //    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
     Enemy *enemy = new Enemy();
-    enemy->position = Vector3(0, 200, 100);
+    // enemy->position = Vector3(0, 200, 100);
     // PyramidMesh* mesh = new PyramidMesh(20, 10, 10);
     // mesh->lookTowards(Vector3::DOWN, Vector3::FORWARD);
     // enemy->addChild(mesh);
