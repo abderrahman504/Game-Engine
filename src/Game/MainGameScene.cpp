@@ -3,7 +3,8 @@
 #include "cameraTest.cpp"
 #include "MainPlayer.h"
 #include "enemy.h"
-
+#include "HealthBar.cpp"
+#include "Score.cpp"
 
 using namespace Game;
 
@@ -15,6 +16,33 @@ void renderPlanet(Planet* planet);
 Engine::Nodes::Node *MainGameScene::constructTree() {
     Node *root = new Node();
     root->setName("Solar System");
+    Label *Health_label = new Label();
+    Health_label->z_index = 1;
+    Health_label->normalized_coordinates = true;
+    Health_label->text = "Health";
+    Health_label->position = Vector2(0.8f, 0.95f);
+    Health_label->color = Color::fromRGBFloat(0, 0, 1, 1);
+    root->addChild(Health_label);
+    HealthBar *health_bar = new HealthBar();
+    health_bar->z_index = 1;
+    health_bar->normalized_coordinates = true;
+    health_bar->position = Vector2(0.8f, 0.85f);
+    health_bar->size = Vector2(0.3f, 0.05f);
+    health_bar->color = Color::fromRGBFloat(0, 1, 0, 1);
+    health_bar->setName("Health Bar");
+    root->addChild(health_bar);
+    Score *score = new Score();
+    score->z_index = 1;
+    score->normalized_coordinates = true;
+    score->position = Vector2(0.8f, 0.8f);
+    root->addChild(score);
+//    Quad *quad = new Quad();
+//    quad->z_index = 0;
+//    quad->normalized_coordinates = true;
+//    quad->position = Vector2(0.7f, 0.7f);
+//    quad->size = Vector2(0.3f, 0.3f);
+//    root->addChild(quad);
+
     SphereMesh *sun = new SphereMesh(150, 50);
     sun->material->color = Color(255, 255, 0, 255);
     sun->material->ambient_diffuse = 1;
@@ -85,33 +113,10 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     neptune->orbitRadius = 2400;
     neptune->orbitSpeed = 0.5 * PI / 180;
 
-
-
-
-//    SpaceShipMesh *enemy_spaceship1 = drawSpaceship(10, 10, 20, 100, Vector3(-40, -30, 300), true);
-//    SpaceShipMesh *enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300), true);
-//    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
-//    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
     Enemy *enemy = new Enemy();
-    enemy->position = Vector3(0, 200, 100);
-    // PyramidMesh* mesh = new PyramidMesh(20, 10, 10);
-    // mesh->lookTowards(Vector3::DOWN, Vector3::FORWARD);
-    // enemy->addChild(mesh);
-    PyramidMesh *mesh = new PyramidMesh(20, 10, 10);
-    mesh->material->color = Color::fromRGBFloat(1, 0, 0, 1);
-    SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
-    enemy->addChild(enemy_spaceship);
-
-//    enemy->addChild(new SphereCollider(30));
-//    enemy->addChild(enemy_spaceship1);
-//    enemy->addChild(enemy_spaceship2);
-//    enemy->addChild(enemy_spaceship3);
-//    enemy->addChild(enemy_spaceship4);
     root->addChild(enemy);
     // enemy->addChild(enemy_collider);
 
-
-    SpaceShipMesh *spaceship = drawSpaceship(10, 10, 20, 100, Vector3(0, 0, 20), false);
     Camera3D *camera = new Camera3D();
     // camera->position = Vector3(0, 20, 30);
     camera->setFar(10000);
@@ -119,7 +124,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     
     enemy->attachEnemy(dynamic_cast<Player *>(player) );
     player->setName("Player");
-    player->position = Vector3(0, 0, 200);
+    player->position = Vector3(0, 0, 400);
     // player->addChild(spaceship);
     player->addChild(camera);
     player->addChild(new SphereCollider(30));
