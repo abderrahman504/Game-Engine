@@ -75,6 +75,12 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     saturn->orbitSpeed = 3 * PI / 180;
     saturn->material->setTextureCoordinates(saturn->TexCoords(), saturn->TexCoordsSize());
     saturn->material->setTexture("../resources/images/saturn.jpg");
+    DiskMesh3D* saturn_rings = new DiskMesh3D(100, 130, 0.5, 50);
+    saturn_rings->material->color = Color::fromRGBFloat(115, 104, 80, 1);
+    saturn_rings->material->ambient_diffuse = 0.5;
+    saturn_rings->material->specular = 0;
+    saturn_rings->rotateAround(Vector3::RIGHT, 10* PI / 180);
+    saturn->addChild(saturn_rings);
     // jupiter
     Planet *jupiter = createPlanet(sun, "Jupiter", 80, 0.78, 0.74, 0.45);
     jupiter->orbitRadius = 1800;
