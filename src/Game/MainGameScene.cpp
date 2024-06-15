@@ -71,7 +71,7 @@ Engine::Nodes::Node *MainGameScene::constructTree()
     sun->material->emission = 0.8;
     sun->position = Vector3(0, 0, 0);
     sun->material->setTextureCoordinates(sun->TexCoords(), sun->TexCoordsSize());
-    sun->material->setTexture("../resources/images/sun.png");
+    sun->material->setTexture("../resources/images/sun.jpeg");
     sun->setName("Sun");
     root->addChild(sun);
 
@@ -83,8 +83,8 @@ Engine::Nodes::Node *MainGameScene::constructTree()
     sunLight->setName("SunLight");
     sun->addChild(sunLight);
 
-    sun->material->setTextureCoordinates(sun->TexCoords(), sun->TexCoordsSize());
-    sun->material->setTexture("../resources/images/sun2.jpeg");
+    // sun->material->setTextureCoordinates(sun->TexCoords(), sun->TexCoordsSize());
+    // sun->material->setTexture("../resources/images/sun2.jpeg");
 
     // mercury
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
@@ -158,7 +158,7 @@ Engine::Nodes::Node *MainGameScene::constructTree()
     neptune->orbitRadius = 2400;
     neptune->orbitSpeed = 0.5 * PI / 180;
     neptune->material->setTextureCoordinates(neptune->TexCoords(), neptune->TexCoordsSize());
-    neptune->material->setTexture("../resources/images/neptune.jpeg");
+    neptune->material->setTexture("../resources/images/neptune.jpg");
 
     // Creating Enemy
 
