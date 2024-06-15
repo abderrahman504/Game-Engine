@@ -12,7 +12,7 @@
 #include "SoundManager.h"
 namespace Game{
     class MainPlayer : public Player{
-    private:
+        public:
         int score;
         int ammo;
         

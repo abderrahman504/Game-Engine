@@ -14,14 +14,11 @@ void MainPlayer::idle(double deltaTime) {
     if(inputServer.isKeyJustPressed(27)){ //ESC button
         getSceneHead().unfreezeCursor();
         getSceneHead().showCursor();
-
     } 
     else if(inputServer.isKeyJustPressed(MOUSE_LEFT)){
         getSceneHead().freezeCursor();
         getSceneHead().hideCursor();
     }
-
-
     
     Vector3 moveDir = Vector3::ZERO;
     if (inputServer.isKeyPressed('w')) moveDir = moveDir + Vector3::FORWARD;
@@ -32,7 +29,7 @@ void MainPlayer::idle(double deltaTime) {
     if (inputServer.isKeyPressed('c')) moveDir = moveDir + Vector3::DOWN;
     if (inputServer.isKeyPressed('q')) rotateAround(Vector3::UP, 0.01);
     if (inputServer.isKeyPressed('e')) rotateAround(Vector3::UP, -0.01);
-    if (inputServer.isKeyPressed('r')) shoot();
+    // if (inputServer.isKeyPressed('r')) shoot();
 
     moveDir = moveDir.normalize();
 
@@ -56,21 +53,45 @@ void MainPlayer::idle(double deltaTime) {
 
 
     // rotate the player as the mouse moves
+        Vector3 forward = getForward();
+        float travel_angle = forward.angleTo(look_direction);
+        Vector3 spin_vec = forward.cross(look_direction);
 
-    Vector2 mouseDir = inputServer.getMouseMotion();
-
-    if (mouseDir.length() != 0) {
-        float speed = 10 * PI / 180.0;
-        float xAngle = speed * deltaTime * -1 * mouseDir.x;
-        float yAngle = speed * deltaTime * mouseDir.y;
-
-        rotateAround(Vector3::UP, xAngle);
-        Vector3 right = getUp().cross(getForward());
-        rotateAround(right, yAngle);
-        if (getForward().dot(Vector3::UP) == 0)
-            rotateAround(right, -0.01);
-        lookTowards(getForward(), Vector3::UP);
-    }
+        //Figure out whether to rotate faster towards the player or slow down
+        if(rotation_speed == 0 && travel_angle != 0)
+        {
+            //accelerate rotation
+            rotation_speed += rotation_acceleration * deltaTime;
+            if(rotation_speed > max_rotation_speed)
+                rotation_speed = max_rotation_speed;
+        }
+        else
+        {
+            float travel_time = travel_angle / rotation_speed;
+            float halting_time = rotation_speed / rotation_acceleration;
+            if(travel_time < halting_time)
+            {
+                //decelerate rotation
+                rotation_speed -= rotation_acceleration * deltaTime;
+                if(rotation_speed < 0)
+                    rotation_speed = 0;
+            }
+            else
+            {
+                //accelerate rotation
+                rotation_speed += rotation_acceleration * deltaTime;
+                if(rotation_speed > max_rotation_speed)
+                    rotation_speed = max_rotation_speed;
+            }
+        }
+        if(rotation_speed != 0)
+        {
+            float rotation = rotation_speed * deltaTime;
+            if(rotation > travel_angle)
+                rotation = travel_angle;
+            rotateAround(spin_vec, rotation);
+            lookTowards(getForward(), Vector3::UP);
+        }
 
     //if mouse left button is pressed shoot
     if (inputServer.isKeyJustPressed(MOUSE_LEFT)) {

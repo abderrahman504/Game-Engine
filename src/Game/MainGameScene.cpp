@@ -1,7 +1,8 @@
 #include "MainGameScene.h"
 #include "Planet.h"
-#include "cameraTest.cpp"
+// #include "cameraTest.cpp"
 #include "MainPlayer.h"
+#include "PlayerCameraPivot.h"
 #include "enemy.h"
 
 #include "HealthBar.cpp"
@@ -44,12 +45,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     score->normalized_coordinates = true;
     score->position = Vector2(0.8f, 0.8f);
     root->addChild(score);
-//    Quad *quad = new Quad();
-//    quad->z_index = 0;
-//    quad->normalized_coordinates = true;
-//    quad->position = Vector2(0.7f, 0.7f);
-//    quad->size = Vector2(0.3f, 0.3f);
-//    root->addChild(quad);
+    
 
     SphereMesh *sun = new SphereMesh(150, 50);
     sun->material->color = Color(255, 255, 0, 255);
@@ -145,18 +141,21 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
 
     // Creating Player
+    
+    MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
+    player->setName("Player");
+    player->position = Vector3(0, 0, 400);
+    enemy->attachEnemy((Player*)player);
+    root->addChild(player);
 
     Camera3D *camera = new Camera3D();
     camera->position = Vector3(0, 7, 30);
     camera->setFar(10000);
-
-    MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
-    player->setName("Player");
-    player->position = Vector3(0, 0, 400);
-    player->addChild(camera);
-    enemy->attachEnemy((Player*)player);
-    root->addChild(player);
-
+    PlayerCameraPivot* cam_pivot = new PlayerCameraPivot();
+    cam_pivot->player = player;
+    cam_pivot->addChild(camera);
+    
+    root->addChild(cam_pivot);
 
     // Minimap Camera
 
