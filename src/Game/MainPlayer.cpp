@@ -29,7 +29,7 @@ void MainPlayer::idle(double deltaTime) {
     } 
     else if(inputServer.isKeyJustPressed(MOUSE_LEFT)){
         getSceneHead().freezeCursor();
-        // getSceneHead().hideCursor();
+        getSceneHead().hideCursor();
     }
 
 
@@ -44,9 +44,6 @@ void MainPlayer::idle(double deltaTime) {
     if (inputServer.isKeyPressed('q')) rotateAround(Vector3::UP, 0.01);
     if (inputServer.isKeyPressed('e')) rotateAround(Vector3::UP, -0.01);
     if (inputServer.isKeyPressed('r')) shoot();
-    if (inputServer.isKeyPressed('j')){
-            
-    }
 
 
     if (moveDir.length() != 0) {
