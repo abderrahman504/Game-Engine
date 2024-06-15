@@ -8,7 +8,7 @@
 #include "Score.cpp"
 
 #include "MinimapCamera.h"
-
+#include "GenerateEnemies.cpp"
 
 #include "PickableGenrator.h"
 using namespace Game;
@@ -138,10 +138,10 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
 
     // Creating Enemy
-    Enemy *enemy = new Enemy();
-    enemy->position = Vector3(0, 0, 150);
 
+  GenerateEnemies *enemy = new GenerateEnemies();
     root->addChild(enemy);
+
 
 
     // Creating Player
@@ -149,7 +149,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Camera3D *camera = new Camera3D();
     camera->position = Vector3(0, 7, 30);
     camera->setFar(10000);
-    
+
     MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
     player->setName("Player");
     player->position = Vector3(0, 0, 400);
@@ -180,7 +180,6 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
     return root;
 }
-
 
 Planet *createPlanet(Node3D *parent, std::string planetName, float radius,
                      float red, float green, float blue) {

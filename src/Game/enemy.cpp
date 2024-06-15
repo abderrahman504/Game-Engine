@@ -37,29 +37,7 @@ Enemy::Enemy()
 
 
 void Enemy::idle(double deltaTime) {
-    std::vector<Node *> children = getChildren();
-    switch (Level) {
-    case 1:
-        if(children.size() <3) {
-            addEnemy();
-            x+=30;
-        }
-        break;
-    case 2:
-        if(children.size() <6) {
-            addEnemy();
-            x+=30;
-        }
-        break;
-    case 3:
-        if(children.size() <9) {
-            addEnemy();
-            x+=30;
-        }
-        break;
-    }
-
-    if (player != nullptr) 
+    if (player != nullptr)
     { // Check if player is not a nullptr
 
         // Calculate the direction vector from the enemy to the player
@@ -132,10 +110,14 @@ void Enemy::idle(double deltaTime) {
             std::cout << "Enemy is shooting" << std::endl;
              this->shoot();
             timeSinceLastShot = 0.0; // Reset the timer
-        }
-    }
-}
 
+        }
+     
+
+
+    }
+ 
+}
 
 void Enemy::shoot() {
     Bullet *bullet = new Bullet(0.5, 100, 200, 5, 5,0,false);
@@ -193,7 +175,7 @@ void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::Collision
 
 
 
-// static ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy) 
+// static ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy)
 // {
     
 //     ConeMesh *spaceship = new ConeMesh(baseWidth/2, baseHeight/2, height, 50);

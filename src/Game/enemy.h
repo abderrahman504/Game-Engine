@@ -7,15 +7,15 @@
 #include "../Engine.h"
 #include <stdio.h>
 
-namespace Game{
-    class Enemy : public CollisionBody3D 
-    {
-        public:
+namespace Game {
+    class Enemy : public CollisionBody3D {
+    public:
         CollisionBody3D *player = nullptr;
         double shootingInterval = 3;
         double timeSinceLastShot = 3;
         int health = 100;
-
+        int Level;
+        int x;
         Vector3 velocity = Vector3::ZERO;
         float max_speed = 50;
         float acceleration = 30;
@@ -26,21 +26,27 @@ namespace Game{
 
         float min_distance_to_player = 200;
 
-        int Level;
-        int x;
-
         void onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info);
 
         Enemy();
+
         void attachEnemy(CollisionBody3D *player);
+
         void idle(double deltaTime);
+
         void shoot();
+
         void destroy();
+
         void addEnemy();
+
+        SpaceShipMesh *
+        drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, Vector3 vector3, bool isEnemy);
+
         int generate_random_number();
 
-    };
 
+    };
 }
 
 
