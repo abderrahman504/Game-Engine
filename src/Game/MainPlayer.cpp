@@ -5,24 +5,40 @@
 #include "MainPlayer.h"
 
 
+bool isMuosefreaze = false;
 using namespace Game;
 
 
 void MainPlayer::shoot() {
-    Bullet *bullet = new Bullet(0.5, 0.5, 100, 200, 5, 50);
-    bullet->position = position + getForward() * 4;
+    Bullet *bullet = new Bullet(0.5, 100, 200, 5, 10,ammo,true);
+    bullet->position = position + getForward() * 1;
     bullet->orientation = orientation;
     bullet->lookTowards(getForward(), Vector3::UP);
     bullet->moveDir = getForward();
     this->Parent()->addChild(bullet);
+    SphereCollider *collider = new SphereCollider(0.5);
 
-    SoundManager::setVolume(255);
-    SoundManager::setPlayDuration(100);
-    SoundManager::loadAndPlay("../resources/sounds/laser-gun-81720.mp3");
+    collider->setName("Bullet");
+    bullet->addChild(collider);
+    bullet->shooter = true;
 }
 
 void MainPlayer::idle(double deltaTime) {
     Engine::InputServer &inputServer = getSceneHead().getInputServer();
+
+    
+    if(inputServer.isKeyJustPressed(27)){ //ESC button
+        getSceneHead().unfreezeCursor();
+        getSceneHead().showCursor();
+
+    } 
+    else if(inputServer.isKeyJustPressed(MOUSE_LEFT)){
+        getSceneHead().freezeCursor();
+        getSceneHead().hideCursor();
+    }
+
+
+    
     Vector3 moveDir = Vector3::ZERO;
     if (inputServer.isKeyPressed('w')) moveDir = moveDir + Vector3::FORWARD;
     if (inputServer.isKeyPressed('s')) moveDir = moveDir + Vector3::BACK;
@@ -33,6 +49,8 @@ void MainPlayer::idle(double deltaTime) {
     if (inputServer.isKeyPressed('q')) rotateAround(Vector3::UP, 0.01);
     if (inputServer.isKeyPressed('e')) rotateAround(Vector3::UP, -0.01);
     if (inputServer.isKeyPressed('r')) shoot();
+
+
     if (moveDir.length() != 0) {
         moveDir = moveDir.normalize().rotateBy(orientation);
         float speed = 150;
@@ -55,7 +73,7 @@ void MainPlayer::idle(double deltaTime) {
 
     //if mouse left button is pressed shoot
     if (inputServer.isKeyJustPressed(MOUSE_LEFT)) {
-        // shoot();
+        shoot();
     }
 
 }
@@ -64,33 +82,57 @@ void MainPlayer::idle(double deltaTime) {
 void MainPlayer::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
     // std::cout << "Collision between player and " << other->getName() << "\n";
 
-    // if (other->getName() == "Bullet") {
-    //     Bullet *bullet = dynamic_cast<Bullet *>(other);
-    //     bullet->destroy();
-    //     if (bullet->Parent()->getName() == "Player") return;
-    //     health -= bullet->getDamage();
-    //     if (health <= 0) {
-    //         destroy();
-    //     }
-    // }
+    if (other->getName() == "Bullet") {
+        Bullet *bullet = dynamic_cast<Bullet *>(other);
+        if (bullet->Parent()==nullptr) return;
+        if (bullet->shooter) return;
+        else{
+            health -= bullet->getDamage();
+            bullet->destroy();
+            if (health <= 0) {
+                // destroy();
+                std::cout<<"Player is dead"<<std::endl;
+            }
+            std::cout<<"Player Health: "<<health<<std::endl;
+        }
+    }
+
     // if (other->getName() == "Enemy") {
     //     health -= 10;
     //     if (health <= 0) {
     //         destroy();
     //     }
     // }
+
+    // if (other->getName() == "Pickable") {
+    //     std::cout<<health<<std::endl;
+    //     std::cout<<ammo<<std::endl;
+    //     std::cout<<score<<std::endl;
+    // }
+
 }
 
 void MainPlayer::destroy() {
-
-    std::vector < Engine::Nodes::Node * > children = getChildren();
-    for (int i = 0; i < children.size(); i++) {
-        if (children[i]->getName() == "Bullet") {
-            Bullet *bullet = dynamic_cast<Bullet *>(children[i]);
-            bullet->destroy();
-        }
-    }
     
     queueFree();
 }
 
+
+
+
+void MainPlayer::setScore(int score) {
+    this->score = score;
+}
+int MainPlayer::getScore(){
+    return score;
+}
+void MainPlayer::addScore(int score){
+    this->score += score;
+}
+void MainPlayer::addHealth(int health){
+    this->health += health;
+}
+void MainPlayer::setAmmo(int ammo){
+    this->ammo = ammo;
+}
+    

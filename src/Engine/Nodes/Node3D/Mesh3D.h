@@ -21,17 +21,22 @@ namespace Nodes{
         int countPrimitives = 0;
         float *texCoords = nullptr;
         int texCoordsSize = 0;
+        float *colors = nullptr; // Array to store colors
+        long verticesSize = 0;
 
         public:
+
         Mesh3D();
         ~Mesh3D();
         float* Vertices();
+        long VerticesSize();
         unsigned int** Indeces();
         int* CountIndeces();
         int CountPrimitives();
         int TexCoordsSize();
         float* TexCoords();
-        bool LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives);
+        float* Colors(); // Getter for colors
+        bool LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives, float** colors);
         void Scale(float scaleFactor);
     };
 }}

@@ -107,7 +107,7 @@ void SceneHead::freezeCursor(){
     inputServer->cursor_frozen = true;
 }
 
-void SceneHead::unfreazeCursor(){
+void SceneHead::unfreezeCursor(){
     inputServer->cursor_frozen = false;
 }
 

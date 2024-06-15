@@ -102,13 +102,13 @@ void InputServer::mouseEntry(int state){
 void InputServer::onIdle(Vector2 window_size)
 {
     win_size = window_size;
-    prev_mouse_pos = mouse_pos;
     //place mouse at center of window if cursor_frozen is true
     if(cursor_frozen)
     {
         glutWarpPointer(window_size.x / 2, window_size.y / 2);
-        prev_mouse_pos = Vector2(window_size.x / 2, window_size.y / 2);
+        mouse_pos = Vector2(window_size.x / 2, window_size.y / 2);
     }
+    prev_mouse_pos = mouse_pos;
     //Iterate on key_map
     for(auto it = key_map.begin(); it != key_map.end(); it++)
     {
