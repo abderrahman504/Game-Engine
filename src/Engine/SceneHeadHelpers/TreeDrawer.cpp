@@ -2,6 +2,7 @@
 #include "../DataTypes.h"
 #include "../Nodes.h"
 #include "../Display.h"
+#include "../Nodes/Node3D/SkyBox.h"
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <vector>
@@ -13,6 +14,7 @@ using namespace Engine;
 using namespace Engine::Nodes;
 
 static Vector2 win_size;
+static Skybox* skybox = nullptr; // Add this line
 
 void applyMaterial(Material material);
 Camera3D defaultCamera();
@@ -130,20 +132,25 @@ void TreeDrawer::drawScene(Nodes::Node *root, Vector2 windowSize)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     std::map<int, Camera3D *> activeCameras = findCameras(root);
 
-    // lightCount = 0;
-    // turnOffLights();
-    findCameras(root);
     Camera3D defaultCam = defaultCamera();
 
-    if (activeCameras.size() == 0)
-        activeCameras[VIEWPORT_1] = &defaultCam;
-    for (auto it = activeCameras.begin(); it != activeCameras.end(); it++)
-    {
-        Camera3D *camera = it->second;
+    if (activeCameras.size() == 0) activeCameras[VIEWPORT_1] = &defaultCam;
+    for (auto it = activeCameras.begin(); it != activeCameras.end(); it++) {
+        Camera3D* camera = it->second;
         drawCameraViewport(camera, windowSize, activeCameras.size() > 1);
+        
         if (it->first == VIEWPORT_1)
             drawSceneUI(root, camera);
+        
         placeLights(root);
+        
+        // Draw Skybox before other nodes
+        if (skybox) {
+            glDisable(GL_LIGHTING);
+            skybox->Draw();
+            glEnable(GL_LIGHTING);
+        }
+        
         drawNode(root);
     }
     glutSwapBuffers();
@@ -231,12 +238,17 @@ void TreeDrawer::drawNodeUI(UI *node, Vector2 view_plane_dims)
 
 void TreeDrawer::drawNode(Node *node)
 {
-    // Check the type of the node
-    bool isNode3D = dynamic_cast<Node3D *>(node) != nullptr;
-    bool isMesh3D = dynamic_cast<Mesh3D *>(node) != nullptr;
-    bool isLight3D = dynamic_cast<Light3D *>(node) != nullptr;
-    // If Node3D then apply its transformation before drawing
-    if (isNode3D)
+    //Check the type of the node
+    bool isNode3D = dynamic_cast<Node3D*>(node) != nullptr;
+    bool isMesh3D = dynamic_cast<Mesh3D*>(node) != nullptr;
+    bool isLight3D = dynamic_cast<Light3D*>(node) != nullptr;
+    
+    if (dynamic_cast<Skybox*>(node) != nullptr) {
+        skybox = (Skybox*)node;
+        return;
+    }
+    //If Node3D then apply its transformation before drawing
+    if(isNode3D)
     {
         glPushMatrix();
         Vector3 position = ((Node3D *)node)->position;

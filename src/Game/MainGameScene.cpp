@@ -16,12 +16,29 @@ using namespace Game;
 
 static ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
 
-Planet* createPlanet(Node3D* parent, std::string planetName, float radius, float red, float green, float blue);
+Planet *createPlanet(Node3D *parent, std::string planetName, float radius, float red, float green, float blue);
 
-Engine::Nodes::Node *MainGameScene::constructTree() {
+Engine::Nodes::Node *MainGameScene::constructTree()
+{
     Node *root = new Node();
-
+    
     PickabelGenerator::generate(root,10);
+    
+    Skybox *sb = new Skybox(10000);
+    std::vector<std::string> faces = {
+        "../resources/images/star.jpeg",
+        "../resources/images/star.jpeg",
+        "../resources/images/star.jpeg",
+        "../resources/images/star.jpeg",
+        "../resources/images/star.jpeg",
+        "../resources/images/star.jpeg",
+    };
+    sb->LoadSkyboxTextures(faces);
+    sb->setName("Skybox");
+    sb->position = Vector3(0, 0, 0);
+    root->addChild(sb);
+
+
     // Enemy *enemy = new Enemy();
 
     root->setName("Solar System");
@@ -58,7 +75,6 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sun->setName("Sun");
     root->addChild(sun);
 
-
     Light3D *sunLight = new Light3D();
     sunLight->color = Color::fromRGBInt(255, 218, 143, 1);
     sunLight->ambient = 0.5;
@@ -67,7 +83,6 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     sunLight->setName("SunLight");
     sun->addChild(sunLight);
 
-
     sun->material->setTextureCoordinates(sun->TexCoords(), sun->TexCoordsSize());
     sun->material->setTexture("../resources/images/sun2.jpeg");
 
@@ -75,20 +90,33 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
     mercury->orbitRadius = 400;
     mercury->orbitSpeed = 30 * PI / 180;
+    
    mercury->material->setTextureCoordinates(mercury->TexCoords(), mercury->TexCoordsSize());
    mercury->material->setTexture("../resources/images/mercury.jpg");
+   
 //     venus
     Planet *venus = createPlanet(sun, "Venus", 25, 195 / 256.0, 141 / 256.0, 14 / 256.0);
     venus->orbitRadius = 560;
     venus->orbitSpeed = 20 * PI / 180;
    venus->material->setTextureCoordinates(venus->TexCoords(), venus->TexCoordsSize());
    venus->material->setTexture("../resources/images/venus.jpg");
+//=====
+    // //    mercury->material->setTextureCoordinates(mercury->TexCoords(), mercury->TexCoordsSize());
+    // //    mercury->material->setTexture("../resources/images/mercury.jpg");
+    // //     venus
+    // Planet *venus = createPlanet(sun, "Venus", 25, 195 / 256.0, 141 / 256.0, 14 / 256.0);
+    // venus->orbitRadius = 560;
+    // venus->orbitSpeed = 20 * PI / 180;
+    // //    venus->material->setTextureCoordinates(venus->TexCoords(), venus->TexCoordsSize());
+    // //    venus->material->setTexture("../resources/images/venus.jpg");
+
+    
     // Earth
 
     Planet *earth = createPlanet(sun, "Earth", 35, 65 / 256.0, 175 / 256.0, 239 / 256.0);
     earth->orbitRadius = 800;
     earth->orbitSpeed = 15 * PI / 180;
-    
+
     earth->material->setTextureCoordinates(earth->TexCoords(), earth->TexCoordsSize());
     earth->material->setTexture("../resources/images/earth.jpeg");
     // Moon
@@ -97,13 +125,13 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     moon->orbitSpeed = 70 * PI / 180;
     moon->material->setTextureCoordinates(moon->TexCoords(), moon->TexCoordsSize());
     moon->material->setTexture("../resources/images/moon.jpg");
-    //Mars
-    Planet *mars = createPlanet(sun, "Mars", 30,  0.78, 0.54, 0.45);
+    // Mars
+    Planet *mars = createPlanet(sun, "Mars", 30, 0.78, 0.54, 0.45);
     mars->orbitRadius = 1000;
     mars->orbitSpeed = 10 * PI / 180;
     mars->material->setTextureCoordinates(mars->TexCoords(), mars->TexCoordsSize());
     mars->material->setTexture("../resources/images/mars.jpg");
-    //Saturn
+    // Saturn
     Planet *saturn = createPlanet(sun, "Saturn", 60, 0.78, 0.54, 0.45);
     saturn->orbitRadius = 1400;
     saturn->orbitSpeed = 3 * PI / 180;
@@ -114,7 +142,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     saturn_rings->material->color = Color::fromRGBInt(115, 104, 80, 1);
     saturn_rings->material->ambient_diffuse = 0.5;
     saturn_rings->material->specular = 0;
-    saturn_rings->rotateAround(Vector3::RIGHT, 10* PI / 180);
+    saturn_rings->rotateAround(Vector3::RIGHT, 10 * PI / 180);
     saturn->addChild(saturn_rings);
     // jupiter
 
@@ -132,17 +160,15 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     neptune->material->setTextureCoordinates(neptune->TexCoords(), neptune->TexCoordsSize());
     neptune->material->setTexture("../resources/images/neptune.jpeg");
 
-
     // Creating Enemy
 
   GenerateEnemies *enemy = new GenerateEnemies();
     root->addChild(enemy);
 
-
-
     // Creating Player
     
     MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
+    enemy->attachEnemy((Player *)player);
     player->setName("Player");
     player->position = Vector3(0, 0, 400);
     enemy->attachEnemy((Player*)player);
@@ -152,7 +178,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
     Camera3D *camera = new Camera3D();
     camera->position = Vector3(0, 7, 30);
-    camera->setFar(10000);
+    camera->setFar(20000);
     PlayerCameraPivot* cam_pivot = new PlayerCameraPivot();
     cam_pivot->player = player;
     cam_pivot->addChild(camera);
@@ -173,7 +199,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     camera2->viewportPosition = Vector2(0.7, 0.1);
     camera2->viewportSize = Vector2(0.2, 0.2);
     camera2->setFOV(90);
-    camera2->setFar(10000);
+    camera2->setFar(20000);
     camera2->target = player;
     camera2->distance_from_target = 800;
     
@@ -183,7 +209,8 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 }
 
 Planet *createPlanet(Node3D *parent, std::string planetName, float radius,
-                     float red, float green, float blue) {
+                     float red, float green, float blue)
+{
     Planet *planet = new Planet(radius, 100);
     Material *planetMaterial = planet->material;
     // Earth
