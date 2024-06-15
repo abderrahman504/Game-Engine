@@ -26,6 +26,9 @@ namespace Game{
 
         float min_distance_to_player = 200;
 
+        int Level;
+        int x;
+
         void onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info);
 
         Enemy();
@@ -33,6 +36,8 @@ namespace Game{
         void idle(double deltaTime);
         void shoot();
         void destroy();
+        void addEnemy();
+        int generate_random_number();
 
     };
 

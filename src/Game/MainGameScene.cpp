@@ -3,6 +3,10 @@
 #include "cameraTest.cpp"
 #include "MainPlayer.h"
 #include "enemy.h"
+
+#include "HealthBar.cpp"
+#include "Score.cpp"
+
 #include "MinimapCamera.h"
 
 
@@ -15,9 +19,38 @@ Planet* createPlanet(Node3D* parent, std::string planetName, float radius, float
 
 Engine::Nodes::Node *MainGameScene::constructTree() {
     Node *root = new Node();
+
     PickabelGenerator::generate(root,10);
     // Enemy *enemy = new Enemy();
+
     root->setName("Solar System");
+    Label *Health_label = new Label();
+    Health_label->z_index = 1;
+    Health_label->normalized_coordinates = true;
+    Health_label->text = "Health";
+    Health_label->position = Vector2(0.8f, 0.95f);
+    Health_label->color = Color::fromRGBFloat(0, 0, 1, 1);
+    root->addChild(Health_label);
+    HealthBar *health_bar = new HealthBar();
+    health_bar->z_index = 1;
+    health_bar->normalized_coordinates = true;
+    health_bar->position = Vector2(0.8f, 0.85f);
+    health_bar->size = Vector2(0.3f, 0.05f);
+    health_bar->color = Color::fromRGBFloat(0, 1, 0, 1);
+    health_bar->setName("Health Bar");
+    root->addChild(health_bar);
+    Score *score = new Score();
+    score->z_index = 1;
+    score->normalized_coordinates = true;
+    score->position = Vector2(0.8f, 0.8f);
+    root->addChild(score);
+//    Quad *quad = new Quad();
+//    quad->z_index = 0;
+//    quad->normalized_coordinates = true;
+//    quad->position = Vector2(0.7f, 0.7f);
+//    quad->size = Vector2(0.3f, 0.3f);
+//    root->addChild(quad);
+
     SphereMesh *sun = new SphereMesh(150, 50);
     sun->material->color = Color(255, 255, 0, 255);
     sun->material->ambient_diffuse = 1;
@@ -41,7 +74,6 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
     sun->material->setTextureCoordinates(sun->TexCoords(), sun->TexCoordsSize());
     sun->material->setTexture("../resources/images/sun2.jpeg");
-    // set texture of the sun
 
     // mercury
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
@@ -113,15 +145,17 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
 
     // Creating Player
+
     Camera3D *camera = new Camera3D();
     camera->position = Vector3(0, 7, 30);
     camera->setFar(10000);
-    MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
-    enemy->attachEnemy((Player*)player);
-    player->position = Vector3(0, 0, 300);
-    player->addChild(camera);
-    root->addChild(player);
     
+    MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
+    player->setName("Player");
+    player->position = Vector3(0, 0, 400);
+    player->addChild(camera);
+    enemy->attachEnemy((Player*)player);
+    root->addChild(player);
 
 
     // Minimap Camera
@@ -147,6 +181,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     return root;
 }
 
+
 Planet *createPlanet(Node3D *parent, std::string planetName, float radius,
                      float red, float green, float blue) {
     Planet *planet = new Planet(radius, 100);
@@ -160,53 +195,4 @@ Planet *createPlanet(Node3D *parent, std::string planetName, float radius,
     planet->setName(planetName);
     parent->addChild(planet);
     return planet;
-}
-
-
-
-
-ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy) 
-{
-    
-    ConeMesh *spaceship = new ConeMesh(baseWidth, baseHeight, height, 50);
-
-    Material *spaceshipMaterial = spaceship->material;
-    // set color of spaceship to be red
-    if (isEnemy)
-        spaceshipMaterial->color = Color::fromRGBFloat(1, 0, 0, 1);
-    else
-        spaceshipMaterial->color = Color::fromRGBFloat(0, 0, 1, 1);
-    spaceshipMaterial->ambient_diffuse = 1;
-    spaceshipMaterial->shininess = 0;
-    spaceshipMaterial->specular = 0;
-    spaceship->setName("Spaceship Model");
-    // spaceship->lookTowards(Vector3::DOWN, Vector3::FORWARD);
-    spaceship->rotateAround(Vector3::UP, PI / 2);
-    spaceship->rotateAround(Vector3::FORWARD, PI / 2);
-
-    // SpaceShipMesh *right_wing = new SpaceShipMesh(baseWidth / 2, baseHeight / 2, height / 3, 50);
-    // spaceshipMaterial = right_wing->material;
-    // // set color of spaceship to be red
-    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    // spaceshipMaterial->ambient_diffuse = 1;
-    // spaceshipMaterial->shininess = 0;
-    // spaceshipMaterial->specular = 0;
-    // right_wing->position = Vector3(5, baseWidth * 1.5, 0);
-    // right_wing->setName("right wing");
-
-    // SpaceShipMesh *left_wing = new SpaceShipMesh(baseWidth / 2, baseHeight / 2, height / 3, 50);
-    // spaceshipMaterial = left_wing->material;
-    // spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
-    // spaceshipMaterial->ambient_diffuse = 1;
-    // spaceshipMaterial->shininess = 0;
-    // spaceshipMaterial->specular = 0;
-    // left_wing->position = Vector3(-5, baseWidth * 1.5, 0);
-    // left_wing->setName("left wing");
-
-
-    // spaceship->addChild(right_wing);
-    // spaceship->addChild(left_wing);
-    // spaceship->addChild(spaceshiphead);
-
-    return spaceship;
 }
