@@ -1,4 +1,10 @@
 #include "Mesh3D.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <random>
+
 using namespace Engine::Nodes;
 
 void Mesh3D::Scale(float scaleFactor) {
@@ -16,10 +22,10 @@ void Mesh3D::Scale(float scaleFactor) {
 Mesh3D::Mesh3D(){
     setName("Mesh3D");
 }
+
 Mesh3D::~Mesh3D(){
     if(vertices != nullptr){
         for(int i = 0; i < countPrimitives; i++){
-            delete[] vertices;
             delete[] indeces[i];
         }
         if(texCoords != nullptr){
@@ -28,20 +34,23 @@ Mesh3D::~Mesh3D(){
         delete[] vertices;
         delete[] indeces;
         delete[] countIndeces;
+        delete[] colors; // Free the color array
         delete material;
-
     }
 }
-float* Mesh3D::Vertices(){return vertices;}
-unsigned int** Mesh3D::Indeces(){return indeces;}
-int* Mesh3D::CountIndeces(){return countIndeces;}
-int Mesh3D::CountPrimitives(){return countPrimitives;}
-int Mesh3D::TexCoordsSize(){return texCoordsSize;}
-float* Mesh3D::TexCoords(){return texCoords;}
 
-bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives) {
+float* Mesh3D::Vertices() { return vertices; }
+unsigned int** Mesh3D::Indeces() { return indeces; }
+int* Mesh3D::CountIndeces() { return countIndeces; }
+int Mesh3D::CountPrimitives() { return countPrimitives; }
+int Mesh3D::TexCoordsSize() { return texCoordsSize; }
+float* Mesh3D::TexCoords() { return texCoords; }
+float* Mesh3D::Colors() { return colors; } // Getter for colors
+
+bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives, float** colors) {
     std::vector<float> vertice;
     std::vector<unsigned int> indice;
+    std::vector<float> colorArray; // Vector to store colors
     std::ifstream in_file(path);
 
     if (!in_file.is_open()) {
@@ -60,6 +69,28 @@ bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices
             vertice.push_back(x);
             vertice.push_back(y);
             vertice.push_back(z);
+
+            // Generate random colors for each vertex
+            float r, g, b;
+            // if (vertice.size() >= 1000) {
+            //     r = 1.0f;
+            //     g = 0.0f;
+            //     b = 0.0f;
+            // } else {
+            //     std::random_device rd;
+            //     std::mt19937 gen(rd());
+            //     std::uniform_real_distribution<float> dis(0.0f, 1.0f);
+            //     r = dis(gen);
+            //     g = dis(gen);
+            //     b = dis(gen);
+            // }
+            r = 1.0f;
+            g = 0.0f;
+            b = 0.0f;
+            
+            colorArray.push_back(r); // R
+            colorArray.push_back(g); // G
+            colorArray.push_back(b); // B
         } else if (prefix == "f") {
             std::string vertexStr;
             unsigned int vertexIndex[3];
@@ -82,11 +113,11 @@ bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices
     *countIndices = new int[1];
     (*countIndices)[0] = indice.size();
     *countPrimitives = 1;
+    *colors = new float[colorArray.size()]; // Allocate memory for colors
 
     std::copy(vertice.begin(), vertice.end(), *vertices);
     std::copy(indice.begin(), indice.end(), (*indices)[0]);
-    
-    
+    std::copy(colorArray.begin(), colorArray.end(), *colors); // Copy colors to the array
 
     return true;
 }

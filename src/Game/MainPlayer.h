@@ -14,6 +14,7 @@ namespace Game{
     class MainPlayer : public Player{
     private:
         int score;
+        int ammo;
         Vector3 velocity = Vector3::ZERO;
         const float damping = 0.95f;     
         protected:
@@ -22,6 +23,7 @@ namespace Game{
         public:
         MainPlayer(float speed, float acceleration, float rotationSpeed, float rotationAcceleration, int health, float maxSpeed) {
             score = 0;
+            ammo = 2;
             this->speed = speed;
             this->acceleration = acceleration;
             this->rotationSpeed = rotationSpeed;
@@ -30,9 +32,17 @@ namespace Game{
             this->maxSpeed = maxSpeed;
             collisionLayer = 0b0001; //Player exists on layer 1
             collisionMask = 0b0010; //Player scans for layer 2
+
+            setName("Player");
+
         }
         void shoot();
         void destroy();
+        void setScore(int score);
+        int getScore();
+        void addScore(int score);
+        void addHealth(int health);
+        void setAmmo(int ammo);
     };
 
 }

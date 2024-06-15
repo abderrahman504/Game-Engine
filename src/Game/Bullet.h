@@ -8,6 +8,26 @@
 #include "../Engine.h"
 #include <stdio.h>
 
+#include "SoundManager.h"
+
+enum BulletType{
+    BULLET,
+    LASER,
+    MISSILE
+};
+
+struct BulletData{
+    char* txtPath;
+    char* soundPath;
+    float damage;
+    BulletType type;
+};
+
+const BulletData BULLETS_DATA[] = {
+        {"../resources/images/bullet1.jpeg","../resources/sounds/gun.mp3",10,BULLET},
+        {"../resources/images/bullet2.jpeg","../resources/sounds/laser.mp3",20,LASER},
+        {"../resources/images/bullet3.jpeg","../resources/sounds/peow.mp3",30,MISSILE}
+};
 
 namespace Game {
     class Bullet: public Engine::Nodes::CollisionBody3D {
@@ -17,12 +37,13 @@ namespace Game {
         float radius;
         float height;
         float damage = 10;
-        CylinderMesh* mesh;
+        int type;
+        SphereMesh* mesh;
         protected:
         void idle(double deltaTime);
         public:
         Vector3 moveDir;
-        Bullet(float radius, float height, int resolution, float speed,float maxLifeTime,float damage);
+        Bullet(float radius, int resolution, float speed,float maxLifeTime,float damage,int type);
         void destroy();
         float getDamage();
     };

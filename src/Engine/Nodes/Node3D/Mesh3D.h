@@ -21,6 +21,7 @@ namespace Nodes{
         int countPrimitives = 0;
         float *texCoords = nullptr;
         int texCoordsSize = 0;
+        float *colors = nullptr; // Array to store colors
 
         public:
         Mesh3D();
@@ -31,7 +32,8 @@ namespace Nodes{
         int CountPrimitives();
         int TexCoordsSize();
         float* TexCoords();
-        bool LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives);
+        float* Colors(); // Getter for colors
+        bool LoadOBJ(const char* path, float** vertices, unsigned int*** indices, int** countIndices, int* countPrimitives, float** colors);
         void Scale(float scaleFactor);
     };
 }}

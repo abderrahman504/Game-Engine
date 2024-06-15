@@ -4,6 +4,7 @@
 #include "MainPlayer.h"
 #include "enemy.h"
 
+#include "PickableGenrator.h"
 
 using namespace Game;
 
@@ -14,6 +15,12 @@ Planet* createPlanet(Node3D* parent, std::string planetName, float radius, float
 void renderPlanet(Planet* planet);
 Engine::Nodes::Node *MainGameScene::constructTree() {
     Node *root = new Node();
+
+    PickabelGenerator::generate(root, 10);
+
+
+
+
     // Enemy *enemy = new Enemy();
     root->setName("Solar System");
     SphereMesh *sun = new SphereMesh(150, 50);
@@ -45,14 +52,14 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Planet *mercury = createPlanet(sun, "Mercury", 20, 0.941, 0.906, 0.902);
     mercury->orbitRadius = 400;
     mercury->orbitSpeed = 30 * PI / 180;
-//    mercury->material->setTextureCoordinates(mercury->TexCoords(), mercury->TexCoordsSize());
-//    mercury->material->setTexture("../resources/images/mercury.jpg");
-//     venus
+   mercury->material->setTextureCoordinates(mercury->TexCoords(), mercury->TexCoordsSize());
+   mercury->material->setTexture("../resources/images/mercury.jpg");
+    // venus
     Planet *venus = createPlanet(sun, "Venus", 25, 195 / 256.0, 141 / 256.0, 14 / 256.0);
     venus->orbitRadius = 560;
     venus->orbitSpeed = 20 * PI / 180;
-//    venus->material->setTextureCoordinates(venus->TexCoords(), venus->TexCoordsSize());
-//    venus->material->setTexture("../resources/images/venus.jpg");
+   venus->material->setTextureCoordinates(venus->TexCoords(), venus->TexCoordsSize());
+   venus->material->setTexture("../resources/images/venus.jpg");
     // Earth
 
     Planet *earth = createPlanet(sun, "Earth", 35, 65 / 256.0, 175 / 256.0, 239 / 256.0);
@@ -91,6 +98,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     jupiter->orbitRadius = 1800;
     jupiter->orbitSpeed = 1 * PI / 180;
 
+
     //neptune
     Planet *neptune = createPlanet(sun, "Neptune", 70, 0.06, 0.5, 0.7);
     neptune->orbitRadius = 2400;
@@ -105,7 +113,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 //    SpaceShipMesh *enemy_spaceship2 = drawSpaceship(10, 10, 20, 100, Vector3(-60, 10, 300), true);
 //    SpaceShipMesh *enemy_spaceship3 = drawSpaceship(10, 10, 20, 100, Vector3(20, -90, 300), true);
 //    SpaceShipMesh *enemy_spaceship4 = drawSpaceship(10, 10, 20, 100, Vector3(40, -38, 400), true);
-    Enemy *enemy = new Enemy();
+    // Enemy *enemy = new Enemy();
     // enemy->position = Vector3(0, 200, 100);
     // PyramidMesh* mesh = new PyramidMesh(20, 10, 10);
     // mesh->lookTowards(Vector3::DOWN, Vector3::FORWARD);
@@ -113,7 +121,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     PyramidMesh *mesh = new PyramidMesh(20, 10, 10);
     mesh->material->color = Color::fromRGBFloat(1, 0, 0, 1);
     SpaceShipMesh *enemy_spaceship = drawSpaceship(10, 10, 20, 100, Vector3(-20, 30, 300), true);
-    enemy->addChild(enemy_spaceship);
+    // enemy->addChild(enemy_spaceship);
 
 //    enemy->addChild(new SphereCollider(30));
 //    enemy->addChild(enemy_spaceship1);
@@ -123,18 +131,22 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     // root->addChild(enemy);
 
 
-    SpaceShipMesh *spaceship = drawSpaceship(100, 10, 20, 100, Vector3(0, 0, 200), false);
+    SpaceShipMesh *spaceship = drawSpaceship(100, 10, 20, 100, Vector3(0, 0, 250), false);
     Camera3D *camera = new Camera3D();
     camera->active = true;
     camera->setFar(10000);
     MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
+    Collider3D *collider = new SphereCollider(30);
     // enemy->attachEnemy(dynamic_cast<Player *>(player) );
+
+    // root->addChild(enemy);
+
     player->setName("Player");
     player->position = Vector3(0, 0, 200);
     root->addChild(spaceship);
     player->addChild(camera);
     root->addChild(player);
-    // player->addChild(collider);
+    player->addChild(collider);
 
 
 
@@ -178,8 +190,11 @@ drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, V
 
     Material *spaceshipMaterial = spaceship->material;
     // set color of spaceship to be red
-    if (isEnemy)
+    if (isEnemy){
         spaceshipMaterial->color = Color::fromRGBFloat(1, 0, 0, 1);
+        //rotate the spaceship to face the player
+        // spaceship->scale = Vector3(1, 1, -1);
+        }
     else
         spaceshipMaterial->color = Color::fromRGBFloat(0, 0, 1, 1);
     spaceshipMaterial->ambient_diffuse = 1;

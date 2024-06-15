@@ -10,16 +10,12 @@ using namespace Game;
 
 
 void MainPlayer::shoot() {
-    Bullet *bullet = new Bullet(0.5, 0.5, 100, 200, 5, 50);
+    Bullet *bullet = new Bullet(0.5, 100, 200, 5, 50,ammo);
     bullet->position = position + getForward() * 4;
     bullet->orientation = orientation;
     bullet->lookTowards(getForward(), Vector3::UP);
     bullet->moveDir = getForward();
     this->Parent()->addChild(bullet);
-
-    SoundManager::setVolume(255);
-    SoundManager::setPlayDuration(100);
-    SoundManager::loadAndPlay("../resources/sounds/laser-gun-81720.mp3");
 }
 
 void MainPlayer::idle(double deltaTime) {
@@ -45,6 +41,8 @@ void MainPlayer::idle(double deltaTime) {
         }
             
     }
+
+
     if (moveDir.length() != 0) {
         moveDir = moveDir.normalize().rotateBy(orientation);
         float speed = 150;
@@ -76,21 +74,33 @@ void MainPlayer::idle(double deltaTime) {
 void MainPlayer::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
     // std::cout << "Collision between player and " << other->getName() << "\n";
 
-    // if (other->getName() == "Bullet") {
-    //     Bullet *bullet = dynamic_cast<Bullet *>(other);
-    //     bullet->destroy();
-    //     if (bullet->Parent()->getName() == "Player") return;
-    //     health -= bullet->getDamage();
-    //     if (health <= 0) {
-    //         destroy();
-    //     }
-    // }
+    if (other->getName() == "Bullet") {
+        Bullet *bullet = dynamic_cast<Bullet *>(other);
+        if (bullet->Parent()==nullptr) return;
+        if (bullet->Parent()->getName() == "Player") return;
+        else{
+            std::cout << "Collision between player and bullet with parent " << other->getName() << "\n";
+        }
+        // health -= bullet->getDamage();
+        if (health <= 0) {
+            // destroy();
+        }
+        // bullet->destroy();
+    }
+
     // if (other->getName() == "Enemy") {
     //     health -= 10;
     //     if (health <= 0) {
     //         destroy();
     //     }
     // }
+
+    // if (other->getName() == "Pickable") {
+    //     std::cout<<health<<std::endl;
+    //     std::cout<<ammo<<std::endl;
+    //     std::cout<<score<<std::endl;
+    // }
+
 }
 
 void MainPlayer::destroy() {
@@ -106,3 +116,22 @@ void MainPlayer::destroy() {
     queueFree();
 }
 
+
+
+
+void MainPlayer::setScore(int score) {
+    this->score = score;
+}
+int MainPlayer::getScore(){
+    return score;
+}
+void MainPlayer::addScore(int score){
+    this->score += score;
+}
+void MainPlayer::addHealth(int health){
+    this->health += health;
+}
+void MainPlayer::setAmmo(int ammo){
+    this->ammo = ammo;
+}
+    

@@ -6,7 +6,7 @@
 
 using namespace Game;
 
-Bullet::Bullet(float radius, float height, int resolution, float speed,float maxLifeTime, float damage) : Engine::Nodes::CollisionBody3D(){
+Bullet::Bullet(float radius, int resolution, float speed,float maxLifeTime, float damage,int type) : Engine::Nodes::CollisionBody3D(){
     this->speed = speed;
     this->maxLifeTime = maxLifeTime;
     this->radius = radius;
@@ -14,9 +14,9 @@ Bullet::Bullet(float radius, float height, int resolution, float speed,float max
     this->lifeTime = 0;
     this->setName("Bullet");
     this->damage = damage;
-    this->mesh = new Engine::Nodes::CylinderMesh(radius, height, resolution);
+    this->mesh = new Engine::Nodes::SphereMesh(radius, resolution);
     Material *material = new Material();
-    material->color = Color::fromRGBFloat(0, 1, 0,1);
+    material->color = Color::fromRGBFloat(255,255,255,1);
     material->ambient_diffuse = 1;
     material->shininess = 0;
     material->specular = 0;
@@ -24,6 +24,13 @@ Bullet::Bullet(float radius, float height, int resolution, float speed,float max
     addChild(this->mesh);
     Collider3D* collider = new SphereCollider(radius > 0.5*height ? radius : 0.5*height);
     addChild(collider);
+    
+    this->mesh->material->setTextureCoordinates(mesh->TexCoords(), mesh->TexCoordsSize());
+    this->type = type;
+    this->mesh->material->setTexture(BULLETS_DATA[type].txtPath);
+    SoundManager::setVolume(255);
+    SoundManager::setPlayDuration(150);
+    SoundManager::loadAndPlay(BULLETS_DATA[type].soundPath);
 
 }
 
