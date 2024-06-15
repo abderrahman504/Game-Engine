@@ -3,24 +3,93 @@
 //
 
 #include "enemy.h"
-
+#include "Bullet.h"
 using namespace Game;
 
-Enemy::Enemy() {
-    health = 100;
-    speed = 10;
-    acceleration = 10;
-    rotationSpeed = 10;
-    maxSpeed = 10;
-    rotationAcceleration = 10;
-    player = nullptr;
-    shootingInterval = 3.0; // Adjust as necessary
-    timeSinceLastShot = 0.0;
-    collisionLayer = 0; //Enemy exists on layer 2
+Enemy::Enemy() 
+{
+    collisionLayer = 0b0010; //Enemy exists on layer 2
     collisionMask = 0; // Enemy doesn't scan for any layers
     setName("Enemy");
 }
 
+
+void Enemy::idle(double deltaTime) {
+    if (player != nullptr) { // Check if player is not a nullptr
+
+        // Calculate the direction vector from the enemy to the player
+        Vector3 dir = player->position - position;
+        float distance = dir.length();
+
+        if(distance <= min_distance_to_player)
+        {
+            // Slow the enemy down
+            velocity = velocity - velocity.normalize() * acceleration * deltaTime;
+            if(velocity.length() < acceleration * deltaTime)
+                velocity = Vector3::ZERO;
+        }
+        else
+        {
+            //Move towards the player
+            dir = dir.normalize();
+
+            velocity = velocity + dir * acceleration * deltaTime;
+            if(velocity.length() > max_speed)
+                velocity = velocity.normalize() * max_speed;
+        }
+        position = position + velocity * deltaTime;
+
+        // rotate the enemy towards the player
+        Vector3 dir_to_player = dir;
+        Vector3 forward = getForward();
+        float travel_angle = forward.angleTo(dir_to_player);
+        Vector3 spin_vec = forward.cross(dir_to_player);
+
+        //Figure out whether to rotate faster towards the player or slow down
+        if(rotation_speed == 0 && travel_angle != 0)
+        {
+            //accelerate rotation
+            rotation_speed += rotation_acceleration * deltaTime;
+            if(rotation_speed > max_rotation_speed)
+                rotation_speed = max_rotation_speed;
+        }
+        else
+        {
+            float travel_time = travel_angle / rotation_speed;
+            float halting_time = rotation_speed / rotation_acceleration;
+            if(travel_time < halting_time)
+            {
+                //decelerate rotation
+                rotation_speed -= rotation_acceleration * deltaTime;
+                if(rotation_speed < 0)
+                    rotation_speed = 0;
+            }
+            else
+            {
+                //accelerate rotation
+                rotation_speed += rotation_acceleration * deltaTime;
+                if(rotation_speed > max_rotation_speed)
+                    rotation_speed = max_rotation_speed;
+            }
+
+        }
+        if(rotation_speed != 0)
+        {
+            float rotation = rotation_speed * deltaTime;
+            if(rotation > travel_angle)
+                rotation = travel_angle;
+            rotateAround(spin_vec, rotation);
+        }
+
+        // Shoot at player
+        timeSinceLastShot += deltaTime;
+        if (timeSinceLastShot >= shootingInterval) {
+            std::cout << "Enemy is shooting" << std::endl;
+             this->shoot();
+            timeSinceLastShot = 0.0; // Reset the timer
+        }
+    }
+}
 
 void Enemy::shoot() {
     Bullet *bullet = new Bullet(1, 1, 100, 50, 100, 20);
@@ -46,63 +115,27 @@ void Enemy::shoot() {
     Parent()->addChild(bullet);
 }
 
-void Enemy::idle(double deltaTime) {
-    if (player) { // Check if player is not a nullptr
-        // Calculate the direction vector from the enemy to the player
-        Vector3 dir = player->position - position;
 
-        // Normalize the direction vector
-        dir = dir.normalize();
-
-        // Move the enemy towards the player
-        double speed = 20.0; // Adjust speed as necessary
-        position = position + dir * speed * deltaTime;
-
-        // rotate the enemy towards the player
-        Vector3 enemyForward = dir;
-        Vector3 enemyUp = Vector3(0, 1, 0);
-        lookTowards(enemyForward, enemyUp);
-
-        timeSinceLastShot += deltaTime;
-        if (timeSinceLastShot >= shootingInterval) {
-            std::cout << "Enemy is shooting" << std::endl;
-             this->shoot();
-            timeSinceLastShot = 0.0; // Reset the timer
-        }
-    }
-}
-
-void Enemy::attachEnemy(Player *player) {
+void Enemy::attachEnemy(CollisionBody3D *player) {
     this->player = player;
 }
 
 
 void Enemy::destroy() {
-    std::vector < Node * > children = getChildren();
-    for (int i = 0; i < children.size(); i++) {
-        if (children[i]->getName() == "Bullet") {
-            Bullet *bullet = dynamic_cast<Bullet *>(children[i]);
-            bullet->destroy();
-        }
-    }
     queueFree();
 }
 
 void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
-    // std::cout << "Enemy collided with " << other->getName() << std::endl;
-    // if (other->getName() == "Bullet") {
-    //     Bullet *bullet = dynamic_cast<Bullet *>(other);
-    //     bullet->destroy();
-    //     if (bullet->Parent()->getName() == "Enemy") return;
-    //     health -= bullet->getDamage();
-    //     if (health <= 0) {
-    //         destroy();
-    //     }
-    // }
-    // if (other->getName() == "Player") {
-    //     health -= 10;
-    //     if (health <= 0) {
-    //         destroy();
-    //     }
-    // }
+    std::cout << "Enemy collided with " << other->getName() << std::endl;
+    if (dynamic_cast<Bullet*>(other) != nullptr) {
+        Bullet *bullet = dynamic_cast<Bullet *>(other);
+        bullet->destroy();
+        //if Bullet is intended to hit player 
+        if (bullet->collisionMask == 1) return;
+        
+        health -= bullet->getDamage();
+        if (health <= 0) {
+            destroy();
+        }
+    }
 }
