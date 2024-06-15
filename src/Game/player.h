@@ -12,13 +12,15 @@
 namespace Game{
     class Player : public Engine::Nodes::CollisionBody3D{
         protected:
-        int health;
+
         float speed;
         float acceleration;
         float rotationSpeed;
         float maxSpeed;
         float rotationAcceleration;
         public:
+        int health;
+        int score=0;
         Player(){
 
         };

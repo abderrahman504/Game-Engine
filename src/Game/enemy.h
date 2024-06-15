@@ -5,12 +5,13 @@
 #define GAME_ENGINE_ENEMY_H
 
 #include "../Engine.h"
+#include "player.h"
 #include <stdio.h>
 
 namespace Game {
     class Enemy : public CollisionBody3D {
     public:
-        CollisionBody3D *player = nullptr;
+        Player *player = nullptr;
         double shootingInterval = 3;
         double timeSinceLastShot = 3;
         int health = 100;
@@ -30,7 +31,7 @@ namespace Game {
 
         Enemy();
 
-        void attachEnemy(CollisionBody3D *player);
+        void attachEnemy(Player *player);
 
         void idle(double deltaTime);
 

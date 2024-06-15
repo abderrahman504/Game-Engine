@@ -17,8 +17,14 @@ public:
 protected:
    void idle(double deltaTime)
    {
-        if(size.x>0)
-          size.x-=0.01*deltaTime;
+         if(player->health>0)
+            size.x=(player->health * 0.3)/100;
+        else {
+            std::cout<< "Game Over" << std::endl;
+             exit(0);
+         }
+
+
    }
 
 

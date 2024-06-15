@@ -29,13 +29,13 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Health_label->z_index = 1;
     Health_label->normalized_coordinates = true;
     Health_label->text = "Health";
-    Health_label->position = Vector2(0.8f, 0.95f);
+    Health_label->position = Vector2(0.7f, 0.95f);
     Health_label->color = Color::fromRGBFloat(0, 0, 1, 1);
     root->addChild(Health_label);
     HealthBar *health_bar = new HealthBar();
     health_bar->z_index = 1;
     health_bar->normalized_coordinates = true;
-    health_bar->position = Vector2(0.8f, 0.85f);
+    health_bar->position = Vector2(0.7f, 0.85f);
     health_bar->size = Vector2(0.3f, 0.05f);
     health_bar->color = Color::fromRGBFloat(0, 1, 0, 1);
     health_bar->setName("Health Bar");
@@ -43,7 +43,7 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     Score *score = new Score();
     score->z_index = 1;
     score->normalized_coordinates = true;
-    score->position = Vector2(0.8f, 0.8f);
+    score->position = Vector2(0.7f, 0.8f);
     root->addChild(score);
     
 
@@ -146,6 +146,8 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     player->setName("Player");
     player->position = Vector3(0, 0, 400);
     enemy->attachEnemy((Player*)player);
+    health_bar->player = player;
+    score->player = player;
     root->addChild(player);
 
     Camera3D *camera = new Camera3D();

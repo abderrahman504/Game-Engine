@@ -40,6 +40,7 @@ void Enemy::idle(double deltaTime) {
     if (player != nullptr)
     { // Check if player is not a nullptr
 
+
         // Calculate the direction vector from the enemy to the player
         Vector3 dir = player->position - position;
         float distance = dir.length();
@@ -142,7 +143,7 @@ void Enemy::shoot() {
 }
 
 
-void Enemy::attachEnemy(CollisionBody3D *player) {
+void Enemy::attachEnemy(Player *player) {
     this->player = player;
 }
 
@@ -160,11 +161,12 @@ void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::Collision
     if (dynamic_cast<Bullet*>(other) != nullptr) {
         Bullet *bullet = dynamic_cast<Bullet *>(other);
         bullet->destroy();
-        //if Bullet is intended to hit player 
+        //if Bullet is intended to hit player
         if (bullet->collisionMask == 1) return;
         
         health -= bullet->getDamage();
         if (health <= 0) {
+        player->score += 10;
             destroy();
         }
     }
