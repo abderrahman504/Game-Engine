@@ -5,23 +5,7 @@
 #include "MainPlayer.h"
 
 
-bool isMuosefreaze = false;
 using namespace Game;
-
-
-void MainPlayer::shoot() {
-    Bullet *bullet = new Bullet(0.5, 100, 200, 5, 10,ammo,true);
-    bullet->position = position + getForward() * 1;
-    bullet->orientation = orientation;
-    bullet->lookTowards(getForward(), Vector3::UP);
-    bullet->moveDir = getForward();
-    this->Parent()->addChild(bullet);
-    SphereCollider *collider = new SphereCollider(0.5);
-
-    collider->setName("Bullet");
-    bullet->addChild(collider);
-    bullet->shooter = true;
-}
 
 void MainPlayer::idle(double deltaTime) {
     Engine::InputServer &inputServer = getSceneHead().getInputServer();
@@ -50,12 +34,34 @@ void MainPlayer::idle(double deltaTime) {
     if (inputServer.isKeyPressed('e')) rotateAround(Vector3::UP, -0.01);
     if (inputServer.isKeyPressed('r')) shoot();
 
+    moveDir = moveDir.normalize();
 
-    if (moveDir.length() != 0) {
-        moveDir = moveDir.normalize().rotateBy(orientation);
-        float speed = 150;
-        position = position + moveDir * speed * deltaTime;
+    if(moveDir.length() <= 0)
+    {
+        // Slow the player down
+        velocity = velocity - velocity.normalize() * acceleration * deltaTime;
+        if(velocity.length() < acceleration * deltaTime)
+            velocity = Vector3::ZERO;
     }
+    else
+    {
+        //Accelerate in given direction
+        moveDir = moveDir.rotateBy(orientation);
+        velocity = velocity + moveDir * acceleration * deltaTime;
+        if(velocity.length() > max_speed)
+            velocity = velocity.normalize() * max_speed;
+    }
+    position = position + velocity * deltaTime;
+
+
+
+    // rotate the player as the mouse moves
+
+    // if (moveDir.length() != 0) {
+    //     moveDir = moveDir.normalize().rotateBy(orientation);
+    //     float speed = 150;
+    //     position = position + moveDir * speed * deltaTime;
+    // }
     Vector2 mouseDir = inputServer.getMouseMotion();
 
     if (mouseDir.length() != 0) {
@@ -78,9 +84,25 @@ void MainPlayer::idle(double deltaTime) {
 
 }
 
+void MainPlayer::shoot() {
+    Bullet *bullet = new Bullet(0.5, 100, 200, 5, 10,ammo,true);
+    bullet->collisionLayer = 4; //Bullet exists on layer 3
+    bullet->collisionMask = 2; //Bullet scans for layer 2
+    bullet->position = position + getForward() * 1;
+    bullet->orientation = orientation;
+    bullet->lookTowards(getForward(), Vector3::UP);
+    bullet->moveDir = getForward();
+    this->Parent()->addChild(bullet);
+    SphereCollider *collider = new SphereCollider(0.5);
+
+    collider->setName("Bullet");
+    bullet->addChild(collider);
+    bullet->shooter = true;
+}
+
 
 void MainPlayer::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
-    // std::cout << "Collision between player and " << other->getName() << "\n";
+    std::cout << "Collision between player and " << other->getName() << "\n";
 
     if (other->getName() == "Bullet") {
         Bullet *bullet = dynamic_cast<Bullet *>(other);

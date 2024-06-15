@@ -111,35 +111,15 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
     root->addChild(enemy);
 
-    SpaceShipMesh *spaceship = new SpaceShipMesh();
-    spaceship->rotateAround(Vector3::UP, PI);
-    spaceship->material->color = Color::WHITE;
-    spaceship->material->ambient_diffuse = 1;
-    spaceship->material->emission = 1;
-    spaceship->setName("Player");
-    spaceship->position = Vector3(0, 0, 500);
-    spaceship->rotateAround(Vector3::UP, PI / 2);
-
-    // spaceship->material->color = Color::fromRGBFloat(0, 0, 0, 1);
-    // spaceship->material->ambient_diffuse = 1;
-    // spaceship->material->shininess = 0;
-    // spaceship->material->specular = 0;
-    // spaceship->setName("X-Wing Model");
-    // spaceship->position = Vector3(0, 0, 500);
-    // spaceship->rotateAround(Vector3::UP, PI/2);
-    // root->addChild(spaceship);
-
-
 
     // Creating Player
     Camera3D *camera = new Camera3D();
-    camera->active = true;
+    camera->position = Vector3(0, 7, 30);
     camera->setFar(10000);
     MainPlayer *player = new MainPlayer(10, 20, 10, 10, 100, 150);
     enemy->attachEnemy((Player*)player);
     player->position = Vector3(0, 0, 300);
     player->addChild(camera);
-    player->addChild(spaceship);
     root->addChild(player);
     
 

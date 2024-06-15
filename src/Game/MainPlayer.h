@@ -15,8 +15,17 @@ namespace Game{
     private:
         int score;
         int ammo;
+        
         Vector3 velocity = Vector3::ZERO;
-        const float damping = 0.95f;     
+        float max_speed = 150;
+        float acceleration = 70;
+
+        Vector3 look_direction = Vector3::FORWARD;
+        float rotation_speed = 0;
+        float max_rotation_speed = 180 * PI / 180.0;
+        float rotation_acceleration = 100 * PI / 180.0;
+
+
         protected:
         void idle(double deltaTime);
         void onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info);
@@ -33,6 +42,10 @@ namespace Game{
             collisionLayer = 0b0001; //Player exists on layer 1
             collisionMask = 0b0010; //Player scans for layer 2
             SphereCollider *collider = new SphereCollider(15);
+
+            SpaceShipMesh* model = new SpaceShipMesh();
+            model->rotateAround(Vector3::UP, PI);
+            addChild(model);
 
             setName("Player");
             addChild(collider);
