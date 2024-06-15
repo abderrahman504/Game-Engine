@@ -64,34 +64,16 @@ bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices
         ss >> prefix;
 
         if (prefix == "v") {
-            float x, y, z;
-            ss >> x >> y >> z;
+            float x, y, z, r, g, b;
+            ss >> x >> y >> z >> r >> g >> b;
             vertice.push_back(x);
             vertice.push_back(y);
             vertice.push_back(z);
-
-            // Generate random colors for each vertex
-            float r, g, b;
-            // if (vertice.size() >= 1000) {
-            //     r = 1.0f;
-            //     g = 0.0f;
-            //     b = 0.0f;
-            // } else {
-            //     std::random_device rd;
-            //     std::mt19937 gen(rd());
-            //     std::uniform_real_distribution<float> dis(0.0f, 1.0f);
-            //     r = dis(gen);
-            //     g = dis(gen);
-            //     b = dis(gen);
-            // }
-            r = 1.0f;
-            g = 0.0f;
-            b = 0.0f;
-            
             colorArray.push_back(r); // R
             colorArray.push_back(g); // G
             colorArray.push_back(b); // B
         } else if (prefix == "f") {
+            // break;
             std::string vertexStr;
             unsigned int vertexIndex[3];
             int i = 0;
@@ -116,6 +98,12 @@ bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices
     (*countIndices)[0] = indice.size();
     *countPrimitives = 1;
     *colors = new float[colorArray.size()]; // Allocate memory for colors
+    // std::cout<<"color array size: "<<colorArray.size()<<std::endl; // Print the size of the color array
+    // std::cout<<"vertices size: "<<vertice.size()<<std::endl; // Print the size of the vertices array
+    //   for (int i = 0; i < colorArray.size(); i+=3)
+    //             {
+    //                 std::cout <<"color "<< colorArray[i] << " " << colorArray[i+1] << " " << colorArray[i+2] << std::endl;
+    //             }
 
     std::copy(vertice.begin(), vertice.end(), *vertices);
     std::copy(indice.begin(), indice.end(), (*indices)[0]);

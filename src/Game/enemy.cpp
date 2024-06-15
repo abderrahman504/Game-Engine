@@ -22,7 +22,7 @@ Enemy::Enemy()
 
     addChild(spaceship);
     //Create collider
-    SphereCollider* collider = new SphereCollider();
+    SphereCollider* collider = new SphereCollider(20);
     collider->radius = 10;
     addChild(collider);
     setName("Enemy");
@@ -100,14 +100,14 @@ void Enemy::idle(double deltaTime) {
         timeSinceLastShot += deltaTime;
         if (timeSinceLastShot >= shootingInterval) {
             std::cout << "Enemy is shooting" << std::endl;
-            //  this->shoot();
+             this->shoot();
             timeSinceLastShot = 0.0; // Reset the timer
         }
     }
 }
 
 void Enemy::shoot() {
-    Bullet *bullet = new Bullet(0.5, 100, 200, 5, 50,0);
+    Bullet *bullet = new Bullet(0.5, 100, 200, 5, 5,0,false);
     bullet->position = position + getForward() * 2;
     bullet->orientation = orientation;
     bullet->lookTowards(getForward(), Vector3::UP);
@@ -118,6 +118,13 @@ void Enemy::shoot() {
     bullet->collisionMask =  0b0001; //Bullet scans layer 1 (the player exists in that layer)
 
     bullet->setName("Bullet");
+
+    //Add collider to bullet
+    SphereCollider *collider = new SphereCollider(0.5);
+    collider->setName("Bullet");
+    bullet->addChild(collider);
+    bullet->shooter = false;
+
     this->Parent()->addChild(bullet);
 }
 
@@ -134,18 +141,18 @@ void Enemy::destroy() {
 }
 
 void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info) {
-    std::cout << "Enemy collided with " << other->getName() << std::endl;
-    if (dynamic_cast<Bullet*>(other) != nullptr) {
-        Bullet *bullet = dynamic_cast<Bullet *>(other);
-        bullet->destroy();
-        //if Bullet is intended to hit player 
-        if (bullet->collisionMask == 1) return;
+    // std::cout << "Enemy collided with " << other->getName() << std::endl;
+    // if (dynamic_cast<Bullet*>(other) != nullptr) {
+    //     Bullet *bullet = dynamic_cast<Bullet *>(other);
+    //     bullet->destroy();
+    //     //if Bullet is intended to hit player 
+    //     if (bullet->collisionMask == 1) return;
         
-        health -= bullet->getDamage();
-        if (health <= 0) {
-            destroy();
-        }
-    }
+    //     health -= bullet->getDamage();
+    //     if (health <= 0) {
+    //         destroy();
+    //     }
+    // }
 }
 
 

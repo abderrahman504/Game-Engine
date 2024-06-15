@@ -6,7 +6,7 @@
 
 using namespace Game;
 
-Bullet::Bullet(float radius, int resolution, float speed,float maxLifeTime, float damage,int type) : Engine::Nodes::CollisionBody3D(){
+Bullet::Bullet(float radius, int resolution, float speed,float maxLifeTime, float damage,int type,bool sound) : Engine::Nodes::CollisionBody3D(){
     this->speed = speed;
     this->maxLifeTime = maxLifeTime;
     this->radius = radius;
@@ -28,9 +28,11 @@ Bullet::Bullet(float radius, int resolution, float speed,float maxLifeTime, floa
     this->mesh->material->setTextureCoordinates(mesh->TexCoords(), mesh->TexCoordsSize());
     this->type = type;
     this->mesh->material->setTexture(BULLETS_DATA[type].txtPath);
+
+    if (sound){
     SoundManager::setVolume(255);
     SoundManager::setPlayDuration(150);
-    SoundManager::loadAndPlay(BULLETS_DATA[type].soundPath);
+    SoundManager::loadAndPlay(BULLETS_DATA[type].soundPath);}
 
 }
 
