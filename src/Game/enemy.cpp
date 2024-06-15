@@ -13,7 +13,13 @@ Enemy::Enemy()
     collisionLayer = 0b0010; //Enemy exists on layer 2
     collisionMask = 0; // Enemy doesn't scan for any layers
     //Create model
-    ConeMesh *spaceship = drawSpaceship(10, 10, 20, true);
+    // ConeMesh *spaceship = drawSpaceship(10, 10, 20, true);
+    SpaceShipMesh* spaceship = new SpaceShipMesh();
+    spaceship->rotateAround(Vector3::UP, PI);
+    spaceship->material->color = Color::WHITE;
+    spaceship->material->ambient_diffuse = 1;
+    spaceship->material->emission = 1;
+
     addChild(spaceship);
     //Create collider
     SphereCollider* collider = new SphereCollider();

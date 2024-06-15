@@ -12,20 +12,12 @@
 namespace Engine {
     namespace Nodes {
         class SpaceShipMesh : public Mesh3D {
-        protected:
-            float baseWidth;
-            float baseHeight;
-            float height;
+            
 
         public:
-            SpaceShipMesh(float baseWidth, float baseHeight, float height, int resolution);
+            SpaceShipMesh();
 
-            ~SpaceShipMesh();   
-            float BaseWidth();
-
-            float BaseHeight();
-
-            float Height();
+            ~SpaceShipMesh();
         };
     }
 }

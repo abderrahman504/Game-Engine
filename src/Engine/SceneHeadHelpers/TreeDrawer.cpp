@@ -276,7 +276,7 @@ void TreeDrawer::drawNode(Node *node)
             {
 
                 long lenVertices = mesh->VerticesSize() + mesh->VerticesSize() / 3;
-                float *colors = new float[lenVertices];
+                float colors[lenVertices];
                 for (int i = 0; i < lenVertices; i++)
                 {
                     colors[i] = 1.0f;
@@ -290,7 +290,6 @@ void TreeDrawer::drawNode(Node *node)
                 glDisableClientState(GL_VERTEX_ARRAY);
                 glDisableClientState(GL_COLOR_ARRAY);
 
-                delete[] colors;
             }
             else
             {

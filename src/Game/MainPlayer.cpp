@@ -20,6 +20,20 @@ void MainPlayer::shoot() {
 
 void MainPlayer::idle(double deltaTime) {
     Engine::InputServer &inputServer = getSceneHead().getInputServer();
+
+    
+    if(inputServer.isKeyJustPressed(27)){ //ESC button
+        getSceneHead().unfreezeCursor();
+        getSceneHead().showCursor();
+
+    } 
+    else if(inputServer.isKeyJustPressed(MOUSE_LEFT)){
+        getSceneHead().freezeCursor();
+        // getSceneHead().hideCursor();
+    }
+
+
+    
     Vector3 moveDir = Vector3::ZERO;
     if (inputServer.isKeyPressed('w')) moveDir = moveDir + Vector3::FORWARD;
     if (inputServer.isKeyPressed('s')) moveDir = moveDir + Vector3::BACK;
@@ -31,14 +45,6 @@ void MainPlayer::idle(double deltaTime) {
     if (inputServer.isKeyPressed('e')) rotateAround(Vector3::UP, -0.01);
     if (inputServer.isKeyPressed('r')) shoot();
     if (inputServer.isKeyPressed('j')){
-        if (isMuosefreaze){
-            getSceneHead().unfreazeCursor();
-            isMuosefreaze = false;
-        }
-        else{
-            getSceneHead().freezeCursor();
-            isMuosefreaze = true;
-        }
             
     }
 
