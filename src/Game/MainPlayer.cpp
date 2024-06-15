@@ -57,11 +57,6 @@ void MainPlayer::idle(double deltaTime) {
 
     // rotate the player as the mouse moves
 
-    // if (moveDir.length() != 0) {
-    //     moveDir = moveDir.normalize().rotateBy(orientation);
-    //     float speed = 150;
-    //     position = position + moveDir * speed * deltaTime;
-    // }
     Vector2 mouseDir = inputServer.getMouseMotion();
 
     if (mouseDir.length() != 0) {

@@ -4,7 +4,6 @@
 
 #include "enemy.h"
 #include "Bullet.h"
-#include <random>
 using namespace Game;
 
 // static ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
@@ -31,13 +30,8 @@ Enemy::Enemy()
 
     setName("Enemy");
 }
-int Enemy::generate_random_number() {
-    std::random_device rd; // Obtain a random number from hardware
-    std::mt19937 gen(rd()); // Seed the generator
-    std::uniform_int_distribution<> distr(0, 100); // Define the range
 
-    return distr(gen); // Generate the random number
-}
+
 
 
 

@@ -13,10 +13,11 @@ static Vector2 mouse_pos, prev_mouse_pos;
 static bool mouse_just_entered;
 static std::unordered_map<int, KeyState> key_map = std::unordered_map<int, KeyState>();
 static Vector2 win_size;
-
+static bool just_warped_mouse;
 
 void InputServer::init()
 {
+    just_warped_mouse = false;
     key_map.clear();
     unsigned char c = 0;
     do{
@@ -38,21 +39,21 @@ void InputServer::init()
 }
 
 void InputServer::keyboardInput(unsigned char key, bool down, int x, int y){
-    if(mouse_just_entered)
-    {
-        mouse_just_entered = false;
-        prev_mouse_pos = Vector2(x, y);
-    }
-    mouse_pos = Vector2(x,y);
+    // if(mouse_just_entered)
+    // {
+    //     mouse_just_entered = false;
+    //     prev_mouse_pos = Vector2(x, y);
+    // }
+    // mouse_pos = Vector2(x,y);
     key_map[key] = down ? PRESSED : RELEASED;
 }
 void InputServer::specialInput(int key, bool down, int x, int y){
-    if(mouse_just_entered)
-    {
-        mouse_just_entered = false;
-        prev_mouse_pos = Vector2(x, y);
-    }
-    mouse_pos = Vector2(x,y);
+    // if(mouse_just_entered)
+    // {
+    //     mouse_just_entered = false;
+    //     prev_mouse_pos = Vector2(x, y);
+    // }
+    // mouse_pos = Vector2(x,y);
     //implement later
 }
 void InputServer::mouseMotion(int x, int y){
@@ -61,15 +62,20 @@ void InputServer::mouseMotion(int x, int y){
         mouse_just_entered = false;
         prev_mouse_pos = Vector2(x, y);
     }
+    if(just_warped_mouse)
+    {
+        just_warped_mouse = false;
+        return;
+    }
     mouse_pos = Vector2(x, y);
 }
 void InputServer::mouseKey(int button, int state, int x, int y){
-    if(mouse_just_entered)
-    {
-        mouse_just_entered = false;
-        prev_mouse_pos = Vector2(x, y);
-    }
-    mouse_pos = Vector2(x,y);
+    // if(mouse_just_entered)
+    // {
+    //     mouse_just_entered = false;
+    //     prev_mouse_pos = Vector2(x, y);
+    // }
+    // mouse_pos = Vector2(x,y);
     switch(button)
     {
         case GLUT_LEFT_BUTTON: 
@@ -84,12 +90,12 @@ void InputServer::mouseKey(int button, int state, int x, int y){
     }
 }
 void InputServer::mouseWheel(int wheel, int direction, int x, int y){
-    if(mouse_just_entered)
-    {
-        mouse_just_entered = false;
-        prev_mouse_pos = Vector2(x, y);
-    }
-    mouse_pos = Vector2(x,y);
+    // if(mouse_just_entered)
+    // {
+    //     mouse_just_entered = false;
+    //     prev_mouse_pos = Vector2(x, y);
+    // }
+    // mouse_pos = Vector2(x,y);
     if (direction > 0)
         key_map[MOUSE_SCROLL_UP] = RELEASED;
     else
@@ -130,6 +136,7 @@ Vector2 InputServer::getMousePosition(){
     return mouse_pos;
 }
 Vector2 InputServer::getMouseMotion(){
+    // printf("Mouse motion: <%f, %f>\n", mouse_pos.x - prev_mouse_pos.x, mouse_pos.y - prev_mouse_pos.y);
     return mouse_pos - prev_mouse_pos;
 }
 
