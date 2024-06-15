@@ -9,7 +9,6 @@ class Score : public Engine::Nodes::Label
     public:
      void idle(double deltaTime)
     {
-         std::cout<<"henaaaaaaa"<<deltaTime<<std::endl;
         text = "Score: " + std::to_string((float )deltaTime);
     }
 };

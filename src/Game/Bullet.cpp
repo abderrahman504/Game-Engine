@@ -38,7 +38,7 @@ Bullet::Bullet(float radius, int resolution, float speed,float maxLifeTime, floa
 
 
 void Bullet::destroy(){
-    this->Parent()->removeChild(this);
+    // this->Parent()->removeChild(this);
     queueFree();
 }
 

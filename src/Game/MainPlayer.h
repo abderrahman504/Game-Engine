@@ -17,8 +17,8 @@ namespace Game{
         int ammo;
         
         Vector3 velocity = Vector3::ZERO;
-        float max_speed = 150;
-        float acceleration = 70;
+        float max_speed = 200;
+        float acceleration = 150;
 
         Vector3 look_direction = Vector3::FORWARD;
         float rotation_speed = 0;

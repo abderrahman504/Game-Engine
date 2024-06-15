@@ -220,6 +220,9 @@ void free_nodes()
 {
     for(int i = 0; i < node_freeing_queue.size(); i++)
     {
+        Node* node = node_freeing_queue[i];
+        if(node->Parent() != nullptr)
+            node->Parent()->removeChild(node);
         delete node_freeing_queue[i];
     }
     node_freeing_queue.clear();
