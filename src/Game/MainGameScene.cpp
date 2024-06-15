@@ -3,6 +3,7 @@
 #include "cameraTest.cpp"
 #include "MainPlayer.h"
 #include "enemy.h"
+#include "MinimapCamera.h"
 
 
 #include "PickableGenrator.h"
@@ -110,16 +111,6 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
     root->addChild(enemy);
 
-    // SpaceShipMesh *spaceship = new SpaceShipMesh(10, 10, 50, 50);
-    // spaceship->material->color = Color::fromRGBFloat(0, 0, 0, 1);
-    // spaceship->material->ambient_diffuse = 1;
-    // spaceship->material->shininess = 0;
-    // spaceship->material->specular = 0;
-    // spaceship->setName("X-Wing Model");
-    // spaceship->position = Vector3(0, 0, 500);
-    // spaceship->rotateAround(Vector3::UP, PI/2);
-    // root->addChild(spaceship);
-
 
     // Creating Player
     Camera3D *camera = new Camera3D();
@@ -138,15 +129,22 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
     // Minimap Camera
 
-    Camera3D *camera2 = new Camera3D();
-    camera2->active = true;
+    Quad* minimap_border = new Quad();
+    minimap_border->color = Color::fromRGBFloat(0.3, 0.3, 0.3, 1);
+    minimap_border->normalized_coordinates = true;
+    minimap_border->position = Vector2(0.69, 0.09);
+    minimap_border->size = Vector2(0.22, 0.22);
+    root->addChild(minimap_border);
+
+    MinimapCamera *camera2 = new MinimapCamera();
     camera2->viewport = Engine::VIEWPORT_2;
     camera2->viewportPosition = Vector2(0.7, 0.1);
     camera2->viewportSize = Vector2(0.2, 0.2);
     camera2->setFOV(90);
-    camera2->setFar(5000);
-    camera2->position = Vector3(0, 3000, 0);
-    camera2->rotateAround(Vector3::LEFT, PI / 2);
+    camera2->setFar(10000);
+    camera2->target = player;
+    camera2->distance_from_target = 800;
+    
     root->addChild(camera2);
 
     return root;
