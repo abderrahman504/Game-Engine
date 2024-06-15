@@ -272,33 +272,34 @@ void TreeDrawer::drawNode(Node *node)
         }
         else
         {
-            // if (mesh->Colors() != nullptr)
-            // {
+            if (mesh->Colors() != nullptr)
+            {
 
-            //     // make a random color array for the mesh
+                long lenVertices = mesh->VerticesSize() + mesh->VerticesSize() / 3;
+                float *colors = new float[lenVertices];
+                for (int i = 0; i < lenVertices; i++)
+                {
+                    colors[i] = 1.0f;
+                }
 
-            //     float *colors = new float[mesh->CountPrimitives() * 3];
-            //     for (int i = 0; i < mesh->CountPrimitives() * 3; i++)
-            //     {
-            //         colors[i] = (float)rand() / RAND_MAX;
-            //     }
+                glEnableClientState(GL_VERTEX_ARRAY);
+                glEnableClientState(GL_COLOR_ARRAY);
+                glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
+                glColorPointer(4, GL_FLOAT, 0, colors);
+                glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void **)mesh->Indeces(), mesh->CountPrimitives());
+                glDisableClientState(GL_VERTEX_ARRAY);
+                glDisableClientState(GL_COLOR_ARRAY);
 
-            //     glEnableClientState(GL_VERTEX_ARRAY);
-            //     glEnableClientState(GL_COLOR_ARRAY);
-            //     glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
-            //     glColorPointer(3, GL_FLOAT, 0, mesh->Colors());
-            //     glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void **)mesh->Indeces(), mesh->CountPrimitives());
-            //     glDisableClientState(GL_VERTEX_ARRAY);
-            //     glDisableClientState(GL_COLOR_ARRAY);
-            // }
-            // else
-            // {
+                delete[] colors;
+            }
+            else
+            {
             applyMaterial(*material);
             glEnableClientState(GL_VERTEX_ARRAY);
             glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
             glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void **)mesh->Indeces(), mesh->CountPrimitives());
             glDisableClientState(GL_VERTEX_ARRAY);
-            // }
+            }
         }
     }
 

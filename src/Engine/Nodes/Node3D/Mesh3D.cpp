@@ -107,6 +107,8 @@ bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices
         }
     }
 
+    in_file.close();
+    verticesSize = vertice.size();
     *vertices = new float[vertice.size()];
     *indices = new unsigned int*[1];
     (*indices)[0] = new unsigned int[indice.size()];
@@ -121,3 +123,5 @@ bool Mesh3D::LoadOBJ(const char* path, float** vertices, unsigned int*** indices
 
     return true;
 }
+
+long Mesh3D::VerticesSize() { return verticesSize; }

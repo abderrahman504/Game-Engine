@@ -12,8 +12,8 @@ SpaceShipMesh::SpaceShipMesh(float baseWidth, float baseHeight, float height, in
     this->baseWidth = baseWidth;
     this->baseHeight = baseHeight;
     this->height = height;
-    this->LoadOBJ("/home/ahmed/Downloads/Game-Engine/ahmedtest/elk-color.obj",&vertices,&indeces,&countIndeces,&countPrimitives,&colors);
-    this->scale= Vector3(2,2,2);
+    this->LoadOBJ("../resources/models/spaceship.obj",&vertices,&indeces,&countIndeces,&countPrimitives,&colors);
+    // this->scale= Vector3(2,2,2);
     // buildMesh(baseWidth, baseHeight, height, resolution, &vertices,&texCoords, &indeces, &countIndeces, &countPrimitives);
     setName("SpaceShipMesh");
 }

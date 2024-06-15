@@ -22,11 +22,14 @@ namespace Nodes{
         float *texCoords = nullptr;
         int texCoordsSize = 0;
         float *colors = nullptr; // Array to store colors
+        long verticesSize = 0;
 
         public:
+
         Mesh3D();
         ~Mesh3D();
         float* Vertices();
+        long VerticesSize();
         unsigned int** Indeces();
         int* CountIndeces();
         int CountPrimitives();
