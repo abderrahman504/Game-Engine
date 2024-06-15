@@ -4,7 +4,6 @@
 #include "MainPlayer.h"
 #include "enemy.h"
 
-
 using namespace Game;
 
 SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
@@ -13,6 +12,25 @@ Planet* createPlanet(Node3D* parent, std::string planetName, float radius, float
 
 Engine::Nodes::Node *MainGameScene::constructTree() {
     Node *root = new Node();
+    SkyBox *sb = new SkyBox();
+    GLfloat* TextCoords = (GLfloat*)(sb)->TextureCoords;
+    std::vector<std::string> faces = (sb)->faces;
+    Material Mat = Material();
+    
+    sb->setName("SkyBox");
+    for(int i = 0; i<6;i++){
+        Mat.setTextureCoordinates(&TextCoords[i], sizeof(TextCoords[i]));
+        Mat.setTexture(faces[i]);            
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glTexCoordPointer(2, GL_FLOAT, 0, Mat.textureCoordinates);
+        Mat.bindTexture();
+        glEnable(GL_TEXTURE_2D);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glDisable(GL_TEXTURE_2D);
+
+    }
+    root->addChild(sb);
+
     // Enemy *enemy = new Enemy();
     root->setName("Solar System");
     SphereMesh *sun = new SphereMesh(150, 50);

@@ -229,6 +229,8 @@ void TreeDrawer::drawNode(Node* node)
     bool isNode3D = dynamic_cast<Node3D*>(node) != nullptr;
     bool isMesh3D = dynamic_cast<Mesh3D*>(node) != nullptr;
     bool isLight3D = dynamic_cast<Light3D*>(node) != nullptr;
+    bool isSkyBox = dynamic_cast<SkyBox*>(node) != nullptr;
+    
     //If Node3D then apply its transformation before drawing
     if(isNode3D)
     {
@@ -272,7 +274,57 @@ void TreeDrawer::drawNode(Node* node)
         }
         
     }
+    if(isSkyBox){
+        // Draw skybox
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Render as solid
+        const GLfloat* Vertices = ((SkyBox*)node)->skyboxVertices;
+        const GLuint* Indices = ((SkyBox*)node)->skyboxIndices;
+        
+        // Setup vertex data and buffers
+        GLuint VBO, VAO, EBO;
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &EBO);
 
+        glBindVertexArray(VAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+
+        // Position attribute
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+        glEnableVertexAttribArray(0);
+
+        // Texture coordinate attribute
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+        glEnableVertexAttribArray(1);
+
+        // // Bind cubemap texture
+        // for(int i = 0; i<6;i++){
+        //     Mat.setTextureCoordinates(&TextCoords[i], sizeof(TextCoords[i]));
+        //     Mat.setTexture(faces[i]);            
+        //     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        //     glTexCoordPointer(2, GL_FLOAT, 0, Mat.textureCoordinates);
+        //     Mat.bindTexture();
+        //     glEnable(GL_TEXTURE_2D);
+        //     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        //     glDisable(GL_TEXTURE_2D);
+
+        // }
+
+        // glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+
+        // Draw the skybox
+        glDrawElements(GL_TRIANGLES, sizeof(Indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
+
+        glBindVertexArray(0); // Unbind VAO
+        glDeleteBuffers(1, &VBO);
+        glDeleteBuffers(1, &EBO);
+        glDeleteVertexArrays(1, &VAO);
+    }
     
 
     std::vector<Nodes::Node*> children = node->getChildren();
