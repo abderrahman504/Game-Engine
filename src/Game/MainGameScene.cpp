@@ -3,6 +3,7 @@
 #include "cameraTest.cpp"
 #include "MainPlayer.h"
 #include "enemy.h"
+#include "MinimapCamera.h"
 
 
 #include "PickableGenrator.h"
@@ -145,15 +146,22 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
 
     // Minimap Camera
 
-    Camera3D *camera2 = new Camera3D();
-    camera2->active = true;
+    Quad* minimap_border = new Quad();
+    minimap_border->color = Color::fromRGBFloat(0.3, 0.3, 0.3, 1);
+    minimap_border->normalized_coordinates = true;
+    minimap_border->position = Vector2(0.69, 0.09);
+    minimap_border->size = Vector2(0.22, 0.22);
+    root->addChild(minimap_border);
+
+    MinimapCamera *camera2 = new MinimapCamera();
     camera2->viewport = Engine::VIEWPORT_2;
     camera2->viewportPosition = Vector2(0.7, 0.1);
     camera2->viewportSize = Vector2(0.2, 0.2);
     camera2->setFOV(90);
-    camera2->setFar(5000);
-    camera2->position = Vector3(0, 3000, 0);
-    camera2->rotateAround(Vector3::LEFT, PI / 2);
+    camera2->setFar(10000);
+    camera2->target = player;
+    camera2->distance_from_target = 800;
+    
     root->addChild(camera2);
 
     return root;
