@@ -26,6 +26,13 @@ namespace Game{
 
         float min_distance_to_player = 200;
 
+    class Enemy : public Player {
+        Player *player;
+        double shootingInterval;
+        double timeSinceLastShot;
+        int Level;
+        int x;
+
         void onCollision(Engine::Nodes::CollisionBody3D *other, Engine::CollisionInfo info);
 
         Enemy();
@@ -33,6 +40,9 @@ namespace Game{
         void idle(double deltaTime);
         void shoot();
         void destroy();
+        void addEnemy();
+        SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, int resolution, Vector3 vector3, bool isEnemy);
+        int generate_random_number();
 
     };
 
