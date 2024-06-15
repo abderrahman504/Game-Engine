@@ -47,7 +47,7 @@ namespace Engine{
         //Freezes the mouse cursor in place
         void freezeCursor();
         //Unfreezes the mouse cursor
-        void unfreazeCursor();
+        void unfreezeCursor();
 
         
         protected:
