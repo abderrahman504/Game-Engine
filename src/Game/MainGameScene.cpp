@@ -7,7 +7,7 @@
 
 using namespace Game;
 
-SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
+static ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
 
 Planet* createPlanet(Node3D* parent, std::string planetName, float radius, float red, float green, float blue);
 
@@ -101,8 +101,6 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     // Creating Enemy
     Enemy *enemy = new Enemy();
     enemy->position = Vector3(0, 0, 150);
-    SpaceShipMesh *enemy_spaceship = drawSpaceship(5, 5, 30, true);
-    enemy->addChild(enemy_spaceship);
 
     root->addChild(enemy);
 
@@ -155,10 +153,10 @@ Planet *createPlanet(Node3D *parent, std::string planetName, float radius,
 
 
 
-SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy) 
+ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy) 
 {
     
-    SpaceShipMesh *spaceship = new SpaceShipMesh(baseWidth, baseHeight, height, 50);
+    ConeMesh *spaceship = new ConeMesh(baseWidth, baseHeight, height, 50);
 
     Material *spaceshipMaterial = spaceship->material;
     // set color of spaceship to be red
@@ -172,7 +170,7 @@ SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bo
     spaceship->setName("Spaceship Model");
     spaceship->lookTowards(Vector3::DOWN, Vector3::FORWARD);
 
-    SpaceShipMesh *right_wing = new SpaceShipMesh(baseWidth / 2, baseHeight / 2, height / 3, 50);
+    ConeMesh *right_wing = new ConeMesh(baseWidth / 2, baseHeight / 2, height / 3, 50);
     spaceshipMaterial = right_wing->material;
     // set color of spaceship to be red
     spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
@@ -182,7 +180,7 @@ SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bo
     right_wing->position = Vector3(5, baseWidth * 1.5, 0);
     right_wing->setName("right wing");
 
-    SpaceShipMesh *left_wing = new SpaceShipMesh(baseWidth / 2, baseHeight / 2, height / 3, 50);
+    ConeMesh *left_wing = new ConeMesh(baseWidth / 2, baseHeight / 2, height / 3, 50);
     spaceshipMaterial = left_wing->material;
     spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
     spaceshipMaterial->ambient_diffuse = 1;
