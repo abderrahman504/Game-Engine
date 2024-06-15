@@ -6,10 +6,19 @@
 #include "Bullet.h"
 using namespace Game;
 
+static ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
+
 Enemy::Enemy() 
 {
     collisionLayer = 0b0010; //Enemy exists on layer 2
     collisionMask = 0; // Enemy doesn't scan for any layers
+    //Create model
+    ConeMesh *spaceship = drawSpaceship(10, 10, 20, true);
+    addChild(spaceship);
+    //Create collider
+    SphereCollider* collider = new SphereCollider();
+    collider->radius = 10;
+    addChild(collider);
     setName("Enemy");
 }
 
@@ -102,15 +111,6 @@ void Enemy::shoot() {
     bullet->collisionLayer = 0b0100; //Bullet exists on layer 3
     bullet->collisionMask =  0b0001; //Bullet scans layer 1 (the player exists in that layer)
 
-    //  std::vector < Node * > children = getChildren();
-    //  for (int i = 0; i < children.size(); i++) {
-    //      SpaceShipMesh *enemy = dynamic_cast<SpaceShipMesh *>(children[i]);
-    //      if (enemy == nullptr) continue;
-    //      bullet->position = enemy->position;
-    //      bullet->orientation = enemy->orientation;
-    //      bullet->lookTowards(enemy->getForward(), Vector3::UP);
-    //      bullet->moveDir = enemy->getForward();
-    //  }
     bullet->setName("Bullet");
     this->Parent()->addChild(bullet);
 }
@@ -140,4 +140,53 @@ void Enemy::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::Collision
             destroy();
         }
     }
+}
+
+
+
+
+
+
+static ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy) 
+{
+    
+    ConeMesh *spaceship = new ConeMesh(baseWidth/2, baseHeight/2, height, 50);
+
+    Material *spaceshipMaterial = spaceship->material;
+    // set color of spaceship to be red
+    if (isEnemy)
+        spaceshipMaterial->color = Color::fromRGBFloat(1, 0, 0, 1);
+    else
+        spaceshipMaterial->color = Color::fromRGBFloat(0, 0, 1, 1);
+    spaceshipMaterial->ambient_diffuse = 1;
+    spaceshipMaterial->shininess = 0;
+    spaceshipMaterial->specular = 0;
+    spaceship->setName("Spaceship Model");
+    spaceship->lookTowards(Vector3::DOWN, Vector3::FORWARD);
+
+    ConeMesh *right_wing = new ConeMesh(baseWidth / 4, baseHeight / 4, height / 3, 50);
+    spaceshipMaterial = right_wing->material;
+    // set color of spaceship to be red
+    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    spaceshipMaterial->ambient_diffuse = 1;
+    spaceshipMaterial->shininess = 0;
+    spaceshipMaterial->specular = 0;
+    right_wing->position = Vector3(baseWidth / 2, height * 0.2, 0);
+    right_wing->setName("right wing");
+
+    ConeMesh *left_wing = new ConeMesh(baseWidth / 4, baseHeight / 4, height / 3, 50);
+    spaceshipMaterial = left_wing->material;
+    spaceshipMaterial->color = Color::fromRGBFloat(1.0f, 1.0f, 0.0f, 1.0f);
+    spaceshipMaterial->ambient_diffuse = 1;
+    spaceshipMaterial->shininess = 0;
+    spaceshipMaterial->specular = 0;
+    left_wing->position = Vector3(-baseWidth / 2, height * 0.2, 0);
+    left_wing->setName("left wing");
+
+
+    spaceship->addChild(right_wing);
+    spaceship->addChild(left_wing);
+    // spaceship->addChild(spaceshiphead);
+
+    return spaceship;
 }

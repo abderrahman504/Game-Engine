@@ -8,7 +8,7 @@
 #include "PickableGenrator.h"
 using namespace Game;
 
-SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
+static ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy);
 
 Planet* createPlanet(Node3D* parent, std::string planetName, float radius, float red, float green, float blue);
 
@@ -107,8 +107,6 @@ Engine::Nodes::Node *MainGameScene::constructTree() {
     // Creating Enemy
     Enemy *enemy = new Enemy();
     enemy->position = Vector3(0, 0, 150);
-    SpaceShipMesh *enemy_spaceship = drawSpaceship(5, 5, 30, true);
-    enemy->addChild(enemy_spaceship);
 
     root->addChild(enemy);
 
@@ -172,10 +170,10 @@ Planet *createPlanet(Node3D *parent, std::string planetName, float radius,
 
 
 
-SpaceShipMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy) 
+ConeMesh *drawSpaceship(float baseWidth, float baseHeight, float height, bool isEnemy) 
 {
     
-    SpaceShipMesh *spaceship = new SpaceShipMesh(baseWidth, baseHeight, height, 50);
+    ConeMesh *spaceship = new ConeMesh(baseWidth, baseHeight, height, 50);
 
     Material *spaceshipMaterial = spaceship->material;
     // set color of spaceship to be red
