@@ -10,10 +10,13 @@
 #include <GL/glew.h>
 #include <iostream>
 class Texture {
+
+    sf::Image *image;
 public:
     Texture();
     ~Texture();
     GLuint textureID;
+
 
     bool loadFromFile(const std::string& filename); // Load texture from file
     void bind(); // Bind texture for rendering

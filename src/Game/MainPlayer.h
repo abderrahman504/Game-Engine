@@ -32,8 +32,10 @@ namespace Game{
             this->maxSpeed = maxSpeed;
             collisionLayer = 0b0001; //Player exists on layer 1
             collisionMask = 0b0010; //Player scans for layer 2
+            SphereCollider *collider = new SphereCollider(15);
 
             setName("Player");
+            addChild(collider);
 
         }
         void shoot();

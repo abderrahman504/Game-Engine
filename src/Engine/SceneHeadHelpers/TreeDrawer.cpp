@@ -275,20 +275,16 @@ void TreeDrawer::drawNode(Node *node)
             if (mesh->Colors() != nullptr)
             {
 
-                long lenVertices = mesh->VerticesSize() + mesh->VerticesSize() / 3;
-                float colors[lenVertices];
-                for (int i = 0; i < lenVertices; i++)
-                {
-                    colors[i] = 1.0f;
-                }
 
+                glDisable(GL_LIGHTING);
                 glEnableClientState(GL_VERTEX_ARRAY);
                 glEnableClientState(GL_COLOR_ARRAY);
                 glVertexPointer(3, GL_FLOAT, 0, mesh->Vertices());
-                glColorPointer(4, GL_FLOAT, 0, colors);
+                glColorPointer(3, GL_FLOAT, 0, mesh->Colors());
                 glMultiDrawElements(GL_TRIANGLE_STRIP, mesh->CountIndeces(), GL_UNSIGNED_INT, (const void **)mesh->Indeces(), mesh->CountPrimitives());
                 glDisableClientState(GL_VERTEX_ARRAY);
                 glDisableClientState(GL_COLOR_ARRAY);
+                glEnable(GL_LIGHTING);
 
             }
             else

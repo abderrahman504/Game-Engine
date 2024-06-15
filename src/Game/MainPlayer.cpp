@@ -10,12 +10,17 @@ using namespace Game;
 
 
 void MainPlayer::shoot() {
-    Bullet *bullet = new Bullet(0.5, 100, 200, 5, 50,ammo);
-    bullet->position = position + getForward() * 4;
+    Bullet *bullet = new Bullet(0.5, 100, 200, 5, 10,ammo,true);
+    bullet->position = position + getForward() * 1;
     bullet->orientation = orientation;
     bullet->lookTowards(getForward(), Vector3::UP);
     bullet->moveDir = getForward();
     this->Parent()->addChild(bullet);
+    SphereCollider *collider = new SphereCollider(0.5);
+
+    collider->setName("Bullet");
+    bullet->addChild(collider);
+    bullet->shooter = true;
 }
 
 void MainPlayer::idle(double deltaTime) {
@@ -83,15 +88,16 @@ void MainPlayer::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::Coll
     if (other->getName() == "Bullet") {
         Bullet *bullet = dynamic_cast<Bullet *>(other);
         if (bullet->Parent()==nullptr) return;
-        if (bullet->Parent()->getName() == "Player") return;
+        if (bullet->shooter) return;
         else{
-            std::cout << "Collision between player and bullet with parent " << other->getName() << "\n";
+            health -= bullet->getDamage();
+            bullet->destroy();
+            if (health <= 0) {
+                // destroy();
+                std::cout<<"Player is dead"<<std::endl;
+            }
+            std::cout<<"Player Health: "<<health<<std::endl;
         }
-        // health -= bullet->getDamage();
-        if (health <= 0) {
-            // destroy();
-        }
-        // bullet->destroy();
     }
 
     // if (other->getName() == "Enemy") {
@@ -110,14 +116,6 @@ void MainPlayer::onCollision(Engine::Nodes::CollisionBody3D *other, Engine::Coll
 }
 
 void MainPlayer::destroy() {
-
-    std::vector < Engine::Nodes::Node * > children = getChildren();
-    for (int i = 0; i < children.size(); i++) {
-        if (children[i]->getName() == "Bullet") {
-            Bullet *bullet = dynamic_cast<Bullet *>(children[i]);
-            bullet->destroy();
-        }
-    }
     
     queueFree();
 }

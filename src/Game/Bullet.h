@@ -42,8 +42,9 @@ namespace Game {
         protected:
         void idle(double deltaTime);
         public:
+        bool shooter;
         Vector3 moveDir;
-        Bullet(float radius, int resolution, float speed,float maxLifeTime,float damage,int type);
+        Bullet(float radius, int resolution, float speed,float maxLifeTime,float damage,int type,bool sound);
         void destroy();
         float getDamage();
     };
